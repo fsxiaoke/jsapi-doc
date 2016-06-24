@@ -6,12 +6,12 @@
 
 ### 第二步 clone代码到本地
     
-    `git clone git@github.com:fsxiaoke/jsapi-doc.git`
+    git clone git@github.com:fsxiaoke/jsapi-doc.git
 
 ### 第四步 进入目录，并执行如下命令
     
-    `npm install`
+    npm install
 
 ### 第五步 启动环境
     
-    `npm run server`
+    npm run server
