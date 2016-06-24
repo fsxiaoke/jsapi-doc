@@ -1,0 +1,13 @@
+html,body{color:#333;-webkit-font-smoothing:antialiased;}
+body,button{font:13px/1.5 tahoma,arial,'Hiragino Sans GB','Hiragino Sans GB W3','Microsoft Yahei',\5b8b\4f53}
+.g-nav{position:fixed;top:0;left:0;background:#fff;height:100%;width:220px;padding:15px;box-shadow:1px 0px 5px #ccc;}
+.g-nav h1{font-size:28px;}
+.g-doc{width:1000px;padding:20px;padding-left:250px;}
+.g-doc hr{margin:10px 0;}
+.g-doc h2{padding:0.8em;border-top:1px solid #ccc;border-bottom:1px solid #ccc;background-image:linear-gradient(to bottom,#fff,#f9f9f9);font-size:20px;}
+.g-doc h3{font-size:18px;font-weight:bold;}
+.g-doc h5{margin-top:20px;} /* 给每个接口的小标题使用 */
+.g-doc table{min-width:60%;padding:0 28px;margin-left:10px;margin-bottom:2em;}
+.g-doc th{border-bottom:1px solid #ccc;background:#fff;}
+.g-doc th,.g-doc td{padding:10px;}
+.g-doc tr:nth-child(odd){background-color:#f9fbfc;}

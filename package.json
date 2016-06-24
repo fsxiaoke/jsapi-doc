@@ -1,0 +1,16 @@
+{
+  "name": "jsapi-doc",
+  "version": "1.0.0",
+  "description": "纷享逍客开放平台JSAPI",
+  "authors": [
+    "jerry.lin <linh@fxiaoke.com>"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build/build.js"
+  },
+  "devDependencies": {
+    "marked": "^0.3.5",
+    "webpack": "^1.13.1"
+  }
+}

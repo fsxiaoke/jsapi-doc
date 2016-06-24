@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>纷享逍客 - 开放平台</title>
+    <link rel="shortcut icon" href="//fxiaoke.com/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//fxiaoke.com/favicon.ico" type="image/x-icon">
+    <script src="js/lib/jquery.js"></script>
+    <script src="js/lib/marked.js"></script>
+    <script src="js/main.js?v=0510"></script>
+</head>
+<body>
+    <div id="g-nav" class="g-nav">{{nav}}</div>
+    <div id="g-doc" class="g-doc">{{doc}}</div>
+
+    <noscript>
+        <p>请使用支持Javascript环境的浏览器~</p>
+    </noscript>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        FSOpen.doc.init();
+    });
+    </script>
+</body>
+</html>
