@@ -39,7 +39,7 @@
                 tables: true,
                 breaks: false,
                 pedantic: false,
-                sanitize: true,
+                sanitize: false,
                 smartLists: true,
                 smartypants: false
             });
@@ -60,7 +60,8 @@
         _initDoc: function() {
             var self = this;
             $.get(self.docFile, function(data) {
-                self.doc.html(marked(data));
+                var s = marked(data);
+                self.doc.html(s);
                 if (location.hash) {
                     var hash = location.hash.substr(1);
                     var node = document.getElementById(hash);

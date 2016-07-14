@@ -1,11 +1,16 @@
 ## 基本使用方法
 
-1. 引入jsapi库
+1. 引入JSAPI库
 
     `<script src="http://www.fxiaoke.com/open/jsapi/1.0.0/jsapi.min.js"></script>` 
 
+    或者（仅限内部开发使用，保持最新）
+
+    `<script src="http://open.fsfte2.com/open/jsapi/2.0.0/fsapi.min.js"></script>`
+
 2. 配置应用参数
-```javascript
+
+    ```javascript
     FSOpen.config({
         appId: 'FSAID_1313de7',
         timestamp: 1463564391382,
@@ -17,11 +22,13 @@
             'contact.chooseDepartment'
         ]
     });
-``` 
-说明：如果第三方应用不涉及JSAPI授权校验相关，可不配置此相关接口。   
+    ``` 
 
-3. 通过FSOpen.ready和FSOpen.error来监听初始化成功或者失败
-```javascript
+    说明：如果第三方应用不涉及JSAPI授权校验相关，可不配置此相关接口。   
+
+3. 通过`FSOpen.ready`和`FSOpen.error`来监听初始化成功或者失败
+
+    ```javascript
     FSOpen.ready(function(bridge){
         console.log('FS LOG:', FSOpen.version);
         // do yourself init;
@@ -30,14 +37,16 @@
         if (error.errorCode === 30000) {
             alert('5.3以下版本，需要更新');
         } else {
-            console.log('FS err: ', error);
+            alert('初始化失败：' + JSON.stringify(error));
         }
     });
-``` 
+    ``` 
 
-4. 当然，还可以支持使用链式调用
-```javascript
-    // 如果你不需要调用授权接口，不需要配置config
+    当然，还可以直接使用链式调用：
+    
+    ```javascript
+    // 如果你不需要调用授权接口，不需要配置`config`，
+    // 但是`ready`接口请无论如何都不要忘记调用
     FSOpen.config({
         appId: 'FSAID_1313de7',
         timestamp: 1463564391382,
@@ -55,15 +64,14 @@
         if (error.errorCode === 30000) {
             alert('5.3以下版本，需要更新');
         } else {
-            console.log('FS err: ', error);
+            alert('初始化失败：' + JSON.stringify(error));
         }
     });
-``` 
+    ``` 
 
-## 基本配置
+## 基本配置说明
 
-### 全局参数配置
-
+#### 全局参数配置
 功能说明：用作api授权验证  
 参数说明：  
 
@@ -75,7 +83,7 @@
 | signature     | String        |     Y |
 | jsApiList     | List<String>  |     Y |
 
-### 日志接口配置
+#### 日志接口配置
 功能说明：为了方便外部调试，将内部调试内容输出  
 回调参数说明：
 
@@ -84,18 +92,9 @@
 | message       | String        |     Y |
 | logData       | Object        |     N |
 
-### 错误接口配置
-功能说明：为了方便外部调试，将内部错误内容输出  
-回调参数说明：
-
-| 参数名        | 类型          | 必须  |
-| ------------- |:-------------:| -----:|
-| message       | String        |     Y |
-| errorData     | Object        |     N |
-
 ## 接口调用
 
-### 接口调用说明
+#### 接口调用说明
 
 **所有接口均接受一个可选配置参数，基本格式如下：**
 ```javascript
@@ -148,2323 +147,3405 @@
 | 50000     | 未知错误。目前此错误码不做任何回调处理           |
 | 50003     | 后台服务错误（不可用)                            |
 
-### 接口调用列表
 
----------------------
-#### 容器类  
----------------------
+## 接口调用列表
 
-##### 获取终端版本号     
-接口方法：FSOpen.runtime.getVersion   
-返回说明：  
+### 容器  
 
-| 参数      | 类型        | 说明                |
-| ----------| ------------| --------------------|
-| ver       | String      | 版本号信息，如'5.3' |
+##### 获取终端版本号   
+5.3.0   
 
-举个栗子：  
 ```javascript
 FSOpen.runtime.getVersion({
-    onSuccess: function(responseData){
-        console.assert(responseData.ver !== undefined);
-        console.assert(parseFloat(responseData.ver) > 5.2);
+    onSuccess: function(resp){
+        console.assert(resp.ver !== undefined);
+        console.assert(parseFloat(resp.ver) > 5.2);
     },
-    onFail: function(responseData){
+    onFail: function(error){
         alert('您的应用不支持JSAPI，请升级');
     }
 });
-``` 
+```
 
-##### &#10084;  终端升级提示    
-接口方法：FSOpen.runtime.showUpdate   
-调用参数：  
+接口方法：FSOpen.runtime.getVersion  
+返回成功说明：  
 
 | 参数      | 类型        | 说明                |
 | ----------| ------------| --------------------|
-| message   | String      | 升级提示说明        |
+| ver       | String      | 版本号信息，如'5.3.0' |
 
-举个栗子：  
+
+##### 获取免登授权码
+5.4.0  
+
+```javascript
+FSOpen.runtime.requestAuthCode({
+    onSuccess: function(resp) {
+        console.assert(resp.code !== undefined);
+        console.assert(resp.userId !== undefined);
+    },
+    onFail: function(error) {
+        error = error || {};
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+```  
+
+接口方法：FSOpen.runtime.requestAuthCode   
+返回成功说明：  
+
+| 参数       | 类型        | 说明                |
+| -----------| ------------| --------------------|
+| code       | String      | 授权码 |
+| userId     | String      | 当前登录用户的open user-id |
+
+
+##### 终端升级提示    
+5.4.0
+
 ```javascript
 FSOpen.runtime.showUpdate({
-    message: '要使用我，你需要更新'
+    message: '当前版本有更新'
 });
 ``` 
 
----------------------
-#### 设备类  
----------------------
-
-##### &#10084;  指纹验证     
-接口方法：FSOpen.device.authenticateUser   
+接口方法：FSOpen.runtime.showUpdate   
 调用参数：  
 
-| 参数      | 类型        | 说明                |
-| ----------| ------------| --------------------|
-| appName   | String      | 应用名字            |
+| 参数      | 类型        | 必须 | 说明                |
+| ----------| ------------| -----| --------------------|
+| message   | String      | 是   | 升级提示文本 |
 
-返回说明：  
 
-| 参数      | 类型        | 说明         |
-| ----------| ------------| -------------|
-| result    | Number      | 指纹验证结果：0-验证成功，1-验证失败，2-验证取消 |
+---------------------
+### 设备类  
+---------------------
 
-举个栗子：  
+##### 应用二次认证       
+5.3.0
+  
 ```javascript
 FSOpen.device.authenticateUser({
     appName: '战报助手',
     onSuccess: function(resp){
-        console.log(resp);
+        alert('认证成功');
+    },
+    onFail: function(error){
+        if (error.errorCode === 40050) {
+            alert('取消了认证');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  屏幕控制     
-接口方法：FSOpen.device.setOrientation   
+接口方法：FSOpen.device.authenticateUser   
 调用参数：  
 
-| 参数        | 类型        | 说明                |
-| ------------| ------------| --------------------|
-| orientation | Number      | 0-portrait竖屏，1-landscape横屏 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| appName   | String      | 是   | 当前应用名字 |
 
-举个栗子：  
-```javascript
-FSOpen.device.setOrientation({
-    orientation: 1
-});
-``` 
 
-##### &#10084;  调用扫码     
-接口方法：FSOpen.device.scan   
-调用参数：  
+##### 获取热点信息    
+5.4.0   
 
-| 参数        | 类型        | 说明                |
-| ------------| ------------| --------------------|
-| type        | String      | qr表示二维码；bar表示一维码 |
-
-返回说明：  
-
-| 参数        | 类型        | 说明                |
-| ------------| ------------| --------------------|
-| text        | String      | 扫码内容            |
-
-举个栗子：  
-```javascript
-FSOpen.device.scan({
-    type: 'qr',
-    onSuccess: function(resp) {
-        console.log(resp.text);
-    }
-});
-``` 
-
-##### &#10084;  获取通用唯一识别码     
-接口方法：FSOpen.device.getUUID   
-返回说明：  
-
-| 参数      | 类型        | 说明                |
-| ----------| ------------| --------------------|
-| uuid      | String      | 唯一识别码          |
-
-举个栗子：  
-```javascript
-FSOpen.device.getUUID({
-    onSuccess: function(resp) {
-        console.log(resp.uuid);
-    }
-});
-``` 
-
-##### &#10084;  获取热点信息    
-接口方法：FSOpen.device.getAP   
-返回说明：  
-
-| 参数      | 类型        | 说明                |
-| ----------| ------------| --------------------|
-| ssid      | String      | 热点SSID            |
-| macip     | String      | 热点MAC地址         |
-
-举个栗子：  
 ```javascript
 FSOpen.device.getAP({
     onSuccess: function(resp) {
         // ssid: 'FSDevLan'
-        // macip: '3c:12:aa:09'
-        console.log(resp.ssid, resp.macip);
+        // macAddress: '3c:12:aa:09'
+        console.assert(resp.ssid !== undefined);
+        console.assert(resp.macAddress !== undefined);
     }
 });
 ``` 
 
-##### &#10084;  获取网络类型      
-接口方法：FSOpen.device.getNetwork   
-返回说明：  
+接口方法：FSOpen.device.getAP   
+返回成功说明：  
+
+| 参数       | 类型        | 说明                |
+| -----------| ------------| --------------------|
+| ssid       | String      | 热点SSID            |
+| macAddress | String      | 热点MAC地址         |
+
+
+##### 获取网络类型      
+5.4.0  
+ 
+```javascript
+FSOpen.device.getNetworkType({
+    onSuccess: function(resp) {
+        // network: '3g'
+        console.assert(resp.network !== undefined);
+    }
+});
+``` 
+
+接口方法：FSOpen.device.getNetworkType   
+返回成功说明：  
 
 | 参数      | 类型        | 说明                |
 | ----------| ------------| --------------------|
 | network   | String      | 网络类型，2g/3g/4g/wifi/unknown/none，none表示离线|
 
-举个栗子：  
+
+##### 获取通用唯一识别码     
+5.4.0  
+
 ```javascript
-FSOpen.device.getNetwork({
+FSOpen.device.getUUID({
     onSuccess: function(resp) {
-        // network: '3g'
-        console.log(resp.network);
+        // uuid: '"FD71A168-1CAD-4EF1-BECC-52997124207A'
+        console.assert(resp.uuid !== undefined);
     }
 });
 ``` 
 
----------------------
-#### 授权类  
----------------------
-
-##### &#10084;  获取免登授权码    
-接口方法：FSOpen.permission.requestAuthCode   
-返回说明：  
+接口方法：FSOpen.device.getUUID   
+返回成功说明：  
 
 | 参数      | 类型        | 说明                |
 | ----------| ------------| --------------------|
-| code      | String      | 授权码              |
+| uuid      | String      | 本机唯一识别码          |
 
-举个栗子：  
+
+##### 调用扫码     
+5.4.0
+
 ```javascript
-FSOpen.permission.requestAuthCode({
+FSOpen.device.scan({
     onSuccess: function(resp) {
-        _alert(resp);
-    },
-    onFail: function(resp) {
-        _error(resp);
+        // text: 'https://www.fxiaoke.com/'
+        console.log(resp.text !== undefined);
     }
 });
 ``` 
 
----------------------
-#### 启动器  
----------------------
+接口方法：FSOpen.device.scan   
+返回成功说明：  
 
-##### &#10084;  启动第三方应用    
-接口方法：FSOpen.launcher.launchApp   
-调用参数：  
+| 参数        | 类型        | 说明                |
+| ------------| ------------| --------------------|
+| text        | String      | 扫码内容            |
 
-| 参数      | 类型       | 说明                |
-| ----------| -----------| --------------------|
-| scheme    | String     | iOS：应用scheme |
-| pkgName   | String     | Android：应用包名 |
 
-返回说明：  
+##### 设备震动     
+5.4.0
 
-| 参数      | 类型        | 说明                |
-| ----------| ------------| --------------------|
-| result    | Boolean     | true唤起成功；false唤起失败 |
-
-举个栗子：  
 ```javascript
-FSOpen.launcher.launchApp({
-    scheme: 'taobao',
-    pkgName: 'com.alibaba.taobao',
-    onSuccess: function(resp) {
-        _alert(resp);
-    },
-    onFail: function(resp) {
-        _error(resp);
-    }
+FSOpen.device.vibrate({
+    duration: 3000
 });
 ``` 
 
-##### &#10084;  检测应用是否安装    
-接口方法：FSOpen.launcher.checkAppInstalled   
+接口方法：FSOpen.device.vibrate   
 调用参数：  
 
-| 参数      | 类型       | 说明                |
-| ----------| -----------| --------------------|
-| scheme    | String     | iOS：应用scheme |
-| pkgName   | String     | Android：应用包名 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| duration  | Number      | 否   | 震动时间，只对Android有效。单位毫秒，默认3秒。 |
 
-返回说明：  
 
-| 参数      | 类型            | 说明                |
-| ----------| ----------------| --------------------|
-| installed | Boolean         | 检测结果 |
+### 启动器  
 
-举个栗子：  
+##### 检测应用是否安装
+5.4.0  
+
 ```javascript
 FSOpen.launcher.checkAppInstalled({
     scheme: 'taobao',
     pkgName: 'com.alibaba.taobao',
     onSuccess: function(resp) {
-        _alert(resp);
+        // installed: true
+        console.assert(resp.installed === true);
+    }
+});
+``` 
+
+接口方法：FSOpen.launcher.checkAppInstalled   
+调用参数：  
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| scheme    | String      | 是   | iOS使用，应用scheme |
+| pkgName   | String      | 是   | Android使用，应用包名 |
+
+返回成功说明：  
+
+| 参数      | 类型            | 说明                |
+| ----------| ----------------| --------------------|
+| installed | Boolean         | 检测结果 |
+
+
+##### 启动第三方应用    
+5.4.0  
+
+```javascript
+FSOpen.launcher.launchApp({
+    scheme: 'taobao',
+    pkgName: 'com.alibaba.taobao',
+    onSuccess: function(resp) {
+        // do sth
     },
-    onFail: function(resp) {
-        _error(resp);
-    }
-});
-``` 
-
----------------------
-#### 通讯录  
----------------------
-
-##### &#10084;  根据openid获取用户信息   
-接口方法：FSOpen.contact.getUserInfo   
-调用参数：  
-
-| 参数      | 类型          | 说明                      |
-| ----------| --------------| --------------------------|
-| id        | Array[String] | 需要查询的用户OPEN-ID列表 |
-
-返回说明：  
-
-| 参数      | 类型          | 说明     |
-| ----------| --------------| ---------|
-| users     | Object        | 用户关联数组，比如：{"FSUID_XXX": {openUserId:'',name:'',email:'',profileImageUrl:''}}，如果用户没找到，对应的值为空 |
-
-用户字段说明：
-
-| 字段            | 类型    | 说明        |
-| ----------------| --------| ------------|
-| openUserId      | String  | 用户OPEN-ID |
-| name            | String  | 用户昵称    |
-| email           | String  | 用户eamil   |
-| profileImageUrl | String  | 用户头像    |
-
-举个栗子：  
-```javascript
-FSOpen.contact.getUserInfo({
-    id: ['FSUID_00000000000', 'FSUID_111111111111'],
-    onSuccess: function(responseData){
-        conosle.assert(responseData.errorCode == 0);
-        console.assert(responseData.users != null);
-
-        var apps = responseData.users;
-        for (var key in apps) {
-            console.log(apps[key]);
+    onFail: function(error) {
+        if (error.errorCode === 40010) {
+            alert('未安装该应用');
+            return;
         }
+        alert('操作失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  获取服务号信息    
-接口方法：FSOpen.contact.getAppInfo    
+接口方法：FSOpen.launcher.launchApp   
 调用参数：  
 
-| 参数      | 类型          | 说明                   |
-| ----------| --------------| -----------------------|
-| id        | Array[String] | 需要查询的服务号ID列表 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| scheme    | String      | 是   | iOS使用，应用scheme |
+| pkgName   | String      | 是   | Android使用，应用包名 |
 
-返回说明：  
 
-| 参数      | 类型          | 说明       |
-| ----------| --------------| -----------|
-| apps      | Object        | 服务号关联数组，比如：{"FSAID_XXX": {openAppId:'',name:'',imageUrl:''}}，如果服务号没找到，对应的值为空 |
-
-服务号字段说明：
-
-| 字段      | 类型    | 说明        |
-| ----------| --------| ------------|
-| openAppId | String  | 服务号ID    |
-| name      | String  | 服务号名称  |
-| imageUrl  | String  | 服务号图片地址 |
-
-举个栗子：  
-```javascript
-FSOpen.contact.getAppInfo({
-    id: ['FSAID_00000000000'],
-    onSuccess: function(responseData){
-        conosle.assert(responseData.errorCode == 0);
-        console.assert(responseData.apps != null);
-
-        var apps = responseData.apps;
-        for (var key in apps) {
-            console.log(apps[key]);
-        }
-    }
-});
-``` 
-
-##### &#10084;  从通讯录里同时显示选择人员、部门和群组会话    
-接口方法：FSOpen.contact.choose    
-调用参数：    
-
-| 参数                | 类型          | 说明                       |
-| --------------------| --------------| ---------------------------|
-| selectedUsers       | Array[String] | 可选，已选的人员OPENID列表 |
-| selectedDepartments | Array[String] | 可选，已选的部门ID列表     |
-| selectedGroups      | Array[String] | 可选，已选的多人回话ID列表 |
-| selectedCompanyAll  | Boolean       | 可选，是否已选中全公司，默认false |
-| title               | String        | 可选，控件显示标题         |
-| excludeSelf         | Boolean       | 可选，是否排除自己         |
-| showRecent          | Boolean       | 可选，是否显示最近         |
-| showGroupTab        | Boolean       | 可选，是否显示群组标签页   |
-| showCompanyAll      | Boolean       | 可选，是否显示全公司选项   |
-
-返回说明：  
-
-| 参数             | 类型          | 说明     |
-| -----------------| --------------| ---------|
-| users            | Array[Object] | 用户列表 |
-| departments      | Array[Object] | 部门列表 |
-| groups           | Array[Object] | 群组列表 |
-| selectCompanyAll | Array[Object] | 是否选中全公司，注意与调用参数`selectedCompanyAll`区别 |
-
-用户字段说明：
-
-| 字段            | 类型    | 说明        |
-| ----------------| --------| ------------|
-| openUserId      | String  | 用户OPEN-ID |
-| name            | String  | 用户昵称    |
-| email           | String  | 用户eamil   |
-| profileImageUrl | String  | 用户头像    |
-
-部门字段说明：
-
-| 字段     | 类型    | 说明       |
-| ---------| --------| -----------|
-| id       | Number  | 部门ID     |
-| name     | String  | 部门名称   |
-| parentId | Number  | 父亲部门ID |
-
-群组字段说明：
-
-| 字段      | 类型    | 说明     |
-| ----------| --------| ---------|
-| id        | String  | 群组ID   |
-| name      | String  | 群组名称 |
-
-举个栗子：  
-```javascript
-FSOpen.contact.choose({
-    onSuccess: function(responseData){
-        conosle.assert(responseData.errorCode == 0);
-        console.assert(responseData.users != null);
-        console.assert(responseData.departments != null);
-        console.assert(responseData.groups != null);
-        console.log(responseData.selectCompanyAll);
-    }
-});
-``` 
-
-##### &#10084;  从通讯录里选择人员   
-接口方法：FSOpen.contact.chooseUser       
-调用参数：   
-
-| 参数                | 类型          | 说明                 |
-| --------------------| --------------| ---------------------|
-| selectedUsers       | Array[String] | 已选的人员OPENID列表 |
-| filterUsers         | Array[String] | 过滤的人员OPENID列表 |
-| max                 | Number        | 可选人员上限         |
-| radio               | Boolean       | 是否单选，如有这个参数，selectedUsers最多只被选中一个 |
-| title               | String        | 可选，控件显示标题   |
-| excludeSelf         | Boolean       | 是否排除自己         |
-| firstSelf           | Boolean       | 是否优先显示自己     |
-| isPrivate           | Boolean       | 是否隐藏自己名字，显示为私密 |
-
-返回说明：  
-
-| 参数             | 类型          | 说明     |
-| -----------------| --------------| ---------|
-| users            | Array[Object] | 用户列表 |
-
-举个栗子：   
-```javascript
-FSOpen.contact.chooseUser({
-    max: 5,
-    onSuccess: function(responseData){
-        conosle.assert(responseData.errorCode == 0);
-        console.assert(responseData.users != null);
-        console.assert(responseData.users.length == 2);
-
-        responseData.users.forEach(function(item){
-            console.log(item);
-            <!-- {
-                "openUserId": "FSUID_XXXXXXXXXXXXXXXXXXX",
-                "name": "Andson",
-                "email": "andson@fxiaoke.com",
-                "profileImageUrl": "xxx"
-            } -->
-        });
-    }
-});
-``` 
-
-##### &#10084;  从通讯录里选择部门
-接口方法：FSOpen.contact.chooseDepartment   
-调用参数：   
-
-| 参数                | 类型          | 说明                 |
-| --------------------| --------------| ---------------------|
-| selectedDepartments | Array[String] | 已选的部门ID列表     |
-| filterDepartments   | Array[String] | 过滤的部门ID列表     |
-| max                 | Number        | 可选部门上限         |
-| radio               | Boolean       | 是否单选，如有这个参数，selectedDepartments最多只被选中一个 |
-| title               | String        | 可选，控件显示标题   |
-
-返回说明：  
-
-| 参数             | 类型          | 说明     |
-| -----------------| --------------| ---------|
-| departments      | Array[Object] | 部门列表 |
-
-举个栗子：  
-```javascript
-FSOpen.contact.chooseDepartment({
-    max: 5,
-    onSuccess: function(responseData){
-        conosle.assert(responseData.errorCode == 0);
-        console.assert(responseData.departments != null);
-        console.assert(responseData.departments.length == 1);
-
-        responseData.departments.forEach(function(item){
-            console.log(item);
-            <!-- {
-                "id": 11,
-                "name": "事业部",
-                "parentId": 1,
-            } -->
-        });
-    }
-});
-``` 
-
-##### &#10084;  跳到个人主页
-接口方法：FSOpen.contact.showProfile    
-调用参数：  
-
-| 参数      | 类型      | 说明                 |
-| ----------| ----------| ---------------------|
-| openId    | String    | 开放平台根据应用ID装换后的用户openId |
-
-举个栗子：   
-```javascript
-FSOpen.contact.showProfile({
-    openId: 'FSUID_5174F22D77B81347E278CBD353748547'
-});
-``` 
-
-##### &#10084;  跳到部门主页
-接口方法：FSOpen.contact.showDepartment   
-调用参数：  
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| id        | Number    | 部门ID    |
-
-举个栗子：  
-```javascript
-FSOpen.contact.showDepartment({
-    id: '1009'
-});
-``` 
-
-##### &#10084;  跳到服务号资料页
-接口方法：FSOpen.contact.openAppProfile   
-调用参数：  
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| appId     | String    | 服务号ID  |
-
-举个栗子：  
-```javascript
-FSOpen.contact.openAppProfile({
-    appId: 'FSAID_1313f95'
-});
-``` 
-
-##### &#10084;  联系人添加星标
-接口方法：FSOpen.contact.mark   
-调用参数：  
-
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| openUserId | String    | 用户OPEN-ID |
-
-返回说明：
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| result    | Number    | 0-表示成功，非0表示失败 |
-
-举个栗子：  
-```javascript
-FSOpen.contact.mark({
-    openUserId: 'FSUID_5174F22D77B81347E278CBD353748547'
-});
-``` 
+### Webview  
 
 ---------------------
-#### 支付类  
+#### 控制参数列表 
 ---------------------
 
-##### &#10084;  调起支付页面  
-接口方法：FSOpen.pay.request   
-调用参数：   
+Webview控制参数是指当前页面所打开的链接里的参数信息，用于在页面请求前就可以做一些UI、安全相关的控制，提高用户体验。目前已有的参数列表如下：  
 
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| amount     | String    | 金额，字符串。比如20.00，单位是元 |
-| wareId     | String    | 业务编号                          |
-| wareName   | String    | 业务名称，商家自定义              |
-| merchantId | String    | 商户ID，由支付平台提供            |
-| limitPayer | Number    | 是否限制付款者 1限制，0不限制     |
-| fromEa     | Number    | 当前用户的企业号                  |
-| fromUid    | Number    | 当前用户的userId                  |
-| expireTime | Number    | 二维码的过期时间（不可为空）格式为毫秒数  |
-| sign       | String    | 后台返回的签名参数                |
+| 参数            | 类型    | 说明                      |
+| ----------------| --------| --------------------------|
+| fs_nav_title    | String  | 控制导航栏标题文字，上限30个字 |
+| fs_nav_bgcolor  | String  | 控制导航栏颜色，格式为：RRGGBBAA，如：FAFAFAFF |
+| fs_nav_pbcolor  | String  | 控制导航栏进度条颜色，格式为：RRGGBBAA，如：FAFAFAFF |
+| fs_nav_fsmenu   | Boolean | 控制是否显示纷享菜单，true为显示，false为不显示，默认显示 |
+| fs_auth         | Boolean | 控制是否需二次鉴权，如果为true则需要，否则不需要，默认false |
+| fs_auth_appname | String  | 二次授权的应用名，只有在需要二次授权时使用，非空值需要进行URL encode |
 
-举个栗子：  
+
+---------------------
+#### Webview跳转 
+---------------------
+
+##### 页面回退
+5.4.0
+
 ```javascript
-FSOpen.pay.request({
-    amount: '0.1',
-    wareId: 'xxx',
-    wareName: 'xxx',
-    merchantId: 'xxx',
-    limitPayer: 1,
-    fromEa: 7,
-    fromUid: 1099,
-    expireTime: 1461564216568,
-    sign: '....',
-    onSuccess: function(responseData){
-        // 没有返回
-    },
-    onFail: function(responseData){
-        // 用户取消
-        console.assert(responseData.errorCode == 40008);
+FSOpen.webview.back({
+    steps: 2
+});
+``` 
+
+接口方法：FSOpen.webview.back      
+调用参数：  
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| steps     | Number      | 否   | 回退记录，默认为1 |
+
+
+##### 页面关闭
+5.4.0
+
+```javascript
+FSOpen.webview.close({
+    extras: {
+        data: 1
     }
 });
 ``` 
 
-##### &#10084;  跳到钱包页面   
-接口方法：FSOpen.pay.showWallet    
-举个栗子：   
-```javascript
-FSOpen.pay.showWallet();
-``` 
-
----------------------
-#### 导航栏  
----------------------
-
-##### &#10084;  设置标题栏标题
-接口方法：FSOpen.navigation.setTitle   
-调用参数：   
-
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| title      | String    | 标题      |
-
-举个栗子：   
-```javascript
-FSOpen.navigation.setTitle({
-    title: '设置标题'
-})
-``` 
-
-##### &#10084;  设置标题栏左侧返回按钮的文字
-接口方法：FSOpen.navigation.setBackBtnText       
-调用参数：   
-
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| text       | String    | 返回按钮文字 |
-  
-举个栗子：    
-```javascript
-FSOpen.navigation.setBackBtnText({
-    text: '返回'
-})
-``` 
-
-##### &#10084;  设置左侧自定义按钮    
-接口方法：FSOpen.navigation.setLeftBtn       
+接口方法：FSOpen.webview.close      
 调用参数：  
 
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| text       | String    | 按钮文本  |
-| onClick    | Function  | 点击回调  |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| extras    | Object      | 否   | 如果当前页面是通过`webview.open`接口打开，调用此接口在关闭页面的时候可通过此参数回传一些自定义数据到原先的页面，一般用于新增数据的回传 |
 
-举个栗子：   
+
+##### 页面打开
+5.4.0
+
 ```javascript
-FSOpen.navigation.setLeftBtn({
+FSOpen.webview.open({
+    url: 'https://www.fxiaoke.com/jsapi-demo',
+    onClose: function() {
+        alert('Close new window');
+    }
+});
+``` 
+
+接口方法：FSOpen.webview.open      
+调用参数：  
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| url       | String      | 是   | 需要打开的页面链接地址 |
+| onClose   | Function    | 是   | 打开的页面关闭后的回调。如果通过此接口打开的窗口页面里，通过`webview.close`接口来关闭页面的话，可以指定关闭后的回传参数`extras` |
+
+
+---------------------
+#### 屏幕控制 
+---------------------
+
+##### 屏幕控制
+5.4.0
+
+```javascript
+FSOpen.webview.setOrientation({
+    orientation: 'portrait'
+});
+``` 
+
+接口方法：FSOpen.webview.setOrientation      
+调用参数：  
+
+| 参数        | 类型        | 必须 | 说明         |
+| ------------| ------------| -----| -------------|
+| orientation | String      | 否   | portrait竖屏，landscape横屏。默认为portrait。 |
+
+
+---------------------
+#### 导航栏 
+---------------------
+
+##### 删除右侧按钮组
+5.4.0  
+注意此接口只会删除掉用户自定义添加的按钮组，不会删除纷享菜单  
+
+```javascript
+FSOpen.webview.navbar.removeRightBtns();
+``` 
+
+接口方法：FSOpen.webview.navbar.removeRightBtns      
+
+##### 隐藏纷享菜单
+5.4.0    
+
+```javascript
+FSOpen.webview.navbar.hideMenu();
+``` 
+
+接口方法：FSOpen.webview.navbar.hideMenu      
+
+##### 定制左侧按钮
+5.4.0    
+
+```javascript
+FSOpen.webview.navbar.setLeftBtn({
     text: '关闭',
-    onClick: function(resp) {
-        FSOpen.util.closeWebView();
-    }
-}
-})
-``` 
-
-##### &#10084;  注册标题栏右侧文字按钮
-接口方法：FSOpen.navigation.addRightBtn       
-调用参数：  
-
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| btnLabel   | String    | 按钮文字  |
-| btnIcon    | String    | 如果有定义此参数，则按钮将按照图形按钮形式展示，目前支持的有：add,more |
-| onClick    | Function  | 点击回调  |
-     
-举个栗子：  
-```javascript
-FSOpen.navigation.addRightBtn({
-    btnLabel: '更多',
-    btnIcon: 'more',
     onClick: function() {
-        // 点击回调
+        FSOpen.webview.close();
     }
-})
+});
 ``` 
 
-##### &#10084;  设置标题栏右侧多个按钮     
-接口说明：此接口将清空掉原addRightBtn注册的所有按钮，**推荐使用此接口**     
-接口方法：FSOpen.navigation.setRightBtn       
-调用参数：  
+接口方法：FSOpen.webview.navbar.setLeftBtn        
+调用参数：
 
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| items      | Object    | 多个按钮的属性数组 |
-| onClick    | Function  | 点击回调  |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| text      | String      | 是   | 定制按钮的文本 |
+| onClick   | Function    | 否   | 定制按钮的点击回调 |
 
-按钮字段说明：
+##### 定制右侧按钮组
+5.4.0    
 
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| btnId      | String    | 每一个item的唯一标示 |
-| icon       | String    | 预置icon的值，对应关系查看附录 |
-| text       | String    | item的文本属性 |
-
-`icon`值对应关系：
-
-| 值         | 说明      |
-| -----------| ----------|
-| fav        | 收藏    |
-| add        | 添加    |
-| calendar   | 日历    |
-| search     | 搜索    |
-| delete     | 删除    |
-| scan       | 扫描    |
-| structure  |  架构   |
-| edit       | 编辑    |
-| group      | 群组    |
-| individual | 个人    |
-| more       | 更多    |
-| setting    | 设置    |
-| chat       | 聊天    |
-
-`onClick`点击回调说明：  
-
-| 参数      | 类型          | 说明     |
-| ----------| --------------| ---------|
-| btnId     | String        | item的id |
-
-举个栗子：  
 ```javascript
-FSOpen.navigation.setRightBtn({
+FSOpen.webview.navbar.setRightBtns({
     items: [
         {btnId: '1', icon: 'fav', text: '收藏'},
         {btnId: '2', icon: 'add', text: '添加'}
     ],
     onClick: function(resp) {
-        // {"btnId": "1"}
-    },
-    onSuccess: function(resp) {
-        _alert(resp);
-    },
-    onFail: function(resp) {
-        _error(resp);
+        // {btnId: '1'}
+        console.assert(resp.btnId !== undefined);
     }
-})
+});
 ``` 
 
-##### &#10084;  删除标题栏上所有右侧按钮  
-接口方法：FSOpen.navigation.deleteAllRightBtns       
-举个栗子：   
+接口方法：FSOpen.webview.navbar.setRightBtns        
+调用参数：
+
+| 参数      | 类型          | 必须 | 说明         |
+| ----------| --------------| -----| -------------|
+| items     | Array[Object] | 是   | 定制按钮的属性数组 |
+| onClick   | Function      | 否   | 定制按钮的点击回调 |
+
+`items`单项字段说明：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| btnId     | String    | 是   | 每个item的唯一标示 |
+| icon      | String    | 是   | 预置icon的值，对应关系查看附录 |
+| text      | String    | 是   | 每个item的文本属性 |
+
+##### 定制标题
+5.4.0    
+
 ```javascript
-FSOpen.navigation.deleteAllRightBtns()
+FSOpen.webview.navbar.setTitle({
+    title: '纷享JSAPI'
+});
 ``` 
 
-##### &#10084;  显示纷享菜单 
-接口方法：FSOpen.navigation.showFSMenu       
-调用参数：  
+接口方法：FSOpen.webview.navbar.setTitle        
+调用参数：
 
-| 参数       | 类型          | 说明      |
-| -----------| --------------| ----------|
-| menuList   | Array[String] | 菜单项列表，默认全部显示 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 要显示的标题文本，默认为空 |
 
-`菜单项`说明：
+##### 定制中间图标按钮
+5.4.0    
 
-| 参数                  | 说明      |
-| ----------------------| ----------|
-| biz:favorite          | 收藏 |
-| sns:shareToChat       | 转发到企信 |
-| sns:shareToFeed       | 转发到工作流 |
-| sns:shareToCrmContact | 转发到CRM联系人 |
-| sns:shareToWXFriend   | 分享到微信好友 |
-| sns:shareToWXMoments  | 分享到微信朋友圈 |
-| sns:shareToQQFriend   | 分享到QQ好友 |
-| sns:shareToMail       | 分享到邮件 |
-| sns:shareToSms        | 分享到短信 |
-| page:refresh          | 页面刷新 |
-| page:copyUrl          | 复制链接 |
-| page:generateQR       | 生成二维码 |
-| page:openInBrower     | 在浏览器中打开 |
-| seperator             | 分隔符，仅android端用来分组菜单项 |
-
-举个栗子：   
 ```javascript
-FSOpen.navigation.showFSMenu({
+FSOpen.webview.navbar.setMiddleBtn({
+    onClick: function() {
+        FSOpen.webview.open('https://www.fxiaoke.com/aboutus/index.html');
+    }
+});
+``` 
+
+接口方法：FSOpen.webview.navbar.setMiddleBtn        
+调用参数：
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| onClick   | Function    | 否   | 定制按钮的点击回调 |
+
+##### 显示纷享菜单
+5.4.0    
+> 此接口的每个分享功能都可定制分享参数，具体见[Webview-纷享菜单]()
+
+```javascript
+FSOpen.webview.navbar.showMenu({
     menuList: [
-        'biz:shareToChat',
-        'biz:shareToFeeds',
-        'biz:shareToCrmContact',
-        'biz:favorite',
-        'sns:shareToWXFriend',
-        'sns:shareToWXMoments',
-        'sns:shareToQQFriend',
-        'sns:shareToMail',
-        'sns:shareToSms',
+        'service:favorite',
+        'share:toConversation',
+        'share:toFeed',
+        'seperator',
+        'share:toCRMContact',
+        'share:toWXFriend',
+        'share:toWXMoments',
+        'share:toQQFriend',
+        'share:viaMail',
+        'share:viaSMS',
+        'seperator',
         'page:refresh',
-        'page:copyUrl',
+        'page:copyURL',
         'page:generateQR',
-        'page:openInBrower'
+        'page:openWithBrowser'
     ]
-})
+});
 ``` 
 
-##### &#10084;  隐藏纷享菜单 
-接口方法：FSOpen.navigation.hideFSMenu       
-举个栗子：   
-```javascript
-FSOpen.navigation.hideFSMenu();
-``` 
+接口方法：FSOpen.webview.navbar.showMenu          
+调用参数：
 
-##### &#10084;  设置导航栏中间按钮 
-接口方法：FSOpen.navigation.setMiddleIcon       
-调用参数：  
+| 参数      | 类型          | 必须 | 说明         |
+| ----------| --------------| -----| -------------|
+| menuList  | Array[String] | 是   | 定制的菜单项`menuItem`列表，默认全部显示 |
 
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| icon       | String    | 可选，目前只支持问号按钮 |
-| onClick    | Function  | 点击回调  |
+`menuItem`说明：
 
-举个栗子：   
-```javascript
-FSOpen.navigation.setMiddleIcon({
-    onClick: function(resp) {
-        alert(JSON.stringify(resp));
-    }
-}
-})
-``` 
+| 参数                 | 说明             |
+| ---------------------| -----------------|
+| service:favorite     | 收藏当前页面     |
+| share:toConversation | 转发到企信       |
+| share:toFeed         | 转发到工作流     |
+| share:toCRMContact   | 转发给CRM联系人  |
+| share:toWXFriend     | 分享给微信好友   |
+| share:toWXMoments    | 分享到微信朋友圈 |
+| share:toQQFriend     | 分享给QQ好友     |
+| share:viaMail        | 通过邮件转发     |
+| share:viaSMS         | 通过短信转发     |
+| page:refresh         | 页面刷新         |
+| page:copyURL         | 复制链接         |
+| page:generateQR      | 生成二维码       |
+| page:openWithBrowser | 在浏览器中打开   |
+| seperator            | 分隔符，用来分组菜单项 |
 
 
 ---------------------
-#### 工具类  
+#### 纷享菜单 
 ---------------------
 
-##### &#10084;  上传文件
-接口方法：FSOpen.util.uploadFile         
-调用参数：   
+此系列接口对应系统内置的导航右侧3个点菜单（即**纷享菜单**）的分享转发功能，在用户触发点击的时候的回调处理。通过此回调用户可定义要分享转发出去的内容信息。
 
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| onUpload   | Function  | 上传回调函数，此回调会多次调用，调用次数正常情况跟上传的文件个数一致 |
+##### 转发到企信     
+5.4.0
 
-`onUpload`的回调参数说明：
-
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| file       | Object    | 当前上传成功的文件信息 |
-| progress   | Object    | 本次上传的进度         |
-
-`file`对象的结构说明：
-
-| 参数            | 类型      | 说明      |
-| ----------------| ----------| ----------|
-| businessAccount | String    | 当前登录企业账号 |
-| employeeId      | Object    | 当前登录用户ID   |
-| id              | Object    | 上传对象ID       |
-| result          | Object    | 上传结果，true为成功false为失败 |
-| tempFilePath    | Object    | 临时存储路径     |
-
-`progress`对象的结构说明：
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| loaded    | Number    | 已上传（无论成功与否）的文件个数 |
-| count     | Number    | 总上传的文件个数，当loaded>=count，表示上传完毕 |
-
-返回说明：
-
-| 参数           | 类型          | 说明           |
-| ---------------| --------------| ---------------|
-| selectedFiles  | Array[Object] | 选择的文件列表 |
-
-返回图片对象的结构说明：
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| id        | Number    | 上传对象ID |
-| name      | String    | 上传文件名称 |
-
-举个栗子：  
 ```javascript
-FSOpen.util.uploadFile({
-    onUpload: function(file, progress) {
-        console.log(file);
-        console.assert(progress.loaded <= progress.count);
+FSOpen.webview.menu.onShareToConversation({
+    title: '纷享逍客',
+    desc: '移动办公 自在纷享',
+    link: 'http://www.fxiaoke.com',
+    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
+    onSuccess: function(resp) {
+        // 可以在这里做些分享数据统计
     },
-    onSuccess: function(responseData){
-        console.assert(responseData.selectedFiles != null)
-        console.assert(responseData.selectedFiles.length == 1);   
-    },
-    onFail: function(responseData){
-        console.assert(responseData.errorCode === 40004);
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
+            alert('用户取消分享');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  上传图片
-接口方法：FSOpen.util.uploadImage         
-调用参数：   
-
-| 参数       | 类型          | 说明      |
-| -----------| --------------| ----------|
-| source     | Array[String] | 上传来源列表，目前只支持`album`，`camera`。默认['album', 'camera'] |
-| onUpload   | Function      | 上传回调函数，此回调会多次调用，调用次数正常情况跟上传的图片张数一致 |
-
-`onUpload`的回调参数说明：
-
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| image      | Object    | 当前上传成功的图片信息 |
-| progress   | Object    | 本次上传的进度         |
-
-`image`对象的结构说明：
-
-| 参数            | 类型      | 说明      |
-| ----------------| ----------| ----------|
-| businessAccount | String    | 当前登录企业账号 |
-| employeeId      | Object    | 当前登录用户ID   |
-| id              | Object    | 上传对象ID       |
-| result          | Object    | 上传结果，true为成功false为失败 |
-| tempFilePath    | Object    | 临时存储路径     |
-
-`progress`对象的结构说明：
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| loaded    | Number    | 已上传（无论成功与否）的图片张数 |
-| count     | Number    | 总上传的图片张数，当loaded>=count，表示上传完毕 |
-
-返回说明：
-
-| 参数           | 类型          | 说明           |
-| ---------------| --------------| ---------------|
-| selectedImages | Array[Object] | 选择的图片列表 |
-
-返回图片对象的结构说明：
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| id        | Number    | 上传对象ID |
-| name      | String    | 上传文件名称 |
-| thumbPath | String    | 上传文件的缩略图路径，例：faciImage://www.fxiaoke.com?asset/asset.png?id=1693248043 |
-
-举个栗子：  
-```javascript
-FSOpen.util.uploadImage({
-    onUpload: function(image, progress) {
-        console.log(image);
-        console.assert(progress.loaded <= progress.count);
-    },
-    onSuccess: function(responseData){
-        console.assert(responseData.selectedImages != null)
-        console.assert(responseData.selectedImages.length == 1);   
-    }
-});
-``` 
-
-##### &#10084;  获取当前地理位置
-接口方法：FSOpen.util.getLocation        
-返回说明：  
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| location  | Object    | 位置信息  |
-
-`location`对象的结构说明：
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| longitude | String    | 经度信息  |
-| latitude  | String    | 维度信息  |
-| city      | String    | 所在城市  |
-
-`onFail`调用失败回调说明：
-
-| 错误码    | 错误描述     |
-| ----------| -------------|
-| 40003     | 数据请求失败 |
-| 40005     | 数据授权失败，比如系统未对应用进行授权 |
-
-举个栗子：    
-```javascript
-FSOpen.util.getLocation({
-    onSuccess: function(responseData){
-        console.assert(responseData.location != null);
-        console.log(responseData.location);
-    },
-    onFail: function(responseData){
-        console.log(responseData.errorCode);
-    }
-});
-``` 
-
-##### &#10084;  打开新窗口  
-接口说明: URL支持fs://格式，http(s)://格式。   
-接口方法：FSOpen.util.openWindow    
+接口方法：FSOpen.webview.menu.onShareToConversation   
 调用参数：  
 
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| url       | String    | 跳转应用地址 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 分享标题，默认当前页面标题 |
+| desc      | String      | 否   | 分享摘要描述，默认当前页面标题 |
+| link      | String      | 否   | 分享链接地址，默认当前页面链接 |
+| imgUrl    | String      | 否   | 分享缩略图地址，默认为系统提供的图 |
 
-举个栗子：  
+##### 转发给CRM联系人     
+5.4.0
+
 ```javascript
-FSOpen.util.openWindow({
-    url: 'fs://helper/meeting/send'
-});
-``` 
-
-##### &#10084;  打开新窗口(WebView)  
-接口方法：FSOpen.util.openWindowForResult       
-调用参数：  
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| url       | String    | 新窗口链接地址，支持fs://，http(s)://等应用内外链接  |
-| onClose   | Function  | 新窗口的关闭后回调  |
-
-`onClose`回调参数说明：
-
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| resultCode | Number    | 1表示用js api进行的关闭，0表示通过返回键等方式关闭 |
-| extras     | Object    | extras值即close方法传入的extras值 |
-
-举个栗子：  
-```javascript
-FSOpen.util.openWindowForResult({
-    url: 'fs://helper/meeting/send',
-    onClose: function(resp) {
-        console.assert(resp.resultCode == 1);
-        console.assert(resp.extras !== undefined);
+FSOpen.webview.menu.onShareToCRMContact({
+    link: location.href,
+    onSuccess: function(resp) {
+        // 可以在这里做些分享数据统计
+    },
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
+            alert('用户取消分享');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  关闭当前页面(WebView)
-接口方法：FSOpen.util.closeWebView     
+接口方法：FSOpen.webview.menu.onShareToCRMContact   
 调用参数：  
 
-| 参数     | 类型      | 说明      |
-| ---------| ----------| ----------|
-| extras   | Object    | 关闭时需要回传给上一个窗口（如果有）的参数 |  
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| link      | String      | 否   | 要转发的页面链接 |
 
-举个栗子：  
+##### 转发到工作流     
+5.4.0
+
 ```javascript
-FSOpen.util.closeWebView({
-    extras: {data: 1}
+FSOpen.webview.menu.onShareToFeed({
+    title: '纷享逍客',
+    desc: '移动办公 自在纷享',
+    link: 'http://www.fxiaoke.com',
+    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
+    onSuccess: function(resp) {
+        // 可以在这里做些分享数据统计
+    },
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
+            alert('用户取消分享');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
+    }
 });
 ``` 
 
-##### &#10084;  打开回复输入框
-接口方法：FSOpen.util.openReplyPage     
-调用参数：   
+接口方法：FSOpen.webview.menu.onShareToFeed   
+调用参数：  
 
-| 参数         | 类型          | 说明      |
-| -------------| --------------| ----------|
-| backFillData | Object        | 编辑时回填数据 |
-| components   | Array[String] | 快捷输入组件，目前支持：表情（emoji）、图片（pic）、@（at） |
-| title        | Object        | 是否显示左侧的返回箭头、IOS使用 |
-| placeholder  | String        | 预置输入提示文本 |
-| limit        | Number        | 最大输入字符，不区分中英文 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 分享标题，默认当前页面标题 |
+| desc      | String      | 否   | 分享摘要描述，默认当前页面标题 |
+| link      | String      | 否   | 分享链接地址，默认当前页面链接 |
+| imgUrl    | String      | 否   | 分享缩略图地址，默认为系统提供的图 |
 
-`backFillData`对象的结构说明：  
+##### 通过邮件转发     
+5.4.0
 
-| 参数          | 类型          | 说明      |
-| --------------| --------------| ----------|
-| txt           | String        | 需要回填的文本内容 |
-| pics          | Array[String] | 需要回填的选择图片 |
-| tempFilePaths | Array[String] | 临时图片路径，可选。如果有，不会重复上传 |
-
-`components`对象的结构说明：  
-`components: ['emoji', 'pic', 'at']`
-
-`title`对象的结构说明：  
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| leftText  | String    | 顶部左侧按钮文本 |
-| titleText | String    | 顶部中间抬头文本 |
-| rightText | String    | 顶部右侧按钮文本 |
-| leftArrow | Boolean   | 是否显示左侧的返回箭头，IOS使用 |
-
-返回说明：
-
-| 参数          | 类型          | 说明      |
-| --------------| --------------| ----------|
-| txt           | String        | 文本内容，如'批准[微笑]， @北京研发中心'，emoji表情在文本中，由H5端自行解析。 at内容也在里面，at内容在H5端不支持点击。|
-| pics          | Array[String] | 图片的本地路径，H5端不需要用它做上传，只是编辑回显的时候需要。 |
-| tempFilePaths | Array[String] | 文件上传后的临时路径，由后端进行处理 |
-| thumbs        | Array[String] | 图片的缩略图，直接用`<img src="">`标签加载即可 |
-
-举个栗子：  
 ```javascript
-FSOpen.util.openReplyPage({
-    backFillData: {  
-        txt: '文本内容',
-        pics: ['/sdcard/1.jpg','/sdcard/2.jpg']
+FSOpen.webview.menu.onShareViaMail({
+    title: '纷享逍客',
+    content: '移动办公，自在纷享 {url}',
+    onSuccess: function(resp) {
+        // 可以在这里做些分享数据统计
     },
-    components: ['emoji','pic','at'], 
-    title: {
-        leftText: '返回',
-        titleText: '标题',
-        rightText: '发送',
-        leftArrow: true                        
-    },
-    onSuccess: function(responseData) {
-        console.assert(responseData.txt != null);
-        console.assert(responseData.pics.length == 1);
-        console.assert(responseData.tempFilePaths.length == 1);
-        console.assert(responseData.thumbs.length == 1);
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
+            alert('用户取消分享');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
     }
-})
+});
 ``` 
 
-##### &#10084;  打开时间选择控件    
-接口说明：此接口的输入输出参数均为24小时制   
-接口方法：FSOpen.util.selectDate   
-调用参数：   
+接口方法：FSOpen.webview.menu.onShareViaMail   
+调用参数：  
 
-| 参数         | 类型      | 说明      |
-| -------------| ----------| ----------|
-| dateType     | String    | 时间格式  |
-| defaultValue | String    | 默认值    |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 转发邮件标题 |
+| content   | String      | 否   | 转发邮件内容，可使用{url}替换符来表示当前页面的url |
 
-`dateType`字段的结构说明：
+##### 分享给QQ好友     
+5.4.0
 
-| 值        | 格式                  | 说明          |
-| ----------| ----------------------| --------------|
-| month     | yyyy-MM               | 年月          |
-| day       | yyyy-MM-dd            | 年月日        |
-| week      | yyyy-MM-dd~yyyy-MM-dd | 周            |
-| time      | HH:mm                 | 时分秒，24小时制 |
-| day&#124;time | yyyy-MM-dd HH:mm      | 年月日 时分秒 |
-
-返回说明：     
-
-| 参数         | 类型      | 说明      |
-| -------------| ----------| ----------|
-| selectedDate | String    | 如果有时分秒，为24小时制 |
-
-举个栗子：  
 ```javascript
-FSOpen.util.selectDate({
+FSOpen.webview.menu.onShareToQQFriend({
+    title: '纷享逍客',
+    desc: '移动办公 自在纷享',
+    link: 'http://www.fxiaoke.com',
+    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
+    onSuccess: function(resp) {
+        // 可以在这里做些分享数据统计
+    },
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
+            alert('用户取消分享');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.webview.menu.onShareToQQFriend   
+调用参数：  
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 分享标题，默认当前页面标题 |
+| desc      | String      | 否   | 分享摘要描述，默认当前页面标题 |
+| link      | String      | 否   | 分享链接地址，默认当前页面链接 |
+| imgUrl    | String      | 否   | 分享缩略图地址，默认为系统提供的图 |
+
+##### 通过短信转发     
+5.4.0
+
+```javascript
+FSOpen.webview.menu.onShareViaSMS({
+    content: '移动办公，自在纷享 {url}',
+    onSuccess: function(resp) {
+        // 可以在这里做些分享数据统计
+    },
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
+            alert('用户取消分享');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.webview.menu.onShareViaSMS   
+调用参数：  
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| content   | String      | 否   | 转发内容，最多140字，可使用{url}替换符来表示当前页面的url |
+
+##### 分享给微信好友     
+5.4.0
+
+```javascript
+FSOpen.webview.menu.onShareToWXFriend({
+    title: '纷享逍客',
+    link: 'http://www.fxiaoke.com',
+    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
+    onSuccess: function(resp) {
+        // 可以在这里做些分享数据统计
+    },
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
+            alert('用户取消分享');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.webview.menu.onShareToWXFriend   
+调用参数：  
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 分享标题，默认当前页面标题 |
+| link      | String      | 否   | 分享链接地址，默认当前页面链接 |
+| imgUrl    | String      | 否   | 分享缩略图地址，默认为系统提供的图 |
+
+##### 分享到微信朋友圈     
+5.4.0
+
+```javascript
+FSOpen.webview.menu.onShareToWXMoments({
+    title: '纷享逍客',
+    link: 'http://www.fxiaoke.com',
+    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
+    onSuccess: function(resp) {
+        // 可以在这里做些分享数据统计
+    },
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
+            alert('用户取消分享');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.webview.menu.onShareToWXMoments   
+调用参数：  
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 分享标题，默认当前页面标题 |
+| link      | String      | 否   | 分享链接地址，默认当前页面链接 |
+| imgUrl    | String      | 否   | 分享缩略图地址，默认为系统提供的图 |
+
+
+---------------------
+#### 页面 
+---------------------
+
+##### 复制链接     
+5.4.0
+
+```javascript
+FSOpen.webview.page.copyURL();
+``` 
+
+接口方法：FSOpen.webview.page.copyURL   
+
+##### 生成二维码     
+5.4.0
+
+```javascript
+FSOpen.webview.page.generateQR();
+``` 
+
+接口方法：FSOpen.webview.page.generateQR   
+
+##### 在浏览器中打开     
+5.4.0
+
+```javascript
+FSOpen.webview.page.openWithBrowser();
+``` 
+
+接口方法：FSOpen.webview.page.openWithBrowser   
+
+##### 页面刷新     
+5.4.0
+
+```javascript
+FSOpen.webview.page.refresh();
+``` 
+
+接口方法：FSOpen.webview.page.refresh  
+
+
+---------------------
+#### Bounce 
+---------------------
+
+> 此类接口仅限于IOS系统
+
+##### 启用webview的bounce效果     
+5.4.0
+
+```javascript
+FSOpen.webview.bounce.enable();
+``` 
+
+接口方法：FSOpen.webview.bounce.enable   
+
+##### 禁用webview的bounce效果     
+5.4.0
+
+```javascript
+FSOpen.webview.bounce.disable();
+``` 
+
+接口方法：FSOpen.webview.bounce.disable   
+
+---------------------
+#### 下拉刷新 
+---------------------
+
+##### 启用下拉刷新     
+5.4.0
+
+```javascript
+FSOpen.webview.pullRefresh.enable({
+    onPullRefresh: function() {
+        $.ajax({
+            url: '/support/articles/',
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            success: function() {
+                FSOpen.webview.pullRefresh.stop();
+            },
+            error: function() {
+            }
+        });
+    }
+});
+``` 
+
+接口方法：FSOpen.webview.pullRefresh.enable   
+调用参数：
+
+| 参数          | 类型     | 必须 | 说明         |
+| --------------| ---------| -----| -------------|
+| onPullRefresh | Function | 否   | 下拉到临界值时触发的回调。可在此回调里进行一些延时操作，并在延时操作完毕后通过对应的`webview.pullRefresh.stop`来还原 |   
+
+##### 禁用下拉刷新     
+5.4.0
+
+```javascript
+FSOpen.webview.pullRefresh.disable();
+``` 
+
+接口方法：FSOpen.webview.pullRefresh.disable   
+
+##### 收起下拉刷新     
+5.4.0
+
+```javascript
+FSOpen.webview.pullRefresh.stop();
+``` 
+
+接口方法：FSOpen.webview.pullRefresh.stop   
+
+
+---------------------
+#### 弹层 
+---------------------
+
+##### 显示单选列表(actionSheet)     
+5.4.0
+
+```javascript
+FSOpen.widget.showActionSheet({
+    title: '标题',
+    cancelBtnLabel: '取消',
+    actionBtnLabels: ['湖人', '马刺', '火箭'],
+    onSuccess: function(resp) {
+        if (resp.actionIndex == 0) {
+            alert('选择了湖人');
+        } else if (resp.actionIndex == 1) {
+            alert('选择了马刺');
+        } else {
+            alert('选择了火箭');
+        }
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.widget.showActionSheet   
+调用参数：  
+
+| 参数            | 类型          | 必须 | 说明         |
+| ----------------| --------------| -----| -------------|
+| title           | String        | 否   | 标题说明。如果为空，Android系统默认显示“选项”，ios系统不显示 |
+| cancelBtnLabel  | String        | 否   | 取消选择按钮文本，默认为“取消” |
+| actionBtnLabels | Array[String] | 是   | 选择按钮文本列表 |
+
+返回成功说明：
+
+| 参数        | 类型      | 说明     |
+| ------------| ----------| ---------|
+| actionIndex | Number    | 选择的索引号，从0开始 |
+
+##### 显示Alert     
+5.4.0
+
+```javascript
+FSOpen.widget.showAlert({
+    title: '标题',
+    content: '消息内容',
+    btnLabel: '朕知道了',
+    onSuccess: function(resp) {
+        // return nothing
+    },
+    onFail: function(error) {
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.widget.showAlert   
+调用参数：  
+
+| 参数     | 类型      | 必须 | 说明         |
+| ---------| ----------| -----| -------------|
+| title    | String    | 否   | 弹窗标题说明 |
+| content  | String    | 否   | 弹窗消息内容 |
+| btnLabel | String    | 否   | 弹窗按钮文本，默认“OK” |
+
+##### 显示Confirm     
+5.4.0
+
+```javascript
+FSOpen.widget.showConfirm({
+    title: '标题',
+    content: '消息内容',
+    btnLabels: ['朕知道了','朕不知道'],
+    onSuccess: function(resp) {
+        if (resp.btnIndex == 0) {
+            alert('朕知道了');
+        } else {
+            alert('朕不知道');
+        }
+    },
+    onFail: function(error) {
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.widget.showConfirm   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| title     | String    | 否   | 弹窗标题说明 |
+| content   | String    | 否   | 弹窗消息内容 |
+| btnLabels | String    | 是   | 弹窗按钮左右两个文本 |
+
+返回成功说明：
+
+| 参数     | 类型     | 说明     |
+| ---------| ---------| ---------|
+| btnIndex | Number   | 点击的按钮索引，从0开始 |
+
+##### 隐藏预加载提示框     
+5.4.0
+
+```javascript
+FSOpen.widget.hidePreloader();
+``` 
+
+接口方法：FSOpen.widget.hidePreloader   
+
+##### 显示模态框     
+5.4.0
+
+```javascript
+FSOpen.widget.showModal({
+    title: '标题',
+    imgUrl: '',
+    content: '我是一个模态窗口内容',
+    btnLabels: ['朕知道了','朕不知道'],
+    onSuccess: function(resp) {
+        if (resp.btnIndex == 0) {
+            alert('朕知道了');
+        } else {
+            alert('朕不知道');
+        }
+    },
+    onFail: function(error) {
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.widget.showModal   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| title     | String    | 否   | 弹窗标题说明 |
+| imgUrl    | String    | 否   | 弹窗图片内容，默认为空不显示 |
+| content   | String    | 否   | 弹窗文本内容，默认为空 |
+| btnLabels | String    | 是   | 弹窗按钮左右两个文本 |
+
+返回成功说明：
+
+| 参数     | 类型     | 说明     |
+| ---------| ---------| ---------|
+| btnIndex | Number   | 点击的按钮索引，从0开始 |
+
+##### 显示Prompt     
+5.4.0
+
+```javascript
+FSOpen.widget.showPrompt({
+    title: '标题',
+    content: '消息内容',
+    btnLabels: ['朕知道了','朕不知道'],
+    onSuccess: function(resp) {
+        if (resp.btnIndex == 0) {
+            alert('朕知道了');
+        } else {
+            alert('朕不知道');
+        }
+    },
+    onFail: function(error) {
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.widget.showPrompt   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| title     | String    | 否   | 弹窗标题说明 |
+| content   | String    | 否   | 弹窗消息内容 |
+| btnLabels | String    | 否   | 弹窗按钮左右两个文本，默认“” |
+
+返回成功说明：
+
+| 参数     | 类型     | 说明     |
+| ---------| ---------| ---------|
+| btnIndex | Number   | 点击的按钮索引，从0开始 |
+| value    | String   | 弹窗输入框的值 |
+
+##### 显示预加载提示框     
+5.4.0
+
+```javascript
+FSOpen.widget.showPreloader({
+    text: '正在加载中',
+    icon: true,
+    onSuccess: function(resp) {
+        // do sth
+    },
+    onFail: function(error) {
+        // do sth
+    }
+});
+``` 
+
+接口方法：FSOpen.widget.showPreloader   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| text      | String    | 否   | loading显示的文本，空表示不显示文字 |
+| icon      | Boolean   | 否   | 是否显示图标，默认为true；若text为空，则强制为true |
+
+##### 显示toast     
+5.4.0
+
+```javascript
+FSOpen.widget.showToast({
+    icon: 'success',
+    text: '提示信息',
+    duration: 3000,
+    delay: 1000,
+    onSuccess: function(resp) {
+        // do sth
+    },
+    onFail: function(error) {
+        // do sth
+    }
+});
+``` 
+
+接口方法：FSOpen.widget.showToast   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| text      | String    | 否   | 要显示的提示信息，默认为空 |
+| icon      | String    | 否   | 要显示的图标样式，有`success`和`error`。默认为`success` |
+| duration  | Number    | 否   | 显示持续时间，单位毫秒，默认按系统规范 |
+| delay     | Number    | 否   | 延迟显示时间，单位毫秒，默认0 |
+
+##### 显示时间选择器     
+5.4.0
+
+> 此接口的输入输出参数均为24小时制
+
+```javascript
+FSOpen.widget.showDateTimePicker({
     dateType: 'month',
     defaultValue: '2015-03-24',
-    onSuccess: function(responseData) {
-        console.assert(responseData.selectedDate == '2015-03-24');
+    onSuccess: function(resp) {
+        console.assert(resp.value == '2015-03-24');
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
     }
-})
+});
 ``` 
 
-##### &#10084;  图片预览
-接口方法：FSOpen.util.previewImage          
-调用参数：    
-
-| 参数      | 类型          | 说明      |
-| ----------| --------------| ----------|
-| imgSrc    | Array[String] | 图片地址列表 |
-| thumbSrc  | Array[String] | 图片缩略图地址列表 |
-| index     | Number        | 预览第几张图片，索引从0开始计算 |
-
-举个栗子：    
-```javascript
-FSOpen.util.previewImage({
-    imgSrc: ["http://***.png", "http://***.png"],
-    thumbSrc: ["http://***.png", "http://***.png"],
-    index: 1
-})
-``` 
-
-##### &#10084;  文档预览
-接口方法：FSOpen.util.previewDocument     
+接口方法：FSOpen.widget.showDateTimePicker   
 调用参数：  
 
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| docSrc    | String    | 文档地址  |
- 
-举个栗子：    
+| 参数         | 类型      | 必须 | 说明         |
+| -------------| ----------| -----| -------------|
+| dateType     | String    | 是   | 时间选择器的选择类型。此类型将决定输入和输出的格式类型 |
+| defaultValue | String    | 否   | 时间默认值，若为空将根据`dateType`获取当前时间的对应值 |
+
+`dateType`参数说明：
+
+| 值       | 输入输出格式  | 说明     |
+| ---------| --------------| ---------|
+| month    | yyyy-MM       | 年月     |
+| day      | yyyy-MM-dd    | 年月日   |
+| time     | HH:mm         | 时分秒，24小时制 |
+| week     | yyyy-MM-dd~yyyy-MM-dd | 周 |
+| day&#124;time | yyyy-MM-dd HH:mm | 年月日 时分秒 |
+
+返回成功说明：
+
+| 参数       | 类型      | 说明     |
+| -----------| ----------| ---------|
+| value      | String    | 选择的时间字符串，与`dateType`对应。如果有时分秒，为24小时制 |
+
+##### 显示文本输入框     
+5.4.0
+
 ```javascript
-FSOpen.util.previewDocument({
-    docSrc: "http://***.doc"
-})
+FSOpen.widget.showEditor({
+    limit: 140,
+    placeholder: '请输入内容',
+    navbar: {
+        title: '标题',
+        leftLabel: '返回',
+        leftArrow: true,
+        rightLabel: '发送'
+    },
+    backFillData: {
+        content: '我是输入',
+        images: [''],
+        tempFilePaths: []
+    },
+    components: ['emoji', 'image', 'at'],
+    onSuccess: function(resp) {
+        console.log(resp.content);
+    },
+    onFail: function(error) {
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
 ``` 
 
-##### &#10084;  埋点统计
-接口方法：FSOpen.util.traceEvent    
-调用参数：
+接口方法：FSOpen.widget.showEditor   
+调用参数：  
 
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| detail    | Object    | 统计数据内容，任意json字段  |
- 
-举个栗子：  
+| 参数         | 类型          | 必须 | 说明         |
+| -------------| --------------| -----| -------------|
+| limit        | Number        | 否   | 最大输入字符限制，不区分中英文。默认不做限制 |
+| placeholder  | String        | 否   | 占位符。默认为空 |
+| navbar       | Object        | 否   | 输入框标题栏控制，具体说明见下面。|
+| backFillData | Object        | 否   | 回填数据内容，支持文本和图片的数据回填，具体说明见下面。默认为空 |
+| components   | Array[String] | 否   | 快捷输入组件。目前支持：emoji-表情，image-图片，at-@功能 |
+
+`navbar`参数字段说明：
+
+| 参数       | 类型      | 说明     |
+| -----------| ----------| ---------|
+| title      | String    | 顶部中间抬头文本 |
+| leftLabel  | String    | 顶部左侧按钮文本 |
+| leftArrow  | Boolean   | 顶部左侧按钮是否使用箭头图表，IOS使用 |
+| rightLabel | String    | 顶部右侧按钮文本 |
+
+`backFillData`参数字段说明：
+
+| 参数          | 类型          | 说明     |
+| --------------| --------------| ---------|
+| content       | String        | 需要回填的文本内容 |
+| images        | Array[String] | 需要回填的图片内容 |
+| tempFilePaths | Array[String] | 回填的图片上传后所对应的临时路径，可选。如果有，将不会造成图片重复上传，提高性能 |
+
+返回成功说明：
+
+| 参数          | 类型          | 说明     |
+| --------------| --------------| ---------|
+| content       | String        | 输入纯文本内容，如“批准[微笑]，@北京研发中心”。Emoji表情由H5端自行解析 |
+| thumbs        | Array[String] | 快捷输入所选择的图片缩略图地址，可用来在页面做图片展示 |
+| images        | Array[String] | 快捷输入所选择的图片本地路径，不需要做上传，在编辑的时候回显使用 |
+| tempFilePaths | Array[String] | 快捷输入所选择的图片上传后的临时路径，由后端进行处理 |
+
+
+### 纷享服务
+
+---------------------
+#### 通讯录 
+---------------------
+
+##### 收藏联系人     
+5.4.0
+
 ```javascript
-FSOpen.util.traceEvent({
-    detail: {
-        m1: 'eventName',
-        m2: 'Hello world',
-        m3: 10
-    } 
+FSOpen.service.contact.setMark({
+    userId: 'FSUID_5174F22D77B81347E278CBD353748547',
+    value: true,
+    onSuccess: function(resp) {
+        // do sth
+    },
+    onFail: function(error) {
+        alert('操作失败，错误码：' + error.errorCode);
+    }
 });
-```
+``` 
 
-##### &#10084;  通用收藏
-接口方法：FSOpen.util.favorite    
-调用参数：
+接口方法：FSOpen.service.contact.setMark   
+调用参数：  
 
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| title     | String    | 收藏标题 |
-| desc      | String    | 收藏描述 |
-| link      | String    | 收藏链接 |
-| thumbUrl  | String    | 收藏内容的缩略图 |
-| tagList   | Array[String] | 收藏内容的标签列表 |
- 
-举个栗子：  
+| 参数       | 类型        | 必须 | 说明         |
+| -----------| ------------| -----| -------------|
+| userId     | String      | 是   | 纷享用户的OPEN ID |
+| value      | Boolean     | 是   | 是否收藏 |
+
+##### 获取某群组或部门的用户ID列表     
+5.4.0
+
 ```javascript
-FSOpen.util.favorite({
+FSOpen.service.contact.getMembers({
+    departmentId: 1000,
+    sessionId: 'f6b22ba707bd4447855567291c27476f',
+    onSuccess: function(resp) {
+        console.assert(resp.userIds.length != undefined);
+        FSOpen.service.contact.getUsersInfo({
+            userIds: resp.userIds
+        });
+    },
+    onFail: function(error) {
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.contact.getMembers   
+调用参数：  
+
+| 参数         | 类型        | 必须 | 说明         |
+| -------------| ------------| -----| -------------|
+| departmentId | Number      | 是   | 部门ID，优先级高于sessionId |
+| sessionId    | String      | 是   | 群组（会话）ID |
+
+返回成功说明：
+
+| 参数    | 类型          | 说明         |
+| --------| --------------| -------------|
+| userIds | Array[String] | 用户OPEN-ID列表 |
+
+
+##### 获取服务号信息     
+5.4.0
+
+```javascript
+FSOpen.service.contact.getServiceChannelsInfo({
+    serviceChannelIds: ['FSAID_1313eef'],
+    onSuccess: function(resp) {
+        // do sth
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.contact.getServiceChannelsInfo   
+调用参数：  
+
+| 参数       | 类型        | 必须 | 说明         |
+| -----------| ------------| -----| -------------|
+| serviceChannelIds  | Array[String]      | 是   | 服务号ID列表 |
+
+返回成功说明：  
+
+| 参数      | 类型          | 说明     |
+| ----------| --------------| ---------|
+| serviceChannels     | Object        | 用户`serviceChannel`关联数组，比如：{'FSAID_13135e9': {serviceChannelId:'',name:'',imgUrl:''}}，如果用户没找到，对应的值为空 |
+
+`serviceChannel`字段说明：
+
+| 参数      | 类型          | 说明         |
+| ----------| --------------| -------------|
+| serviceChannelId  | String| 服务号ID  |
+| name      | String        | 服务号名称     |
+| imgUrl    | String        | 服务号图片地址 |
+
+##### 获取用户信息     
+5.4.0
+
+```javascript
+FSOpen.service.contact.getUsersInfo({
+    userIds: [
+        'FSUID_571AA7C41A11BE3D9BA25BDD397AC86E',
+        'FSUID_643539016707F16000E85ADCC967D12C'
+    ],
+    onSuccess: function(resp) {
+        console.assert(resp.users != null);
+        var users = resp.users, key;
+        // 遍历搜索到的用户
+        for (key in users) {
+            // {userId:'',nickname:'',email:'',avatarUrl:'',position:'',marked:true}
+            console.log(users[key]);
+        }
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.contact.getUsersInfo   
+调用参数：  
+
+| 参数       | 类型          | 必须 | 说明         |
+| -----------| --------------| -----| -------------|
+| userIds    | Array[String] | 是   | 用户OPEN-ID列表 |
+
+返回成功说明：  
+
+| 参数      | 类型          | 说明     |
+| ----------| --------------| ---------|
+| users     | Object        | 用户`user`关联数组，比如：{'FSUID_XXX': {userId:'',nickname:'',email:'',avatarUrl:'',position:'',marked:true}}，如果用户没找到，对应的值为空 |
+
+`user`字段说明：
+
+| 参数      | 类型          | 说明         |
+| ----------| --------------| -------------|
+| userId    | String        | 用户OPEN-ID  |
+| nickname  | String        | 用户昵称     |
+| email     | String        | 用户电子邮箱 |
+| avatarUrl | String        | 用户头像     |
+| position  | String        | 用户职位信息 |
+| marked    | Boolean       | 是否关注了此用户 |
+
+##### 从通讯录选择人员，部门和群组     
+5.4.0
+
+```javascript
+// 从人员列表、部门列表和群组列表选择
+FSOpen.service.contact.select({
+    title: '选择数据',
+    selectedUsers: ['FSUID_571AA7C41A11BE3D9BA25BDD397AC86E'],
+    selectedDepartments: [1001],
+    excludedUsers: ['FSUID_643539016707F16000E85ADCC967D12C'],
+    excludedDepartments: [1000],
+    hasEmail: true,
+    hasPhone: true,
+    showRecent: true,
+    showGroupTab: true,
+    showCompanyAll: true,
+    onSuccess: function(resp) {
+        console.assert(resp.users != null);
+        console.assert(resp.departments != null);
+        console.assert(resp.groups != null);
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+```javascript
+// 自定义用户和部门列表
+FSOpen.service.contact.select({
+    scope: 'custom',
+    users: [
+        'FSUID_571AA7C41A11BE3D9BA25BDD397AC86E',
+        'FSUID_643539016707F16000E85ADCC967D12C'
+    ],
+    departments: [
+        1000,
+        1001
+    ],
+    title: '选择数据',
+    onSuccess: function(resp) {
+        console.assert(resp.users != null);
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.contact.select   
+调用参数：  
+
+| 参数               | 类型          | 必须 | 说明         |
+| -------------------| --------------| -----| -------------|
+| title              | String        | 否   | 选择控件的显示标题，默认为空 |
+| scope              | String        | 否   | 指定控件的数据源，只有两个情况：company或custom。当为company时，数据源为全公司数据列表；当为custom时，可通过`users`和`departments`两个参数来指定。默认为company。 |
+| users              | Array[String] | 否   | 当`scope`为custome时使用，指定用户数据源 |
+| departments        | Array[Number] | 否   | 当`scope`为custome时使用，指定部门数据源 |
+| selectedUsers      | Array[String] | 否   | 已选中状态的用户OPEN-ID列表 |
+| selectedDepartments| Array[Number] | 否   | 已选中状态的部门ID列表 |
+| selectedGroups     | Array[String] | 否   | 已选中状态的群组ID列表 |
+| selectedCompanyAll | Boolean       | 否   | 是否已选中“全公司”，只在`showCompanyAll`为true时有效 |
+| showRecent         | Boolean       | 否   | 是否显示最近，默认为true |
+| showGroupTab       | Boolean       | 否   | 是否显示群组标签页，默认为true |
+| showCompanyAll     | Boolean       | 否   | 是否显示全公司选项，默认为true |
+| excludedUsers       | Array[String]| 否   | 过滤器，需要过滤掉的用户OPEN-ID列表。保留待实现参数 |
+| excludedDepartments | Array[Number]| 否   | 过滤器，需要过滤掉的部门ID列表。保留待实现参数 |
+| hasEmail            | Boolean      | 否   | 过滤器，需要过滤掉Email为空的用户数据 |
+| hasPhone            | Boolean      | 否   | 过滤器，需要过滤掉Phone为空的用户数据 |
+
+返回说明：  
+
+| 参数        | 类型          | 说明     |
+| ------------| --------------| ---------|
+| users       | Array[Object] | 选择的用户`user`列表 |
+| departments | Array[Object] | 选择的部门`department`列表 |
+| groups      | Array[Object] | 选择的群组`group`列表 |
+| selectedSum | Array[Object] | 所有选中的人的总数 |
+| selectedCompanyAll | String | 是否选中了全公司 |
+
+`user`字段说明：
+
+| 参数      | 类型          | 说明         |
+| ----------| --------------| -------------|
+| userId    | String        | 用户OPEN-ID  |
+| nickname  | String        | 用户昵称     |
+| email     | String        | 用户电子邮箱 |
+| avatarUrl | String        | 用户头像     |
+| position  | String        | 用户职位信息 |
+
+`department`字段说明：
+
+| 参数        | 类型        | 说明         |
+| ------------| ------------| -------------|
+| departmentId| Number      | 部门ID       |
+| name        | String      | 部门名称     |
+| parentId    | String      | 父部门ID     |
+
+`group`字段说明：
+
+| 参数        | 类型        | 说明         |
+| ------------| ------------| -------------|
+| sessionId   | String      | 群组（会话）ID |
+| name        | String      | 群组（会话）名称 |
+
+##### 从通讯录选择部门     
+5.4.0
+
+```javascript
+FSOpen.service.contact.selectDepartment({
+    title: '选择数据',
+    selectedDepartments: [1001],
+    excludedDepartments: [1000],
+    onSuccess: function(resp) {
+        console.assert(resp.departments != null);
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.contact.selectDepartment   
+调用参数：  
+
+| 参数               | 类型          | 必须 | 说明         |
+| -------------------| --------------| -----| -------------|
+| title              | String        | 否   | 选择控件的显示标题，默认为空 |
+| scope              | String        | 否   | 指定控件的数据源，只有两个情况：company或custom。当为company时，数据源为全公司数据列表；当为custom时，可通过`departments`参数来指定。默认为company。 |
+| departments        | Array[Number] | 否   | 当`scope`为custome时使用，指定部门数据源 |
+| selectedDepartments| Array[Number] | 否   | 已选中状态的部门ID列表 |
+| max                | Number        | 否   | 最大选择上限，当`max=1`时为单选。默认不限制 |
+| excludedDepartments| Array[Number] | 否   | 过滤器，需要过滤掉的部门ID列表 |
+
+返回说明：  
+
+| 参数        | 类型          | 说明     |
+| ------------| --------------| ---------|
+| departments | Array[Object] | 选择的部门`department`列表 |
+| selectedSum | Array[Object] | 所有选中的人的总数 |
+
+`department`字段说明：
+
+| 参数        | 类型        | 说明         |
+| ------------| ------------| -------------|
+| departmentId| Number      | 部门ID       |
+| name        | String      | 部门名称     |
+| parentId    | String      | 父部门ID     |
+
+
+##### 从通讯录选择人员     
+5.4.0
+
+```javascript
+FSOpen.service.contact.selectUser({
+    title: '选择数据',
+    selectedUsers: ['FSUID_571AA7C41A11BE3D9BA25BDD397AC86E'],
+    excludedUsers: ['FSUID_643539016707F16000E85ADCC967D12C'],
+    hasEmail: true,
+    hasPhone: true,
+    onSuccess: function(resp) {
+        console.assert(resp.users != null);
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.contact.selectUser   
+调用参数：  
+
+| 参数               | 类型          | 必须 | 说明         |
+| -------------------| --------------| -----| -------------|
+| title              | String        | 否   | 选择控件的显示标题，默认为空 |
+| scope              | String        | 否   | 指定控件的数据源，只有两个情况：company或custom。当为company时，数据源为全公司数据列表；当为custom时，可通过`users`参数来指定。默认为company。 |
+| users              | Array[String] | 否   | 当`scope`为custome时使用，指定用户数据源 |
+| selectedUsers      | Array[String] | 否   | 已选中状态的用户OPEN-ID列表 |
+| max                | Number        | 否   | 最大选择上限，当`max=1`时为单选。默认不限制 |
+| excludedUsers      | Array[String] | 否   | 需要过滤掉的用户OPEN-ID列表 |
+| hasEmail           | Boolean       | 否   | 需要过滤掉Email为空的用户数据 |
+| hasPhone           | Boolean       | 否   | 需要过滤掉Phone为空的用户数据 |
+
+返回说明：  
+
+| 参数        | 类型          | 说明     |
+| ------------| --------------| ---------|
+| users       | Array[Object] | 选择的用户`user`列表 |
+| selectedSum | Array[Object] | 所有选中的人的总数 |
+
+`user`字段说明：
+
+| 参数      | 类型          | 说明         |
+| ----------| --------------| -------------|
+| userId    | String        | 用户OPEN-ID  |
+| nickname  | String        | 用户昵称     |
+| email     | String        | 用户电子邮箱 |
+| avatarUrl | String        | 用户头像     |
+| position  | String        | 用户职位信息 |
+
+
+---------------------
+#### 企信会话 
+---------------------
+
+##### 发起音视频电话
+5.4.0
+
+```javascript
+FSOpen.service.conversation.setupFSCall({
+    userId: ['FSUID_571AA7C41A11BE3D9BA25BDD397AC86E']
+});
+``` 
+
+接口方法：FSOpen.service.conversation.setupFSCall   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| userId    | String    | 是   | 用户OPEN-ID  |
+
+##### 发起音视频会议
+5.4.0
+
+```javascript
+FSOpen.service.conversation.setupFSConference({
+    userIds: ['FSUID_571AA7C41A11BE3D9BA25BDD397AC86E']
+});
+``` 
+
+接口方法：FSOpen.service.conversation.setupFSConference   
+调用参数：  
+
+| 参数      | 类型         | 必须 | 说明         |
+| ----------| -------------| -----| -------------|
+| userIds   | Array[String]| 是   | 用户OPEN-ID列表 |
+
+
+---------------------
+#### 收藏 
+---------------------
+
+##### 添加收藏
+5.4.0
+
+```javascript
+FSOpen.service.favorite.add({
     title: '纷享开放平台JSAPI',
     desc: '纷享开放平台JSAPI',
     link: location.href,
-    thumbUrl: '',
+    imgUrl: '',
     tagList: ['纷享', 'JSAPI'],
     onSuccess: function(resp) {
-        console.log(resp)
+        alert('收藏成功');
     },
-    onFail: function(resp) {
-        console.log(resp)
+    onFail: function(error) {
+        if (error.errorCode === 40050) {
+            alert('用户取消收藏');
+            return;
+        }
+        alert('获取失败，错误码：' + error.errorCode);
     }
 });
-```
-
-##### &#10084;  根据人和部门ID打开对应工作视图
-接口方法：FSOpen.util.openFeed    
-调用参数：
-
-| 参数         | 类型      | 说明      |
-| -------------| ----------| ----------|
-| type         | String    | `user`打开用户的工作视图，`dept`打开部门的 |
-| openUserId   | String    | 用户的OPEN-ID |
-| departmentId | String    | 部门ID |
- 
-举个栗子：  
-```javascript
-FSOpen.util.openFeed({
-    type: 'dept',
-    departmentId: '1000'
-});
-```
-
-##### &#10084;  将文件或图片存入网盘
-接口方法：FSOpen.util.saveToFSDisk    
-调用参数：
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| name      | String    | 文件名 |
-| path      | String    | 以`N_`开头的文件路径信息 |
- 
-举个栗子：  
-```javascript
-FSOpen.util.saveToFSDisk({
-    name: '纷享逍客培训.pptx',
-    path: 'N_XXXXXXX'
-});
-```
-
-##### &#10084;  打开收藏界面（当前用户）
-接口方法：FSOpen.util.openFavorite    
-举个栗子：  
-```javascript
-FSOpen.util.openFavorite();
-```
-
-##### &#10084;  发起音视频电话
-接口方法：FSOpen.util.openAVSession    
-调用参数：
-
-| 参数         | 类型        | 说明      |
-| -------------| ------------| ----------|
-| openUserId   | String      | 用户OPEN-ID |
- 
-举个栗子：  
-```javascript
-FSOpen.util.openAVSession({
-    openUserId: 'FSUID_xxxxxxx'
-});
-```
-
-##### &#10084;  发起音视频会议
-接口方法：FSOpen.util.openAVMeeting    
-调用参数：
-
-| 参数         | 类型          | 说明      |
-| -------------| --------------| ----------|
-| openUserIds  | Array[String] | 用户OPEN-ID列表 |
- 
-举个栗子：  
-```javascript
-FSOpen.util.openAVMeeting({
-    openUserIds: ['FSUID_xxxxxxx']
-});
-```
-
-##### &#10084;  打开网盘界面（当前用户）
-接口方法：FSOpen.util.openFSDisk    
-举个栗子：  
-```javascript
-FSOpen.util.openFSDisk();
-```
-
-##### &#10084;  网盘选择文件
-接口方法：FSOpen.util.chooseFileFromFSDisk    
-返回说明：
-
-| 参数      | 类型          | 说明           |
-| ----------| --------------| ---------------|
-| file      | Object        | 选中的文件信息 |
-
-返回文件对象的结构说明：
-
-| 参数      | 类型      | 说明      |
-| ----------| ----------| ----------|
-| id        | Number    | 文件ID |
-| name      | String    | 文件名 |
-| path      | String    | 以`N_`开头的文件路径信息 |
-| size      | Number    | 文件大小 |
-| url       | String    | 文件实际访问链接地址，先去掉，要fix这个问题 |
-
-举个栗子：  
-```javascript
-FSOpen.util.chooseFileFromFSDisk({
-    onSuccess: function(responseData){
-        console.log(responseData.file);
-    },
-    onFail: function(responseData){
-        console.assert(responseData.errorCode === 40004);
-    }
-});
-```
-
----------------------
-#### 会话  
----------------------
-
-##### &#10084;  进入到企信会话    
-接口方法：FSOpen.chat.toConversation       
-调用参数：   
-
-| 参数         | 类型          | 说明           |
-| -------------| --------------| ---------------|
-| type         | String        | 会话类型，值：user-多（私）人会话，dept-部门会话，app-服务号私人会话，common-通用会话ID |
-| openUserIds  | Array[String] | 用户ID列表，如果只有一个将发起私人会话 |
-| departmentId | String        | 部门ID |
-| appId        | String        | 服务号ID |
-| sessionId    | String        | 通用会话ID |
-
-举个栗子：  
-```javascript
-FSOpen.chat.toConversation({
-    type: 'user',
-    openUserIds: ['FSUID_xxxxxxx'],
-    departmentId: '1000',
-    appId: 'FSAID_xxxxx',
-    onSuccess: function(resp) {
-        alert(resp);
-    },
-    onFail: function(resp) {
-        alert(resp);
-    }
-})
 ``` 
 
----------------------
-#### 邮件处理  
----------------------
-
-##### &#10084;  转发企信
-接口说明：分享到企信消息里去　　
-接口方法：FSOpen.mail.shareToChat    
-调用参数：   
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| url       | String    | 转发的链接地址 |
-| postTime  | String    | 原企信发布时间，时间格式：yyyy-MM-dd hh:mm:ss |
-| summary   | String    | 原企信摘要     |
-| title     | String    | 原企信抬头     |
-| sender    | String    | 企业邮箱使用，指定发件人名称 |
-  
-举个栗子：  
-```javascript
-FSOpen.mail.shareToChat({
-    url: 'http://www.fxiaoke.com',
-    postTime: '2016-04-28 12:51:00',
-    summary: 'Hello Fxiaoke',
-    title: 'Hello world'
-})
-``` 
-
-##### &#10084;  转发分享    
-接口说明：分享到动态流里去   
-接口方法：FSOpen.mail.shareToFeed       
+接口方法：FSOpen.service.favorite.add   
 调用参数：  
 
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| url       | String    | 转发的链接地址 |
-| postTime  | String    | 原企信发布时间，时间格式：yyyy-MM-dd hh:mm:ss |
-| summary   | String    | 原企信摘要     |
-| title     | String    | 原企信抬头     |
-| sender    | String    | 企业邮箱使用，指定发件人名称 |
- 
-举个栗子：    
+| 参数      | 类型          | 必须 | 说明         |
+| ----------| --------------| -----| -------------|
+| title     | String        | 是   | 收藏标题 |
+| desc      | String        | 否   | 收藏描述 |
+| link      | String        | 否   | 收藏链接，默认为当前页面链接 |
+| imgUrl    | String        | 否   | 收藏内容的缩略图 |
+| tagList   | Array[String] | 否   | 收藏内容的标签列表 |
+
+
+---------------------
+#### 位置 
+---------------------
+
+##### 获取当前地理位置      
+5.4.0
+
 ```javascript
-FSOpen.mail.shareToFeed({
-    url: 'http://www.fxiaoke.com',
-    postTime: '2016-04-28 12:51:00',
+FSOpen.service.geo.getLocation();
+``` 
+
+接口方法：FSOpen.service.geo.getLocation   
+返回说明：  
+
+| 参数      | 类型   | 说明     |
+| ----------| -------| ---------|
+| accuracy  | Number | 实际的定位精度半径（单位米） |
+| address   | String | 格式化后的地址，如：深圳市南山区大冲商务中心 |
+| country   | String | 国家 |
+| province  | String | 省份，如：广东省 |
+| city      | String | 城市，如：深圳市。直辖市会返回空 |
+| district  | String | 行政区，如：南山区 |
+| street    | String | 街道，如：铜鼓路10000号 |
+
+##### 地图定位      
+5.4.0
+
+```javascript
+FSOpen.service.geo.selectPOI({
+    latitude: 39.903578,
+    longitude: 116.473565,
+    onSuccess: function(resp) {
+        console.log(resp);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.geo.selectPOI   
+调用参数：      
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| latitude  | Number    | 否   | 标准维度，默认当前位置 |
+| longitude | Number    | 否   | 标准经度，默认当前位置 |
+
+返回说明：  
+
+| 参数         | 类型   | 说明     |
+| -------------| -------| ---------|
+| latitude     | Number | POI的标准维度 |
+| longitude    | Number | POI的标准经度 |
+| title        | String | POI的名称 |
+| province     | String | POI所在省，可能为空 |
+| provinceCode | String | POI所在省编码，可能为空 |
+| city         | String | POI所在城市，可能为空 |
+| cityCode     | String | POI所在城市的编码，可能为空 |
+| district     | String | POI所在区，可能为空 |
+| districtCode | String | POI所在区的编码，可能为空 |
+| postcode     | String | POI的邮编，可能为空 |
+| street       | String | POI的街道地址，可能为空 |
+
+
+---------------------
+#### 邮件 
+---------------------
+
+**此类接口非外部接口，谨慎使用**
+
+##### 转发邮件到企信     
+5.4.0
+
+```javascript
+FSOpen.service.mail.shareToConversation({
+    title: 'Hello world',
     summary: 'Hello Fxiaoke',
-    title: 'Hello world'
-})
+    postTime: '2016-04-28 12:51:00',
+    url: 'https://www.fxiaoke.com/',
+    onSuccess: function(resp) {
+        alert('转发成功');
+    },
+    onFail: function(error) {
+        alert('转发失败，错误码：' + error.errorCode);
+    }
+});
 ``` 
+
+接口方法：FSOpen.service.mail.shareToConversation  
+调用参数：  
+
+| 参数     | 类型   | 必须 | 说明         |
+| ---------| -------| -----| -------------|
+| title    | String | 是   | 邮件标题 |
+| summary  | String | 否   | 邮件摘要 |
+| postTime | String | 否   | 邮件发送时间，格式：yyyy-MM-dd hh:mm:ss |
+| url      | String | 否   | 邮件查看地址 |
+| sender   | String | 否   | 发件人名称 |
+
+##### 转发邮件到工作流     
+5.4.0
+
+```javascript
+FSOpen.service.mail.shareToFeed({
+    title: 'Hello world',
+    summary: 'Hello Fxiaoke',
+    postTime: '2016-04-28 12:51:00',
+    url: 'https://www.fxiaoke.com/',
+    onSuccess: function(resp) {
+        alert('转发成功');
+    },
+    onFail: function(error) {
+        alert('转发失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.mail.shareToFeed  
+调用参数：  
+
+| 参数     | 类型   | 必须 | 说明         |
+| ---------| -------| -----| -------------|
+| title    | String | 是   | 邮件标题 |
+| summary  | String | 否   | 邮件摘要 |
+| postTime | String | 否   | 邮件发送时间，格式：yyyy-MM-dd hh:mm:ss |
+| url      | String | 否   | 邮件查看地址 |
+| sender   | String | 否   | 发件人名称 |
+
 
 ---------------------
-#### 页面操作类  
+#### 支付 
 ---------------------
 
-##### &#10084;  页面刷新    　　
-接口方法：FSOpen.page.refresh        
+##### 发起支付请求     
+5.4.0
 
-举个栗子：  
 ```javascript
-FSOpen.page.refresh();
+FSOpen.service.pay.request({
+    amount: 1,
+    productId: 'xxx',
+    productName: 'xxx',
+    merchantId: 'xxx',
+    limitPayer: true,
+    fromEa: 7,
+    fromUid: 1099,
+    expireTime: 1461564216568,
+    signature: '643539016707F16000E85ADCC967D12C',
+    onSuccess: function(resp) {
+        alert('支付成功');
+    },
+    onFail: function(error) {
+        alert('支付失败，错误码：' + error.errorCode);
+    }
+});
 ``` 
 
-##### &#10084;  复制页面链接    　　
-接口方法：FSOpen.page.copyUrl        
+接口方法：FSOpen.service.pay.request  
+调用参数：  
 
-举个栗子：  
+| 参数       | 类型    | 必须 | 说明         |
+| -----------| --------| -----| -------------|
+| amount     | Number  | 是   | 支付金额，精确到分。比如2000是指20元整。单位分 |
+| productId  | String  | 是   | 业务编号 |
+| productName| String  | 是   | 业务名称，商家自定义 |
+| merchantId | String  | 是   | 商户ID，由支付平台提供 |
+| limitPayer | Boolean | 是   | 是否限制付款者，true-限制，false-不限制 |
+| fromEa     | String  | 是   | 当前用户的企业号 |
+| fromUid    | String  | 是   | 当前用户的userId |
+| expireTime | Number  | 是   | 二维码的过期时间，格式为毫秒数 |
+| signature  | String  | 是   | 最终的参数签名值 |
+
+##### 发起企业支付请求     
+5.4.0
+
 ```javascript
-FSOpen.page.copyUrl();
+FSOpen.service.pay.requestForCorp({
+    amount: 1,
+    productId: 'xxx',
+    orderNo: 'xxx',
+    merchantCode: 'xxx',
+    remark: 'xxx',
+    subject: 'xxx',
+    body: 'xxx',
+    toEA: 'xxx',
+    toEAWalletId: 'xxx',
+    signature: '643539016707F16000E85ADCC967D12C',
+    onSuccess: function(resp) {
+        alert('支付成功');
+    },
+    onFail: function(error) {
+        alert('支付失败，错误码：' + error.errorCode);
+    }
+});
 ``` 
 
-##### &#10084;  当前页面链接生成二维码    　　
-接口方法：FSOpen.page.generateQR        
+接口方法：FSOpen.service.pay.requestForCorp  
+调用参数：  
 
-举个栗子：  
-```javascript
-FSOpen.page.generateQR();
-``` 
+| 参数         | 类型    | 必须 | 说明         |
+| -------------| --------| -----| -------------|
+| amount       | Number  | 是   | 支付金额，精确到分。比如2000是指20元整。单位分 |
+| productId    | String  | 是   | 商品ID |
+| orderNo      | String  | 是   | 订单号 |
+| merchantCode | String  | 是   | 商户号 |
+| remark       | String  | 否   | 交易备注 |
+| subject      | String  | 是   | 商品名称 |
+| body         | String  | 是   | 商品描述 |
+| toEA         | String  | 否   | 收款的企业号，为空默认为纷享 |
+| toEAName     | String  | 否   | 收款的企业名称，为空默认为纷享 |
+| toEAWalletId | String  | 否   | 收款企业账号ID，为空默认为纷享 |
+| signature    | String  | 是   | 最终的参数签名值 |
 
-##### &#10084;  在浏览器中打开    　　
-接口方法：FSOpen.page.openInBrower        
-
-举个栗子：  
-```javascript
-FSOpen.page.openInBrower();
-``` 
 
 ---------------------
-#### 分享转发类  
+#### 分享 
 ---------------------
 
-##### &#10084;  分享到动态    　　
-接口方法：FSOpen.share.toFeed            
-调用参数：   
+**此类接口对应纷享菜单里的分享接口，可独立使用**  
 
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
-| type      | String    | 分享资源类型，保留备用 |
-| dataUrl   | String    | 分享资源地址，配合type一起使用 |
+##### 转发到企信     
+5.4.0
 
-举个栗子：  
 ```javascript
-FSOpen.share.toFeed({
+FSOpen.service.share.toConversation({
     title: '纷享逍客',
     desc: '移动办公 自在纷享',
     link: 'http://www.fxiaoke.com',
-    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5'
-});
-``` 
-
-##### &#10084;  分享到企信    　　
-接口方法：FSOpen.share.toChat            
-调用参数：   
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
-| type      | String    | 分享资源类型，保留备用 |
-| dataUrl   | String    | 分享资源地址，配合type一起使用 |
-
-举个栗子：  
-```javascript
-FSOpen.share.toChat({
-    title: '纷享逍客',
-    desc: '移动办公 自在纷享',
-    link: 'http://www.fxiaoke.com',
-    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5'
-});
-``` 
-
-##### &#10084;  分享给CRM联系人    　　
-接口方法：FSOpen.share.toCrmContact            
-调用参数：   
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| link      | String    | 分享链接 |
-
-举个栗子：  
-```javascript
-FSOpen.share.toCrmContact({
-    link: 'http://www.fxiaoke.com'
-});
-``` 
-
-##### &#10084;  分享给微信朋友   　　
-接口方法：FSOpen.share.toWXFriend            
-调用参数：   
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
-| type      | String    | 分享资源类型，保留备用 |
-| dataUrl   | String    | 分享资源地址，配合type一起使用 |
-
-举个栗子：  
-```javascript
-FSOpen.share.toWXFriend({
-    title: '纷享逍客',
-    desc: '移动办公 自在纷享',
-    link: 'http://www.fxiaoke.com',
-    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5'
-});
-``` 
-
-##### &#10084;  分享到微信朋友圈   　　
-接口方法：FSOpen.share.toWXMoments            
-调用参数：   
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
-| type      | String    | 分享资源类型，保留备用 |
-| dataUrl   | String    | 分享资源地址，配合type一起使用 |
-
-举个栗子：  
-```javascript
-FSOpen.share.toWXMoments({
-    title: '纷享逍客',
-    desc: '移动办公 自在纷享',
-    link: 'http://www.fxiaoke.com',
-    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5'
-});
-``` 
-
-##### &#10084;  分享给QQ好友   　　
-接口方法：FSOpen.share.toQQFriend            
-调用参数：   
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
-| type      | String    | 分享资源类型，保留备用 |
-| dataUrl   | String    | 分享资源地址，配合type一起使用 |
-
-举个栗子：  
-```javascript
-FSOpen.share.toQQFriend({
-    title: '纷享逍客',
-    desc: '移动办公 自在纷享',
-    link: 'http://www.fxiaoke.com',
-    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5'
-});
-``` 
-
-##### &#10084;  分享给邮件联系人   　　
-接口方法：FSOpen.share.toMail            
-调用参数：   
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| link      | String    | 分享链接 |
-
-举个栗子：  
-```javascript
-FSOpen.share.toMail({
-    title: '纷享逍客',
-    link: 'http://www.fxiaoke.com'
-});
-``` 
-
-##### &#10084;  分享到短信   　　
-接口方法：FSOpen.share.toSms            
-调用参数：   
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| link      | String    | 分享链接 |
-
-举个栗子：  
-```javascript
-FSOpen.share.toSms({
-    link: 'http://www.fxiaoke.com'
-});
-``` 
-
----------------------
-#### 分享回调接口 
----------------------
-
-纷享菜单回调是指系统内置的导航右侧3个点菜单的功能，在用户触发点击的时候的回调处理。通过此回调用户可定义要分享的内容信息。  
-
-所有接口在用户取消分享均统一触发onFail回调，返回errorCode为400008   
-
-##### &#10084;  分享到动态   　　
-接口方法：FSOpen.menu.onShareToFeed            
-调用参数：           
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
-
-举个栗子：  
-```javascript
-FSOpen.menu.onShareToFeed({
-    title: '纷享逍客',
-    desc: '移动办公 自在纷享',
-    link: 'http://www.fxiaoke.com'，
     imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
     onSuccess: function(resp) {
-        alert(resp);
+        // 可以在这里做些分享数据统计
     },
-    onFail: function(resp) {
-        if (resp.errorCode == 40008) {
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
             alert('用户取消分享');
+            return;
         }
-        alert(resp);
+        alert('操作失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  分享到会话   　　
-接口方法：FSOpen.menu.onShareToChat            
-调用参数：           
+接口方法：FSOpen.service.share.toConversation   
+调用参数：  
 
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| type      | String      | 否   | 分享的资源类型，目前支持text-文字，link-链接，image-图片，file-文件。当`link`参数为空时，默认text类型，否则默认为link类型 |
+| title     | String      | 否   | 分享标题，默认当前页面标题 |
+| desc      | String      | 否   | 分享摘要描述，默认当前页面标题 |
+| link      | String      | 否   | 分享链接地址，默认当前页面链接 |
+| imgUrl    | String      | 否   | 分享缩略图地址，默认为系统提供的图 |
+| name      | String      | 否   | 资源类型为image或file时使用，表示资源名 |
+| size      | String      | 否   | 资源类型为image或file时使用，表示资源大小 |
+| npath     | String      | 否   | 资源类型为image或file时使用，表示资源存储地址 |
+| content   | String      | 否   | 资源类型为text时使用，表示文件内容 |
 
-举个栗子：  
+##### 转发给CRM联系人     
+5.4.0
+
 ```javascript
-FSOpen.menu.onShareToChat({
+FSOpen.service.share.toCRMContact({
+    link: location.href,
+    onSuccess: function(resp) {
+        // 可以在这里做些分享数据统计
+    },
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
+            alert('用户取消分享');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.share.toCRMContact   
+调用参数：  
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| link      | String      | 否   | 要转发的页面链接 |
+
+##### 转发到工作流     
+5.4.0
+
+```javascript
+FSOpen.service.share.toFeed({
     title: '纷享逍客',
     desc: '移动办公 自在纷享',
-    link: 'http://www.fxiaoke.com'，
+    link: 'http://www.fxiaoke.com',
     imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
     onSuccess: function(resp) {
-        alert(resp);
+        // 可以在这里做些分享数据统计
     },
-    onFail: function(resp) {
-        if (resp.errorCode == 40008) {
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
             alert('用户取消分享');
+            return;
         }
-        alert(resp);
+        alert('操作失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  分享给CRM联系人   　　
-接口方法：FSOpen.menu.onShareToCrmContact            
-调用参数：           
+接口方法：FSOpen.service.share.toFeed   
+调用参数：  
 
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| type      | String      | 否   | 分享的资源类型，目前支持text-文字，link-链接，image-图片，file-文件。当`link`参数为空时，默认text类型，否则默认为link类型 |
+| title     | String      | 否   | 分享标题，默认当前页面标题 |
+| desc      | String      | 否   | 分享摘要描述，默认当前页面标题 |
+| link      | String      | 否   | 分享链接地址，默认当前页面链接 |
+| imgUrl    | String      | 否   | 分享缩略图地址，默认为系统提供的图 |
+| name      | String      | 否   | 资源类型为image或file时使用，表示资源名 |
+| size      | String      | 否   | 资源类型为image或file时使用，表示资源大小 |
+| npath     | String      | 否   | 资源类型为image或file时使用，表示资源存储地址 |
+| content   | String      | 否   | 资源类型为text时使用，表示文件内容 |
 
-举个栗子：  
+##### 通过邮件转发     
+5.4.0
+
 ```javascript
-FSOpen.menu.onShareToCrmContact({
+FSOpen.service.share.viaMail({
+    title: '纷享逍客',
+    content: '移动办公，自在纷享 {url}',
+    onSuccess: function(resp) {
+        // 可以在这里做些分享数据统计
+    },
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
+            alert('用户取消分享');
+            return;
+        }
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.share.viaMail   
+调用参数：  
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 转发邮件标题 |
+| content   | String      | 否   | 转发邮件内容，可使用{url}替换符来表示当前页面的url |
+
+##### 分享给QQ好友     
+5.4.0
+
+```javascript
+FSOpen.service.share.toQQFriend({
     title: '纷享逍客',
     desc: '移动办公 自在纷享',
-    link: 'http://www.fxiaoke.com'，
+    link: 'http://www.fxiaoke.com',
     imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
     onSuccess: function(resp) {
-        alert(resp);
+        // 可以在这里做些分享数据统计
     },
-    onFail: function(resp) {
-        if (resp.errorCode == 40008) {
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
             alert('用户取消分享');
+            return;
         }
-        alert(resp);
+        alert('操作失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  分享给微信好友   　　
-接口方法：FSOpen.menu.onShareToWXFriend            
-调用参数：           
+接口方法：FSOpen.service.share.toQQFriend   
+调用参数：  
 
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 分享标题，默认当前页面标题 |
+| desc      | String      | 否   | 分享摘要描述，默认当前页面标题 |
+| link      | String      | 否   | 分享链接地址，默认当前页面链接 |
+| imgUrl    | String      | 否   | 分享缩略图地址，默认为系统提供的图 |
 
-举个栗子：  
+##### 通过短信转发     
+5.4.0
+
 ```javascript
-FSOpen.menu.onShareToWXFriend({
-    title: '纷享逍客',
-    desc: '移动办公 自在纷享',
-    link: 'http://www.fxiaoke.com'，
-    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
+FSOpen.service.share.viaSMS({
+    content: '移动办公，自在纷享 {url}',
     onSuccess: function(resp) {
-        alert(resp);
+        // 可以在这里做些分享数据统计
     },
-    onFail: function(resp) {
-        if (resp.errorCode == 40008) {
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
             alert('用户取消分享');
+            return;
         }
-        alert(resp);
+        alert('操作失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  分享到微信朋友圈   　　
-接口方法：FSOpen.menu.onShareToWXMoments            
-调用参数：           
+接口方法：FSOpen.service.share.viaSMS   
+调用参数：  
 
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| content   | String      | 否   | 转发内容，最多140字，可使用{url}替换符来表示当前页面的url |
 
-举个栗子：  
+##### 分享给微信好友     
+5.4.0
+
 ```javascript
-FSOpen.menu.onShareToWXMoments({
-    title: '纷享逍客',
-    desc: '移动办公 自在纷享',
-    link: 'http://www.fxiaoke.com'，
-    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
-    onSuccess: function(resp) {
-        alert(resp);
-    },
-    onFail: function(resp) {
-        if (resp.errorCode == 40008) {
-            alert('用户取消分享');
-        }
-        alert(resp);
-    }
-});
-``` 
-
-##### &#10084;  分享给QQ好友  　　
-接口方法：FSOpen.menu.onShareToQQFriend            
-调用参数：           
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| desc      | String    | 分享摘要描述 |
-| link      | String    | 分享链接 |
-| imgUrl    | String    | 分享缩略图地址 |
-
-举个栗子：  
-```javascript
-FSOpen.menu.onShareToQQFriend({
-    title: '纷享逍客',
-    desc: '移动办公 自在纷享',
-    link: 'http://www.fxiaoke.com'，
-    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
-    onSuccess: function(resp) {
-        alert(resp);
-    },
-    onFail: function(resp) {
-        if (resp.errorCode == 40008) {
-            alert('用户取消分享');
-        }
-        alert(resp);
-    }
-});
-``` 
-
-##### &#10084;  分享给邮件联系人  　　
-接口方法：FSOpen.menu.onShareToMail            
-调用参数：           
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| title     | String    | 分享标题 |
-| link      | String    | 分享链接 |
-
-举个栗子：  
-```javascript
-FSOpen.menu.onShareToMail({
+FSOpen.service.share.toWXFriend({
     title: '纷享逍客',
     link: 'http://www.fxiaoke.com',
+    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
     onSuccess: function(resp) {
-        alert(resp);
+        // 可以在这里做些分享数据统计
     },
-    onFail: function(resp) {
-        if (resp.errorCode == 40008) {
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
             alert('用户取消分享');
+            return;
         }
-        alert(resp);
+        alert('操作失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  分享到短信  　　
-接口方法：FSOpen.menu.onShareToSms            
-调用参数：           
+接口方法：FSOpen.service.share.toWXFriend   
+调用参数：  
 
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| link      | String    | 分享链接 |
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 分享标题，默认当前页面标题 |
+| link      | String      | 否   | 分享链接地址，默认当前页面链接 |
+| imgUrl    | String      | 否   | 分享缩略图地址，默认为系统提供的图 |
 
-举个栗子：  
+##### 分享到微信朋友圈     
+5.4.0
+
 ```javascript
-FSOpen.menu.onShareToSms({
+FSOpen.service.share.toWXMoments({
+    title: '纷享逍客',
     link: 'http://www.fxiaoke.com',
+    imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
     onSuccess: function(resp) {
-        alert(resp);
+        // 可以在这里做些分享数据统计
     },
-    onFail: function(resp) {
-        if (resp.errorCode == 40008) {
+    onFail: function(error) {
+        if (error.errorCode == 40050) {
             alert('用户取消分享');
+            return;
         }
-        alert(resp);
+        alert('操作失败，错误码：' + error.errorCode);
     }
 });
 ``` 
+
+接口方法：FSOpen.service.share.toWXMoments   
+调用参数：  
+
+| 参数      | 类型        | 必须 | 说明         |
+| ----------| ------------| -----| -------------|
+| title     | String      | 否   | 分享标题，默认当前页面标题 |
+| link      | String      | 否   | 分享链接地址，默认当前页面链接 |
+| imgUrl    | String      | 否   | 分享缩略图地址，默认为系统提供的图 |
+
 
 ---------------------
-#### 通知提示类  
+#### 日历 
 ---------------------
 
-##### &#10084;  显示toast    　　
-接口方法：FSOpen.notification.toast        
-调用参数：   
+##### 打开日程界面     
+5.4.0
 
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| icon      | String    | icon样式，有success和error，默认为空 |
-| text      | String    | 提示信息 |
-| duration  | Number    | 显示持续时间，单位秒，默认按系统规范 |
-| delay     | Number    | 延迟显示，单位秒，默认0 |
-  
-举个栗子：  
 ```javascript
-FSOpen.notification.toast({
-        icon: 'success',
-        text: '提示信息',
-        duration: 2,
-        delay: 1
-    });
+var d = new Date();
+FSOpen.service.calendar.open({
+    year: d.getFullYear(),
+    month: d.getMonth() + 1,
+    date: d.getDate()
+});
 ``` 
 
-##### &#10084;  弹出提示alert    　　
-接口方法：FSOpen.notification.alert        
-调用参数：   
+接口方法：FSOpen.service.calendar.open   
+调用参数：  
 
-| 参数        | 类型      | 说明           |
-| ------------| ----------| ---------------|
-| title       | String    | 弹窗标题 |
-| message     | String    | 消息内容 |
-| buttonLabel | String    | 按钮名称 |
-  
-举个栗子：  
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| year      | Number    | 否   | 年份，默认当前年份 |
+| month     | Number    | 否   | 月份，默认当前月份。值为1~12。 |
+| date      | Number    | 否   | 日期，默认当天 |
+
+##### 设置日程提醒     
+5.4.0
+
 ```javascript
-FSOpen.notification.alert({
-    message: '消息内容',
-    title: '弹窗标题',
-    buttonLabel: '按钮名称',
+FSOpen.service.calendar.createEvent({
+    content: '今天原来要上班',
     onSuccess: function(resp) {
-        _alert(resp)
+        alert('创建成功');
     },
-    onFail: function(resp) {
-        _error(resp)
+    onFail: function(error) {
+        alert('创建失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  弹出提示confirm   　　
-接口方法：FSOpen.notification.confirm        
-调用参数：   
+接口方法：FSOpen.service.calendar.createEvent   
+调用参数：  
 
-| 参数         | 类型          | 说明           |
-| -------------| --------------| ---------------|
-| title        | String        | 弹窗标题 |
-| message      | String        | 消息内容 |
-| buttonLabels | Array[String] | 按钮名称 |
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| content   | String    | 否   | 日程提醒内容 |
 
-返回说明：   
-
-| 参数        | 类型      | 说明           |
-| ------------| ----------| ---------------|
-| buttonIndex | Number    | 被点击按钮的索引值，Number类型，从0开始 |
-
-举个栗子：  
-```javascript
-FSOpen.notification.confirm({
-    message: '消息内容',
-    title: '弹窗标题',
-    buttonLabels: ['按钮名称1', '按钮名称2'],
-    onSuccess: function(resp) {
-        _alert(resp)
-    },
-    onFail: function(resp) {
-        _error(resp)
-    }
-});
-``` 
-
-##### &#10084;  弹出提示prompt   　　
-接口方法：FSOpen.notification.prompt        
-调用参数：   
-
-| 参数         | 类型          | 说明           |
-| -------------| --------------| ---------------|
-| title        | String        | 弹窗标题 |
-| message      | String        | 消息内容 |
-| buttonLabels | Array[String] | 按钮名称 |
-
-返回说明：   
-
-| 参数        | 类型      | 说明           |
-| ------------| ----------| ---------------|
-| value       | String    | 输入的值 |
-| buttonIndex | Number    | 被点击按钮的索引值，Number类型，从0开始 |
-  
-举个栗子：  
-```javascript
-FSOpen.notification.prompt({
-    message: '消息内容',
-    title: '弹窗标题',
-    buttonLabels: ['按钮名称1', '按钮名称2'],
-    onSuccess: function(resp) {
-        _alert(resp)
-    },
-    onFail: function(resp) {
-        _error(resp)
-    }
-});
-``` 
-
-##### &#10084;  震动提示vibrate  　　
-接口方法：FSOpen.notification.vibrate        
-调用参数：   
-
-| 参数         | 类型          | 说明           |
-| -------------| --------------| ---------------|
-| duration     | Number        | 震动时间，android可配置；iOS忽略 |
-
-举个栗子：  
-```javascript
-FSOpen.notification.vibrate({
-    duration: 3,
-    onSuccess: function(resp) {
-        _alert(resp)
-    },
-    onFail: function(resp) {
-        _error(resp)
-    }
-});
-``` 
-
-##### &#10084;  显示预加载提示框  　　
-接口说明：和hidePreloader配合使用
-接口方法：FSOpen.notification.showPreloader        
-调用参数：   
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| text      | String    | loading显示的字符，空表示不显示文字 |
-| showIcon  | Boolean   | 是否显示icon，默认true |
-
-举个栗子：  
-```javascript
-FSOpen.notification.showPreloader({
-    text: '正在加载中',
-    showIcon: true,
-    onSuccess: function(resp) {
-        _alert(resp)
-    },
-    onFail: function(resp) {
-        _error(resp)
-    }
-});
-``` 
-
-##### &#10084;  隐藏预加载提示框  　　
-接口说明：和showPreloader配合使用
-接口方法：FSOpen.notification.hidePreloader        
-
-举个栗子：  
-```javascript
-FSOpen.notification.hidePreloader({
-    onSuccess: function(resp) {
-        _alert(resp)
-    },
-    onFail: function(resp) {
-        _error(resp)
-    }
-});
-``` 
-
-##### &#10084;  单选列表 　　
-接口方法：FSOpen.notification.actionSheet        
-调用参数：   
-
-| 参数         | 类型      | 说明           |
-| -------------| ----------| ---------------|
-| title        | String    | 标题说明 |
-| cancelButton | String    | 取消按钮文本 |
-| othersButton | String    | 其他按钮列表 |
-
-举个栗子：  
-```javascript
-FSOpen.notification.actionSheet({
-    title: '标题',
-    cancelButton: '取消',
-    othersButton: ['湖人', '马刺', '勇士'],
-    onSuccess: function(resp) {
-        _alert(resp)
-    },
-    onFail: function(resp) {
-        _error(resp)
-    }
-});
-``` 
-
-##### &#10084;  模态窗口 　　
-接口方法：FSOpen.notification.modal        
-调用参数：   
-
-| 参数         | 类型      | 说明           |
-| -------------| ----------| ---------------|
-| title        | String    | 标题说明 |
-| image        | String    | 图片地址 |
-| content      | String    | 窗口内容 |
-| buttonLabels | String    | 其他按钮列表 |
-
-举个栗子：  
-```javascript
-FSOpen.notification.modal({
-    title: '标题',
-    image: '',
-    content: '我是文本内容',
-    buttonLabels: ['了解更多', '就这样吧'],
-    onSuccess: function(resp) {
-        _alert(resp)
-    },
-    onFail: function(resp) {
-        _error(resp)
-    }
-});
-``` 
 
 ---------------------
-#### UI相关类  
+#### 工作流 
 ---------------------
 
-##### &#10084;  启用下拉刷新 　　
-接口方法：FSOpen.ui.pullRefresh.enable    
-调用参数：   
+##### 创建工作动态     
+5.4.0
 
-| 参数          | 类型          | 说明      |
-| --------------| --------------| ----------|
-| onPullRefresh | Function      | 下拉刷新回调 |
-
-`onPullRefresh`的回调参数说明：
-
-| 参数       | 类型      | 说明      |
-| -----------| ----------| ----------|
-| state      | Object    | 当前下拉阶段 |
-
-举个栗子：  
 ```javascript
-FSOpen.ui.pullRefresh.enable({
-    onPullRefresh: function(resp) {
-        _alert(resp);
-    },
+FSOpen.service.feed.create({
+    type: 'share',
+    content: '周五要上线',
     onSuccess: function(resp) {
-        _alert(resp)
+        alert('创建成功');
     },
-    onFail: function(resp) {
-        _error(resp)
+    onFail: function(error) {
+        alert('创建失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  禁用下拉刷新 　　
-接口方法：FSOpen.ui.pullRefresh.disable        
-举个栗子：  
+接口方法：FSOpen.service.feed.create   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| type      | String    | 否   | 动态类型：share-分享，diary-日志，approval-审批，task-任务，schedule-日程，order-指令，不指定则由用户自行选择 |
+| content   | String    | 否   | 动态文本内容，除任务外，均默认赋值到各类型动态的第一个字段，比如日报填入“今日工作”；任务填入第二个字段“备注” |
+
+##### 创建分享型工作动态     
+5.4.0
+
 ```javascript
-FSOpen.ui.pullRefresh.disable();
-``` 
-
-##### &#10084;  收起下拉刷新 　　
-接口方法：FSOpen.ui.pullRefresh.stop        
-举个栗子：  
-```javascript
-FSOpen.ui.pullRefresh.stop();
-``` 
-
-##### &#10084;  启用Bounce   　　
-接口说明：启用Webview的弹性效果，仅支持ios
-接口方法：FSOpen.ui.bounce.enable        
-举个栗子：  
-```javascript
-FSOpen.ui.bounce.enable();
-``` 
-
-##### &#10084;  禁用Bounce   　　
-接口说明：禁用Webview的弹性效果，仅支持ios
-接口方法：FSOpen.ui.bounce.disable        
-举个栗子：  
-```javascript
-FSOpen.ui.bounce.disable();
-``` 
-
----------------------
-#### 地图  
----------------------
-
-##### &#10084;  获取当前地理位置       　　
-接口方法：FSOpen.geolocation.get        
-返回说明：
-
-| 参数      | 类型      | 说明           |
-| ----------| ----------| ---------------|
-| accuracy  | Number    | 实际的定位精度半径（单位米） |
-| address   | String    | 格式化地址，如：深圳市南山区大冲商务中心 |
-| country   | String    | 国家           |
-| province  | String    | 省份，如：广东省        |
-| city      | String    | 城市，如：深圳市。直辖市会返回空 |
-| district  | String    | 行政区，如：南山区      |
-| street    | String    | 街道，如：铜鼓路10000号 |
-
-举个栗子：  
-```javascript
-FSOpen.geolocation.get({});
-``` 
-
-##### &#10084;  地图定位    　　
-接口方法：FSOpen.map.locate        
-调用参数：   
-
-| 参数         | 类型      | 说明           |
-| -------------| ----------| ---------------|
-| latitude     | Number    | 标准维度 |
-| longitude    | Number    | 标准经度 |
-
-返回说明：
-
-| 参数         | 类型      | 说明           |
-| -------------| ----------| ---------------|
-| latitude     | Number    | POI的标准维度  |
-| longitude    | Number    | POI的标准经度  |
-| title        | String    | POI的名称      |
-| province     | String    | POI所在省，可能为空 |
-| provinceCode | String    | POI所在省编码，可能为空 |
-| city         | String    | POI所在城市，可能为空 |
-| cityCode     | String    | POI所在城市的编码，可能为空 |
-| district     | String    | POI所在区，可能为空 |
-| districtCode | String    | POI所在区的编码，可能为空 |
-| postCode     | String    | POI的邮编，可能为空 |
-| street       | String    | POI的街道地址，可能为空 |
-
-举个栗子：  
-```javascript
-FSOpen.map.locate({
-    latitude: 39.903578,
-    longitude: 116.473565,
+FSOpen.service.feed.createShare({
     onSuccess: function(resp) {
-        _alert(resp)
+        alert('创建成功');
     },
-    onFail: function(resp) {
-        _error(resp)
+    onFail: function(error) {
+        alert('创建失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
-##### &#10084;  位置显示    　　
-接口方法：FSOpen.map.show        
-调用参数：   
+接口方法：FSOpen.service.feed.createShare   
+调用参数：  
 
-| 参数         | 类型      | 说明           |
-| -------------| ----------| ---------------|
-| latitude     | Number    | 标准维度 |
-| longitude    | Number    | 标准经度 |
-| title        | String    | 在地图锚点气泡显示的文本 |
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+|           | String    | 否   | 待定 |
 
-举个栗子：  
+##### 创建日志型工作动态     
+5.4.0
+
 ```javascript
-FSOpen.map.show({
-    latitude: 39.903578,
-    longitude: 116.473565,
-    title: '纷享逍客深研基地',
+FSOpen.service.feed.createDiary({
     onSuccess: function(resp) {
-        _alert(resp)
+        alert('创建成功');
     },
-    onFail: function(resp) {
-        _error(resp)
+    onFail: function(error) {
+        alert('创建失败，错误码：' + error.errorCode);
     }
 });
 ``` 
 
+接口方法：FSOpen.service.feed.createDiary   
+调用参数：  
 
-### Webview控制参数列表 
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+|           | String    | 否   | 待定 |
 
-| 参数名称        | 类型      | 说明         |
-| ----------------| ----------| -------------|
-| fs_nav_title    | String    | 控制导航栏标题文字，上限30个字 |
-| fs_nav_bgcolor  | String    | 控制导航栏颜色，格式为：RRGGBBAA，如：FAFAFAFF |
-| fs_nav_pbcolor  | String    | 控制导航栏进度条颜色，格式为：RRGGBBAA，如：FAFAFAFF |
-| fs_nav_fsmenu   | Boolean   | 控制是否显示纷享菜单，true为显示，false为不显示，默认显示 |
-| fs_auth         | Boolean   | 控制是否需二次鉴权，如果为true则需要，否则不需要，默认false |
-| fs_auth_appname | String    | 二次授权的应用名，只有在需要二次授权时使用，非空值需要进行URL encode |
+##### 创建审批型工作动态     
+5.4.0
+
+```javascript
+FSOpen.service.feed.createApproval({
+    onSuccess: function(resp) {
+        alert('创建成功');
+    },
+    onFail: function(error) {
+        alert('创建失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.feed.createApproval   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+|           | String    | 否   | 待定 |
+
+##### 创建任务型工作动态     
+5.4.0
+
+```javascript
+FSOpen.service.feed.createTask({
+    onSuccess: function(resp) {
+        alert('创建成功');
+    },
+    onFail: function(error) {
+        alert('创建失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.feed.createTask   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+|           | String    | 否   | 待定 |
+
+##### 创建日程型工作动态     
+5.4.0
+
+```javascript
+FSOpen.service.feed.createSchedule({
+    onSuccess: function(resp) {
+        alert('创建成功');
+    },
+    onFail: function(error) {
+        alert('创建失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.feed.createSchedule   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+|           | String    | 否   | 待定 |
+
+##### 创建指令型工作动态     
+5.4.0
+
+```javascript
+FSOpen.service.feed.createOrder({
+    onSuccess: function(resp) {
+        alert('创建成功');
+    },
+    onFail: function(error) {
+        alert('创建失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.feed.createOrder   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+|           | String    | 否   | 待定 |
+
+
+---------------------
+#### 网盘 
+---------------------
+
+##### 将文件保存到网盘     
+5.4.0
+
+> 此接口目前只支持纷享文件系统，见[附录]()
+
+```javascript
+FSOpen.service.disk.addFile({
+    fileName: '纷享逍客培训.pptx',
+    fileNPath: 'N_xxxxxx',
+    onSuccess: function(resp) {
+        alert('保存成功');
+    },
+    onFail: function(error) {
+        alert('保存失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.disk.addFile   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| fileName  | String    | 是   | 存储文件名称，需要带上文件后缀 |
+| fileNPath | String    | 是   | 以`N_`开头的纷享文件系统的文件路径信息 |
+
+##### 从网盘选择文件     
+5.4.0
+
+```javascript
+FSOpen.service.disk.selectFile({
+    onSuccess: function(resp) {
+        console.assert(resp.file !== undefined);
+    },
+    onFail: function(error) {
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.service.disk.selectFile   
+返回成功说明：  
+
+| 参数      | 类型      | 说明     |
+| ----------| ----------| ---------|
+| file      | Object    | 文件信息 |
+
+`file`字段说明：
+
+| 参数      | 类型      | 说明     |
+| ----------| ----------| ---------|
+| id        | String    | 文件ID信息 |
+| fileName  | String    | 文件名 |
+| fileNPath | String    | 以`N_`开头的纷享文件系统的文件路径信息 |
+| size      | Number    | 文件大小，以字节为单位 |
+| url       | String    | 可通过HTTP连接访问的文件地址 |
+
+### 媒体
+
+---------------------
+#### 文件 
+---------------------
+
+##### 文件预览
+5.4.0
+
+```javascript
+FSOpen.media.file.preview({
+    fileNPath: 'N_201606_29_f13bbed15ba14413bc0aef29be255817.docx',
+    onSuccess: function(resp) {
+        // do sth
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.media.file.preview   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| fileNPath | String    | 是   | 文档所对应的Npath地址，目前只支持的文件后缀为doc|docx|pdf|ppt|pptx等格式 |
+
+##### 文件下载
+5.4.0
+
+> 此接口仅在Android里可用
+
+```javascript
+FSOpen.media.file.download({
+    fileUrl: 'N_201606_29_f13bbed15ba14413bc0aef29be255817.docx',
+    fileName: '纷享JSAPI开发文档.docx',
+    onProgress: function(resp) {
+        console.log(resp.loaded, resp.total);
+    },
+    onSuccess: function(resp) {
+        console.log(resp.fileLocalPath);
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.media.file.download   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| fileUrl   | String    | 是   | 要下载的文件地址，支持Npath地址和标准的HTTP链接地址 |
+| fileName  | String    | 是   | 要下载的文件存储名 |
+| onProgress| Function  | 否   | 下载进度回调 |
+
+`onProgress`回调参数说明：
+
+| 参数        | 类型      | 说明     |
+| ------------| ----------| ---------|
+| loaded      | Number    | 已下载文件大小，以byte为单位 |
+| total       | Number    | 总下载文件大小，以byte为单位 |
+
+成功返回说明：
+
+| 参数          | 类型      | 说明     |
+| --------------| ----------| ---------|
+| fileLocalPath | String    | 下载文件的本地路径 |
+
+##### 文件上传
+5.4.0
+
+> 此接口在调用成功后，将会立即通过`onSuccess`回调返回用户选择的文件列表，然后在后续的上传过程中，将通过`onProgress`回调返回某单个文件的上传进度，同时，还会通过`onUpload`回调返回当前批次上传所有文件的上传进度。
+> 此接口仅在Android里可用。
+
+```javascript
+FSOpen.media.file.upload({
+    onUpload: function(resp) {
+        console.log('上传文件信息：', resp.file);
+        console.log('总上传进度：', resp.count, resp.done);
+    },
+    onProgress: function(resp) {
+        console.log(resp.id, resp.loaded, resp.total);
+    },
+    onSuccess: function(resp) {
+        console.log(resp.selectedFiles);
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.media.file.upload   
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| onUpload  | Function  | 否   | 所有文件上传进度回调 |
+| onProgress| Function  | 否   | 单个文件上传进度回调 |
+
+`onUpload`回调参数说明：
+
+| 参数      | 类型      | 说明     |
+| ----------| ----------| ---------|
+| file      | Object    | 当前上传成功的文件`file`信息 |
+| done      | Number    | 已完成上传的文件个数 |
+| count     | Number    | 总的要上传的文件个数 |
+
+`onProgress`回调参数说明：
+
+| 参数        | 类型      | 说明     |
+| ------------| ----------| ---------|
+| loaded      | Number    | 已下载文件大小，以byte为单位 |
+| total       | Number    | 总下载文件大小，以byte为单位 |
+
+`file`字段说明：
+
+| 参数        | 类型      | 说明     |
+| ------------| ----------| ---------|
+| id          | String    | 上传的文件ID |
+| result      | Boolean   | 上传结果，true表示成功，false表示失败 |
+| fileNPath   | String    | 如果上传成功，文件所对应的NPath地址 |
+
+成功返回说明：
+
+| 参数          | 类型          | 说明     |
+| --------------| --------------| ---------|
+| selectedFiles | Array[String] | 选择的文件`localFile`列表 |
+
+`localFile`字段说明：
+
+| 参数          | 类型      | 说明     |
+| --------------| ----------| ---------|
+| id            | String    | 上传的文件ID |
+| fileName      | String    | 上传的文件名称 |
+| fileLocalPath | String    | 上传的文件本地路径 |
+
+---------------------
+#### 图片 
+---------------------
+
+##### 图片预览
+5.4.0
+
+```javascript
+FSOpen.media.image.preview({
+    index: 0,
+    imgUrls: [
+        'https://www.fxiaoke.com/static/img/index/icon-wx-small.png?v=5.1.5',
+        'https://www.fxiaoke.com/static/img/index/icon-kh-small.jpg?v=5.1.5'
+    ]
+});
+``` 
+
+接口方法：FSOpen.media.image.preview   
+调用参数：  
+
+| 参数      | 类型          | 必须 | 说明         |
+| ----------| --------------| -----| -------------|
+| index     | Number        | 否   | 从第几张图片开始预览，索引从0开始计算。默认为0 |
+| imgUrls   | Array[String] | 是   | 图片地址列表，默认为空 |
+
+##### 图片上传
+5.4.0
+
+> 此接口在调用成功后，将会立即通过`onSuccess`回调返回用户选择的图片列表，然后在后续的上传过程中，将通过`onProgress`回调返回某单个图片的上传进度，同时，还会通过`onUpload`回调返回当前批次上传所有图片的上传进度。
+
+```javascript
+FSOpen.media.image.upload({
+    source: ['album', 'camera'],
+    onUpload: function(resp) {
+        console.log('上传文件信息：', resp.image);
+        console.log('总上传进度：', resp.count, resp.done);
+    },
+    onProgress: function(resp) {
+        console.log(resp.id, resp.loaded, resp.total);
+    },
+    onSuccess: function(resp) {
+        console.log(resp.selectedImages);
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+接口方法：FSOpen.media.image.upload   
+调用参数：  
+
+| 参数      | 类型          | 必须 | 说明         |
+| ----------| --------------| -----| -------------|
+| source    | Array[String] | 否   | 指定图片上传源：album-从相册上传，camera-拍照上传，默认只从相册上传 |
+| onUpload  | Function      | 否   | 所有图片上传进度回调 |
+
+`onUpload`回调参数说明：
+
+| 参数      | 类型      | 说明     |
+| ----------| ----------| ---------|
+| image     | Object    | 当前上传成功的图片`image`信息 |
+| done      | Number    | 已完成上传的图片个数 |
+| count     | Number    | 总的要上传的图片个数 |
+
+`image`字段说明：
+
+| 参数        | 类型      | 说明     |
+| ------------| ----------| ---------|
+| id          | String    | 上传的图片ID |
+| result      | Boolean   | 上传结果，true表示成功，false表示失败 |
+| imageNPath  | String    | 如果上传成功，图片所对应的NPath地址 |
+
+成功返回说明：
+
+| 参数          | 类型          | 说明     |
+| --------------| --------------| ---------|
+| selectedImages| Array[String] | 选择的图片`localImage`列表 |
+
+`localImage`字段说明：
+
+| 参数          | 类型      | 说明     |
+| --------------| ----------| ---------|
+| id            | String    | 上传的图片ID |
+| imageName      | String    | 上传的图片名称 |
+| imageLocalPath | String    | 上传的图片本地路径 |
+
+### Util
+
+##### 埋点统计
+5.4.0   
+> 此接口为纷享开放平台所提供的非实时统计平台，外部应用可直接使用此接口进行关键数据统计。具体可见[附录]() 
+
+```javascript
+FSOpen.util.traceEvent({
+    event: {
+        m1: 'eventName',
+        m2: 'Hello world',
+        m3: 10
+    }
+});
+``` 
+
+接口方法：FSOpen.util.traceEvent
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| event     | Object    | 是   | 统计数据内容，用户可自定义任意JSON字段 |
+
+##### 打开内部(native)页面
+5.4.0   
+
+```javascript
+FSOpen.util.open({
+    name: 'conversation',
+    params: {
+        type: 'user',
+        userIds: ['FSUID_571AA7C41A11BE3D9BA25BDD397AC86E']
+    }
+});
+``` 
+
+接口方法：FSOpen.util.open
+调用参数：  
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| name      | String    | 是   | 打开窗口类型 |
+| params    | Object    | 是   | 打开窗口所需要支持的参数对象 |
+
+`name`参数说明：
+
+| 类型             | 类型描述                 |
+| -----------------| -------------------------|
+| conversation     | 打开企信会话             |
+| feedOfUser       | 打开个人工作界面         |
+| feedOfDept       | 打开部门工作界面         |
+| favorite         | 打开收藏夹               |
+| downloadedFiles  | 打开下载管理界面         |
+| disk             | 打开网盘                 |
+| calendar         | 打开日历                 |
+| profileOfUser    | 打开个人信息界面         |
+| profileOfService | 打开服务号信息界面       |
+| map              | 打开地图                 |
+| wallet           | 打开当前登录用户钱包界面 |
+| feedWithId       | 打开Feed详情             |
+| checkInRecord    | 打开打卡界面             |
+| CRMVisiting      | 打开CRM客户拜访记录界面  |
+
+`conversation`对应的`params`参数说明：
+
+| 参数         | 类型          | 必须 | 说明         |
+| -------------| --------------| -----| -------------|
+| type         | String        | 否   | 会话类型，值：user-多（私）人会话；dept-部门会话；service-服务号会话；common-通用会话，即直接传入已存在的会话ID，可通过通讯录接口`service.contact.select`选择群组信息得到此ID。默认为user |
+| userIds      | Array[String] | 否   | 当`type=user`时使用，表示要发起会话的用户列表 |
+| departmentId | Number        | 否   | 当`type=dept`为时使用，表示要发起会话的部门 |
+| sessionId    | String        | 否   | 当`type=common`为时使用，表示要进入的群组会话 |
+| serviceChannelId | String    | 否   | 当`type=service`为时使用，表示要发起会话的服务号 |
+
+`feedOfUser`对应的`params`参数说明：
+
+| 参数      | 类型          | 必须 | 说明         |
+| ----------| --------------| -----| -------------|
+| userId    | String        | 是   | 用户OPEN-ID  |
+
+`feedOfDept`对应的`params`参数说明：
+
+| 参数         | 类型          | 必须 | 说明         |
+| -------------| --------------| -----| -------------|
+| departmentId | Number        | 是   | 部门ID       |
+
+`profileOfUser`对应的`params`参数说明：
+
+| 参数      | 类型          | 必须 | 说明         |
+| ----------| --------------| -----| -------------|
+| userId    | String        | 是   | 用户OPEN-ID  |
+
+`profileOfService`对应的`params`参数说明：
+
+| 参数      | 类型          | 必须 | 说明         |
+| ----------| --------------| -----| -------------|
+| serviceChannelId | String        | 是   | 服务号ID  |
+
+`map`对应的`params`参数说明：
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| latitude  | Number    | 是   | 标准维度，默认当前位置 |
+| longitude | Number    | 是   | 标准经度，默认当前位置 |
+| title     | String    | 否   | 在地图锚点气泡显示的文本，默认为空不显示 |
+
+`feedWithId`对应的`params`参数说明：
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| feedId    | Number    | 是   | 工作详情ID   |
+
+`checkInRecord`对应的`params`参数说明：
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| checkId   | Number    | 是   | 考勤记录ID   |
+
+`CRMVisiting`对应的`params`参数说明：
+
+| 参数      | 类型      | 必须 | 说明         |
+| ----------| ----------| -----| -------------|
+| visitingId| Number    | 是   | CRM对象ID    |
+
 
 
 ### 接口汇总
 
-| 接口名称                  | 需要授权  | Android支持情况 | Ios支持情况 | 功能说明      |
-| --------------------------| ----------| ----------------| ------------| --------------|
-| runtime.getVersion        |     N     | 5.3             | 5.3         | 获取终端版本号 |
-| runtime.showUpdate        |     N     | 5.4             | 5.4         | 升级提示说明  |
-| launcher.launchApp        |     N     | 5.4             | 5.4         | 启动第三方应用 |
-| launcher.checkAppInstalled|     N     | 5.4             | 5.4         | 检查第三方应用是否安装 |
-| contact.choose            |     Y     | 5.3             | 5.3         | 从通讯录里同时显示选择人员、部门和群组会话 |
-| contact.chooseUser        |     Y     | 5.3             | 5.3         | 从通讯录里选择人员 |
-| contact.chooseDepartment  |     Y     | 5.3             | 5.3         | 从通讯录里选择部门 |
-| contact.showProfile       |     Y     | 5.3             | 5.3         | 跳到个人主页 |
-| contact.showDepartment    |     Y     | 5.3             | 5.3         | 跳到部门主页 |
-| contact.getUserInfo       |     Y     | 5.3             | 5.3         | 根据openid获取用户信息 |
-| contact.getAppInfo        |     Y     | 5.3             | 5.3         | 获取服务号信息 |
-| mail.shareToFeed          |     N     | 5.4             | 5.4         | 邮件分享到动态 |
-| mail.shareToChat          |     N     | 5.4             | 5.4         | 邮件分享到企信 |
-| page.refresh              |     N     | 5.4             | 5.4         | 页面刷新 |
-| page.copyUrl              |     N     | 5.4             | 5.4         | 复制当前页面链接 |
-| page.generateQR           |     N     | 5.4             | 5.4         | 当前页面生成二维码 |
-| page.openInBrower         |     N     | 5.4             | 5.4         | 在浏览器中打开 |
-| share.toChat              |     Y     | 5.4             | 5.4         | 转发到企信 |
-| share.toFeed              |     Y     | 5.4             | 5.4         | 转发到动态 |
-| share.toCrmContact        |     Y     | 5.4             | 5.4         | 分享给crm联系人 |
-| share.toWXFriend          |     Y     | 5.4             | 5.4         | 分享给微信好友 |
-| share.toWXMoments         |     Y     | 5.4             | 5.4         | 分享到微信朋友圈 |
-| share.toQQFriend          |     Y     | 5.4             | 5.4         | 分享给QQ好友 |
-| share.toMail              |     Y     | 5.4             | 5.4         | 分享给邮件联系人 |
-| share.toSms               |     Y     | 5.4             | 5.4         | 分享给短信联系人 |
-| menu.onShareToChat        |     Y     | 5.4             | 5.4         | 转发到企信 |
-| menu.onShareToFeed        |     Y     | 5.4             | 5.4         | 转发到动态 |
-| menu.onShareToCrmContact  |     Y     | 5.4             | 5.4         | 分享给crm联系人 |
-| menu.onShareToWXFriend    |     Y     | 5.4             | 5.4         | 分享给微信好友 |
-| menu.onShareToWXMoments   |     Y     | 5.4             | 5.4         | 分享到微信朋友圈 |
-| menu.onShareToQQFriend    |     Y     | 5.4             | 5.4         | 分享给QQ好友 |
-| menu.onShareToMail        |     Y     | 5.4             | 5.4         | 分享给邮件联系人 |
-| menu.onShareToSms         |     Y     | 5.4             | 5.4         | 分享给短信联系人 |
-| chat.toConversation       |     Y     | 5.4             | 5.4         | 发起聊天会话 |
-| pay.request               |     Y     | 5.3             | 5.3         | 调起支付页面 |
-| pay.showWallet            |     Y     | 5.3             | 5.3         | 跳到钱包页面 |
-| device.authenticateUser   |     Y     | 5.3             | 5.3         | 用户鉴权      |
-| device.setOrientation     |     N     | 5.3             | 5.3         | 屏幕控制      |
-| device.scan               |     N     | 5.4             | 5.4         | 调用扫码      |
-| device.getUUID            |     Y     | 5.4             | 5.4         | 获取通用唯一识别码 |
-| device.getNetwork         |     Y     | 5.4             | 5.4         | 获取网络类型  |
-| device.getAP              |     Y     | 5.4             | 5.4         | 获取热点信息  |
-| notification.toast        |     N     | 5.4             | 5.4         | 显示toast |
-| notification.alert        |     N     | 5.4             | 5.4         | 显示toast |
-| notification.confirm      |     N     | 5.4             | 5.4         | 显示toast |
-| notification.prompt       |     N     | 5.4             | 5.4         | 显示toast |
-| notification.vibrate      |     N     | 5.4             | 5.4         | 显示toast |
-| notification.showPreloader|     N     | 5.4             | 5.4         | 显示toast |
-| notification.hidePreloader|     N     | 5.4             | 5.4         | 显示toast |
-| notification.actionSheet  |     N     | 5.4             | 5.4         | 显示toast |
-| notification.modal        |     N     | 5.4             | 5.4         | 显示toast |
-| ui.pullRefresh.enable     |     N     | 5.4             | 5.4         | 显示toast |
-| ui.pullRefresh.disable    |     N     | 5.4             | 5.4         | 显示toast |
-| ui.pullRefresh.stop       |     N     | 5.4             | 5.4         | 显示toast |
-| ui.bounce.enable          |     N     | 5.4             | 5.4         | 显示toast |
-| ui.bounce.disable         |     N     | 5.4             | 5.4         | 显示toast |
-| util.favorite             |     Y     | 5.4             | 5.4         | 收藏 |
-| util.uploadFile           |     Y     | 5.4             | 5.4         | 上传文件 |
-| util.uploadImage          |     Y     | 5.3             | 5.3         | 上传图片 |
-| util.getLocation          |     Y     | 5.3             | 5.3         | 获取当前地理位置 |
-| util.traceEvent           |     N     | 5.3             | 5.3         | 埋点统计 |
-| util.closeWebView         |     N     | 5.3             | 5.3         | 关闭当前页面(WebView) |
-| util.openWindow           |     N     | 5.3             | 5.3         | 跳转到应用内外(WebView) |
-| util.openWindowForResult  |     N     | 5.3             | 5.3         | 删除--打开新窗口(WebView) |
-| util.openContextMenu      |     N     | 5.4             | 5.4         | 删除--打开上下文菜单 |
-| util.openReplyPage        |     N     | 5.3             | 5.3         | 打开回复输入框 |
-| util.selectDate           |     N     | 5.3             | 5.3         | 打开时间选择控件 |
-| util.previewImage         |     N     | 5.3             | 5.3         | 图片预览 |
-| util.previewDocument      |     N     | 5.4             | 5.4         | 文档预览 |
-| geolocation.get       |     N     | 5.3             | 5.3         | 设置标题栏标题 |
-| map.locate |     N     | 5.3             | 5.3         | 设置标题栏左侧返回按钮的文字 |
-| map.show   |     N     | 5.3             | 5.3         | 注册标题栏右侧文字按钮 |
-| navigation.setTitle       |     N     | 5.3             | 5.3         | 设置标题栏标题 |
-| navigation.setBackBtnText |     N     | 5.3             | 5.3         | 设置标题栏左侧返回按钮的文字 |
-| navigation.setLeftBtn    |     N     | 5.3             | 5.3         | 注册标题栏右侧文字按钮 |
-| navigation.addRightBtn    |     N     | 5.3             | 5.3         | 注册标题栏右侧文字按钮 |
-| navigation.setRightBtn    |     N     | 5.3             | 5.3         | 注册标题栏右侧文字按钮 |
-| navigation.deleteAllRightBtns |     N     | 5.3         | 5.3         | 删除标题栏上所有右侧按钮 |
-| navigation.showFSMenu     |     N     | 5.4             | 5.4         | 显示系统菜单栏 |
-| navigation.hideFSMenu     |     N     | 5.4             | 5.4         | 隐藏系统菜单栏 |
-| permission.requestAuthCode|     Y     | 5.4             | 5.4         | 请求免登授权码 |
+<table>
+   <tr>
+      <td>一级分类</td>
+      <td>二级分类</td>
+      <td>接口名</td>
+      <td>需要授权</td>
+      <td>JS版本</td>
+      <td>接口描述</td>
+   </tr>
+   <tr>
+      <td colspan="2" rowspan="3">容器</td>
+      <td>runtime.getVersion</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>获取容器版本号</td>
+   </tr>
+   <tr>
+      <td>runtime.requestAuthCode</td>
+            <td>Y</td>
+      <td>2.0.0</td>
+      <td>获取临时授权码用于免登业务</td>
+   </tr>
+   <tr>
+      <td>runtime.showUpdate</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>提示版本升级</td>
+   </tr>
+   <tr>
+      <td colspan="2" rowspan="6">设备</td>
+      <td>device.authenticateUser</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>鉴权，支持指纹和纷享密码两种方式</td>
+   </tr>
+   <tr>
+      <td>device.getAP</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>获取接入点标识</td>
+   </tr>
+   <tr>
+      <td>device.getNetwork</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>获取当前接入的网络类型：WiFi、2/3/4G</td>
+   </tr>
+   <tr>
+      <td>device.getUUID</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>获取设备唯一编码</td>
+   </tr>
+   <tr>
+      <td>device.scan</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>扫一扫</td>
+   </tr>
+   <tr>
+      <td>device.vibrate</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>手机震动</td>
+   </tr>
+   <tr>
+      <td colspan="2" rowspan="2">启动器</td>
+      <td>launcher.checkAppInstalled</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>查询手机是否安装了某App</td>
+   </tr>
+   <tr>
+      <td>launcher.launchApp</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>启动指定的App</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="35">Webview</td>
+      <td colspan="1" rowspan="6">URL传参</td>
+      <td>fs_nav_title</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>URL后拼接'fs_nav_title=纷享问问'定义导航栏标题</td>
+   </tr>
+   <tr>
+      <td>fs_nav_fsmenu</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>URL后拼接'&fs_nav_fsmenu=true|false'设置是否在导航栏上显示纷享菜单</td>
+   </tr>
+   <tr>
+      <td>fs_nav_bgcolor</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>URL后拼接'&fs_nav_bgcolor=c6a60000'设置导航栏背景颜色</td>
+   </tr>
+   <tr>
+      <td>fs_nav_pgcolor</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>URL后拼接'&fs_nav_pgcolor=c6a60000'设置导航栏进度条颜色</td>
+   </tr>
+   <tr>
+      <td>fs_auth</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>URL后拼接'&auth=true|false'设置访问网页是否需要用户鉴权</td>
+   </tr>
+   <tr>
+      <td>fs_auth_appname</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>当需要用户鉴权（&auth=true)时，需传入应用名称用作用户提示（&auth_appname=纷享问问)</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="4">Webview跳转</td>
+      <td>webview.back</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>webview回退到上一级页面</td>
+   </tr>
+   <tr>
+      <td>webview.close</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>关闭webview</td>
+   </tr>
+   <tr>
+      <td>webview.open</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>打开webview新窗口</td>
+   </tr>
+   <tr>
+      <td>webview.onCloseWebview</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>webview窗口被关闭时回调。用于处理侧滑关闭、Android物理返回键关闭</td>
+   </tr>
+   <tr>
+      <td>屏幕翻转</td>
+      <td>webview.setOrientation</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>webview横屏竖屏控制</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="7">导航栏</td>
+      <td>webview.navbar.setTitle</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>设置导航栏标题</td>
+   </tr>
+   <tr>
+      <td>webview.navbar.setMiddleBtn</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>设置导航栏问号链接</td>
+   </tr>
+   <tr>
+      <td>webview.navbar.setLeftBtn</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>设置导航栏左侧按钮</td>
+   </tr>
+   <tr>
+      <td>webview.navbar.setRightBtns</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>设置导航栏右侧按钮</td>
+   </tr>
+   <tr>
+      <td>webview.navbar.removeRightBtns</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>清除导航栏右侧所有按钮</td>
+   </tr>
+   <tr>
+      <td>webview.navbar.showMenu</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>显示导航栏右侧的“更多”菜单</td>
+   </tr>
+   <tr>
+      <td>webview.navbar.hideMenu</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>隐藏导航栏右侧的“更多”菜单</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="8">纷享菜单</td>
+      <td>webview.menu.onShareToConversation</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>“更多”菜单回调：转发到企信 </td>
+   </tr>
+   <tr>
+      <td>webview.menu.onShareToFeed</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>“更多”菜单回调：转发到“工作”</td>
+   </tr>
+   <tr>
+      <td>webview.menu.onShareToCRMContact</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>“更多”菜单回调：转发到CRM联系人</td>
+   </tr>
+   <tr>
+      <td>webview.menu.onShareToWXFriend</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>“更多”菜单回调：转发给微信朋友</td>
+   </tr>
+   <tr>
+      <td>webview.menu.onShareToWXMoments</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>“更多”菜单回调：分享到微信朋友圈</td>
+   </tr>
+   <tr>
+      <td>webview.menu.onShareToQQFriend</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>“更多”菜单回调：转发给QQ朋友</td>
+   </tr>
+   <tr>
+      <td>webview.menu.onShareViaSMS</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>“更多”菜单回调：通过短信转发</td>
+   </tr>
+   <tr>
+      <td>webview.menu.onShareViaMail</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>“更多”菜单回调：通过邮件转发</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="4">页面</td>
+      <td>webview.page.copyURL</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>复制当前页面URL</td>
+   </tr>
+   <tr>
+      <td>webview.page.generateQR</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>生成当前页面二维码</td>
+   </tr>
+   <tr>
+      <td>webview.page.openWithBrowser</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>用浏览器打开当前页面</td>
+   </tr>
+   <tr>
+      <td>webview.page.refresh</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>页面刷新</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="2">Bounce</td>
+      <td>webview.bounce.disable</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>禁用Bounce</td>
+   </tr>
+   <tr>
+      <td>webview.bounce.enable</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>启用Bounce</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="3">下拉刷新</td>
+      <td>webview.pullRefresh.disable</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>禁用下拉刷新</td>
+   </tr>
+   <tr>
+      <td>webview.pullRefresh.enable</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>启用下拉刷新</td>
+   </tr>
+   <tr>
+      <td>webview.pullRefresh.stop</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>停止刷新</td>
+   </tr>
+   <tr>
+      <td colspan="2" rowspan="10">弹层</td>
+      <td>widget.showActionSheet</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>弹出菜单</td>
+   </tr>
+   <tr>
+      <td>widget.showAlert</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>弹出警告窗口</td>
+   </tr>
+   <tr>
+      <td>widget.showConfirm</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>弹出确认窗口</td>
+   </tr>
+   <tr>
+      <td>widget.hidePreloader</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>隐藏加载提示</td>
+   </tr>
+   <tr>
+      <td>widget.showModal</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>弹出模态窗口</td>
+   </tr>
+   <tr>
+      <td>widget.showPrompt</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>弹出提示窗口</td>
+   </tr>
+   <tr>
+      <td>widget.showPreloader</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>弹出加载提示</td>
+   </tr>
+   <tr>
+      <td>widget.showToast</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>弹出Toast</td>
+   </tr>
+   <tr>
+      <td>widget.showDateTimePicker</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>弹出日期选择控件</td>
+   </tr>
+   <tr>
+      <td>widget.showEditor</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>弹出文本框</td>
+   </tr>
+   <tr>
+      <td  colspan="1" rowspan="34">纷享服务</td>
+      <td  colspan="1" rowspan="7">通讯录</td>
+      <td>service.contact.select</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>选择员工和部门</td>
+   </tr>
+   <tr>
+      <td>service.contact.selectDepartment</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>选择部门</td>
+   </tr>
+   <tr>
+      <td>service.contact.selectUser</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>选择员工</td>
+   </tr>
+   <tr>
+      <td>service.contact.getMembers</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>获取成员列表</td>
+   </tr>
+   <tr>
+      <td>service.contact.getUsersInfo</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>获取员工信息</td>
+   </tr>
+   <tr>
+      <td>service.contact.setMark</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>关注员工或取消关注</td>
+   </tr>
+   <tr>
+      <td>service.contact.getServiceChannelsInfo</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>获取服务号信息</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="2">会话</td>
+      <td>service.conversation.setupFSCall</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>发起1对1纷享电话</td>
+   </tr>
+    <tr>
+      <td>service.conversation.setupFSConference</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>发起多人纷享电话会议</td>
+   </tr>
+   <tr>
+      <td>收藏</td>
+      <td>service.favorite.add</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>添加收藏</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="2">位置</td>
+      <td>service.geo.getLocation</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>获取当前地理位置</td>
+   </tr>
+   <tr>
+      <td>service.geo.selectPOI</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>选择兴趣点</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="2">邮件</td>
+      <td>service.mail.shareToConversation</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>邮件转发到企信</td>
+   </tr>
+   <tr>
+      <td>service.mail.shareToFeed</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>邮件转发到工作</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="2">支付</td>
+      <td>service.pay.request</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>请求支付</td>
+   </tr>
+   <tr>
+      <td>service.pay.requestForCorp</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>请求企业支付</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="8">分享</td>
+      <td>service.share.toConversation</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>转发到企信</td>
+   </tr>
+   <tr>
+      <td>service.share.toFeed</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>转发到“工作”</td>
+   </tr>
+   <tr>
+      <td>service.share.toCRMContact</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>转发到CRM联系人</td>
+   </tr>
+   <tr>
+      <td>service.share.toWXFriend</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>转发给微信朋友</td>
+   </tr>
+   <tr>
+      <td>service.share.toWXMoments</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>分享到微信朋友圈</td>
+   </tr>
+   <tr>
+      <td>service.share.toQQFriend</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>转发给QQ朋友</td>
+   </tr>
+   <tr>
+      <td>service.share.viaMail</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>通过邮件转发</td>
+   </tr>
+   <tr>
+      <td>service.share.viaSMS</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>通过短信转发</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="1">日历</td>
+      <td>service.share.toConversation</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>创建日程</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="7">工作</td>
+      <td>service.feed.create</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>创建工作</td>
+   </tr>
+   <tr>
+      <td>service.feed.createShare</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>创建分享</td>
+   </tr>
+   <tr>
+      <td>service.feed.createDiary</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>创建日志</td>
+   </tr>
+   <tr>
+      <td>service.feed.createApproval</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>创建审批</td>
+   </tr>
+   <tr>
+      <td>service.feed.createTask</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>创建任务</td>
+   </tr>
+   <tr>
+      <td>service.feed.createSchedule</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>创建工作日程</td>
+   </tr>
+   <tr>
+      <td>service.feed.createOrder</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>创建指令</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="2">网盘</td>
+      <td>service.disk.addFile</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>文件保存到网盘</td>
+   </tr>
+   <tr>
+      <td>service.disk.selectFile</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>从网盘中选取文件</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="11">媒体</td>
+      <td colspan="1" rowspan="3">文件</td>
+      <td>media.file.upload</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>上传文件</td>
+   </tr>
+   <tr>
+      <td>media.file.download</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>下载文件</td>
+   </tr>
+   <tr>
+      <td>media.file.preview</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>预览文件</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="2">图片</td>
+      <td>media.image.upload</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>上传图片（含拍照）</td>
+   </tr>
+   <tr>
+      <td>media.image.preview</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>预览图片</td>
+   </tr>
+   <tr>
+      <td colspan="1" rowspan="6">音频</td>
+      <td>media.audio.startRecord</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>开始录制语音</td>
+   </tr>
+   <tr>
+      <td>media.audio.stopRecord</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>停止录制语音</td>
+   </tr>
+   <tr>
+      <td>media.audio.play</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>播放语音</td>
+   </tr>
+   <tr>
+      <td>media.audio.pause</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>暂停播放语音</td>
+   </tr>
+   <tr>
+      <td>media.audio.resume</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>恢复播放语音</td>
+   </tr>
+   <tr>
+      <td>media.audio.stop</td>
+      <td>N</td>
+      <td>2.0.0</td>
+      <td>停止播放语音</td>
+   </tr>
+   <tr>
+      <td colspan="2" rowspan="3">Util</td>
+      <td>util.traceEvent</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>统计事件</td>
+   </tr>
+   <tr>
+      <td>util.open</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>打开纷享内部页面</td>
+   </tr>
+   <tr>
+      <td>util.query</td>
+      <td>Y</td>
+      <td>2.0.0</td>
+      <td>检索分享数据</td>
+   </tr>
+</table>
 
 
 ### 调试技巧
@@ -2495,7 +3576,4 @@ FSOpen.map.show({
 
 
 
-
-
-    
 

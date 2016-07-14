@@ -8,10 +8,10 @@
     
     git clone git@github.com:fsxiaoke/jsapi-doc.git
 
-### 第四步 进入目录，并执行如下命令
+### 第三步 进入目录，并执行如下命令
     
     npm install
 
-### 第五步 启动环境
+### 第四步 启动环境
     
     npm run server
