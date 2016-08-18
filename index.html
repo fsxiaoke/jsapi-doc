@@ -10,11 +10,48 @@
     <link rel="icon" href="//fxiaoke.com/favicon.ico" type="image/x-icon">
     <script src="js/lib/jquery.js"></script>
     <script src="js/lib/marked.js"></script>
+    <script src="js/lib/socket.io.js"></script>
+    <!-- 如果不指定host参数，默认和当前的src host一致 -->
+    <script src="//10.22.0.60:9999/debuggor.js" data-host="http://10.22.0.60:9999" data-appid="FSAID_5f5e30c"></script>
     <script src="js/main.js?v=0510"></script>
 </head>
 <body>
-    <div id="g-nav" class="g-nav">{{nav}}</div>
-    <div id="g-doc" class="g-doc">{{doc}}</div>
+
+    <div class="g-bd">
+
+        <!-- 左侧文档导航 -->
+        <div class="g-nav m-cate" id="g-nav">
+            <ul>
+                <li><a class="article js-art" href="#1-概述">概述</a></li>
+                <li><a class="article js-art" href="#2-Getting Started">Getting Started</a></li>
+                <li><a class="article js-art" href="#3-调试工具">调试工具</a></li>
+                <li>
+                    <a class="cate js-cate" href="javascript:;"><i class="exp-no"></i>APIs</a>
+                    <ul style="display:none;">
+                        <li><a class="article js-art" href="#4-APIs-容器">容器</a></li>
+                        <li><a class="article js-art" href="#5-APIs-设备">设备</a></li>
+                        <li><a class="article js-art" href="#6-APIs-启动器">启动器</a></li>
+                        <li><a class="article js-art" href="#7-APIs-Webview">Webview</a></li>
+                        <li><a class="article js-art" href="#8-APIs-弹层">弹层</a></li>
+                        <li><a class="article js-art" href="#9-APIs-纷享服务">纷享服务</a></li>
+                        <li><a class="article js-art" href="#10-APIs-媒体">媒体</a></li>
+                        <li><a class="article js-art" href="#11-APIs-Util">Util</a></li>
+                    </ul>
+                </li>
+                <li><a class="article js-art" href="#12-附录-接口汇总">附录-接口汇总</a></li>
+                <li><a class="article js-art" href="#13-附录-错误码汇总">附录-错误码汇总</a></li>
+                <li><a class="article js-art" href="#14-附录-FAQ">附录-FAQ</a></li>
+            </ul>
+        </div>
+
+        <!-- 文档内容主体 -->
+        <div class="g-doc">
+			<div class="wrap markdown-body" id="g-doc">
+                {{doc}}
+			</div>
+		</div>
+
+    </div>
 
     <noscript>
         <p>请使用支持Javascript环境的浏览器~</p>

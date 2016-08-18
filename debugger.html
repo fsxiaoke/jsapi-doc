@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>JSAPI终端</title>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+    <style type="text/css">
+    body{padding:5px;}
+    .log-list li{word-break:break-all;}
+    </style>
+</head>
+<body>
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">纷享JSAPI日志</h2>
+        </div>
+        <!-- 
+        <div class="panel-body"></div> 
+        -->
+        <ul class="list-group log-list" id="logList">
+        </ul>
+    </div>
+
+    <!-- 调试客户端日志项模板 -->
+    <script id="logTmpl" type="text/html">
+    <li class="list-group-item"></li>
+    </script>
+
+    <script src="//open.fsfte2.com/open/jsapi/2.0.0/fsapi.min.js"></script>
+    <script src="js/lib/socket.io.js"></script>
+    <!-- 如果不指定host参数，默认和当前的src host一致 -->
+    <script src="//10.22.0.60:9999/vconsole.js" data-host="http://10.22.0.60:9999"></script>
+    <script>
+    (function() {
+        // 获取当前时间格式
+        var getTime = function() {
+            var data = new Date,
+                hours = data.getHours(),
+                minutes = data.getMinutes(),
+                seconds = data.getSeconds();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            return [hours, minutes, seconds].join(':');
+        };
+        // 日志打印
+        var log = function(msg, detail) {
+            var node = document.createElement('li');
+            node.className = 'list-group-item';
+            if (detail)
+                node.innerHTML = '[' + getTime() + '] ' + msg + ', ' + JSON.stringify(detail);
+            else
+                node.innerHTML = '[' + getTime() + '] ' + msg;
+
+            var parent = document.getElementById('logList');
+            parent.appendChild(node);
+        };
+        // 初始化JSAPI
+        FSOpen.init({
+            appId: 'FSAID_5f5e28a',
+            timestamp: 1463650528707,
+            nonceStr: 'HUsfdsOIIejfoweu2u283',
+            signature: '377CB610A5C30247EF81C2E9C3ED33BB57448B0F',
+            internalId: true,
+            onSuccess: function(resp) {
+                log('FS JSAPI初始化成功，版本号：' + FSOpen.version);
+            },
+            onFail: function(error) {
+                if (error.errorCode === 30000)
+                    log('需要更新客户端');
+                else
+                    log('初始化失败：<br>' + JSON.stringify(error));
+            }
+        });
+        vconsole.log = log;
+
+    })();
+    </script>
+</body>
+</html>
