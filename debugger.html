@@ -31,9 +31,21 @@
     <script src="//open.fsfte2.com/open/jsapi/2.0.0/fsapi.min.js"></script>
     <script src="js/lib/socket.io.js"></script>
     <!-- 如果不指定host参数，默认和当前的src host一致 -->
-    <script src="//10.22.0.60:9999/vconsole.js" data-host="http://10.22.0.60:9999"></script>
+    <script src="js/vconsole.js"></script>
     <script>
     (function() {
+        
+        // 从Url里获取参数值
+        var getUrlParam = function(name) {
+            var search = window.location.search.substr(1);
+            if (!search)
+                return null;
+
+            //构造一个含有目标参数的正则表达式对象
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var matches = search.match(reg);
+            return matches != null ? decodeURIComponent(matches[2]) : null;
+        }
         // 获取当前时间格式
         var getTime = function() {
             var data = new Date,
@@ -58,9 +70,10 @@
             var parent = document.getElementById('logList');
             parent.appendChild(node);
         };
+        alert(location.href);
         // 初始化JSAPI
         FSOpen.init({
-            appId: 'FSAID_5f5e28a',
+            appId: getUrlParam('fs_aid'), //'FSAID_5f5e28a',
             timestamp: 1463650528707,
             nonceStr: 'HUsfdsOIIejfoweu2u283',
             signature: '377CB610A5C30247EF81C2E9C3ED33BB57448B0F',
@@ -75,6 +88,7 @@
                     log('初始化失败：<br>' + JSON.stringify(error));
             }
         });
+        // 定义vconsole的日志输出
         vconsole.log = log;
 
     })();
