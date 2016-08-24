@@ -37,12 +37,14 @@ body {
   content: '.';
 }
 .g-nav {
-  position: relative;
+  position: fixed;
   float: left;
   width: 210px;
+  height: 100%;
   margin: 0 -211px 0 0;
   background-color: #f4f6f9;
   border-right: 1px solid #eee;
+  overflow: auto;
 }
 .g-guide {
   position: relative;
