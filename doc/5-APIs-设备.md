@@ -1,6 +1,5 @@
 ## 设备类  
 
-
 <table>
    <tr>
       <td>接口名</td>
@@ -52,11 +51,11 @@ FSOpen.device.authenticateUser({
 });
 ```
 
-方法名：FSOpen.device.authenticateUser    
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上    
+方法名：FSOpen.device.authenticateUser   
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-参数说明  
+调用参数说明：   
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -71,18 +70,16 @@ FSOpen.device.getAP({
     onSuccess: function(resp) {
         // ssid: 'FSDevLan'
         // macAddress: '3c:12:aa:09'
-        console.assert(resp.ssid !== undefined);
-        console.assert(resp.macAddress !== undefined);
+        alert('ssid = ' + resp.ssid + '\n' + 'macAddress = ' + resp.macAddress);
     }
 });
 ``` 
 
-
 方法名：FSOpen.device.getAP   
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-成功回调返回参数  
+成功回调返回参数：     
 
 | 参数       | 类型        | 说明                |
 | -----------| ------------| --------------------|
@@ -97,20 +94,20 @@ JS版本：2.0.0
 FSOpen.device.getNetworkType({
     onSuccess: function(resp) {
         // network: '3g'
-        console.assert(resp.network !== undefined);
+        alert('network = ' + resp.network);
     }
 });
 ``` 
 
 方法名：FSOpen.device.getNetworkType    
-JS版本：2.0.0    
-客户端支持版本：5.4.0及以上    
+JS版本：2.0.0   
+客户端支持版本：5.4.0及以上  
 
-成功回调返回参数  
+成功回调返回参数：     
 
 | 参数      | 类型        | 说明                |
 | ----------| ------------| --------------------|
-| network   | String      | 网络类型，取值可能为：`2g`, `3g`, `4g`, `wifi`, `unknown`, `none`，`none`表示离线。|
+| network   | String      | 网络类型，取值可能为：`2g``3g``4g``wifi``unknown``none`，`none`表示离线。|
 
 
 #### 获取通用唯一识别码     
@@ -120,16 +117,16 @@ JS版本：2.0.0
 FSOpen.device.getUUID({
     onSuccess: function(resp) {
         // uuid: 'FD71A168-1CAD-4EF1-BECC-52997124207A'
-        console.assert(resp.uuid !== undefined);
+        alert('uuid = ' + resp.uuid);
     }
 });
 ``` 
 
-方法名：FSOpen.device.getUUID    
-JS版本：2.0.0    
+方法名：FSOpen.device.getUUID   
+JS版本：2.0.0   
 客户端支持版本：5.4.0及以上    
 
-成功回调返回参数  
+成功回调返回参数：     
 
 | 参数      | 类型        | 说明                |
 | ----------| ------------| --------------------|
@@ -143,16 +140,16 @@ JS版本：2.0.0
 FSOpen.device.scan({
     onSuccess: function(resp) {
         // text: 'https://www.fxiaoke.com/'
-        console.log(resp.text !== undefined);
+        alert('扫码内容：' + resp.text);
     }
 });
 ``` 
 
 方法名：FSOpen.device.scan   
-JS版本：2.0.0    
-客户端支持版本：5.4.0及以上    
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-成功回调返回参数  
+成功回调返回参数：     
 
 | 参数        | 类型        | 说明                |
 | ------------| ------------| --------------------|
@@ -168,11 +165,11 @@ FSOpen.device.vibrate({
 });
 ``` 
 
-方法名：FSOpen.device.vibrate   
-JS版本：2.0.0    
-客户端支持版本：5.4.0及以上    
+方法名：FSOpen.device.vibrate    
+JS版本：2.0.0   
+客户端支持版本：5.4.0及以上   
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|

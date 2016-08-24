@@ -18,7 +18,7 @@
 
             // 处理标题信息
             renderer.heading = function (text, level, raw) {
-                console.log(text, level, raw);
+                // console.log(text, level, raw);
                 var map = {
                     raw: raw,
                     text: text,
@@ -118,19 +118,6 @@
 
                         var code = $code.text();
                         debuggor.send(code);
-                        // try {
-                        //     var func = new Function(code);
-                        //     func();
-                        // } catch (e) {
-                        //     console.log(e.name, '====', e.message);
-                        //     var name = e.name;
-                        //     switch (name) {
-                        //     case 'TypeError':
-                        //         break;
-                        //     case 'SyntaxError':
-                        //         break;
-                        //     }
-                        // }
                         break;
                     case 'complete':
                         break;

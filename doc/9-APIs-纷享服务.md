@@ -1,45 +1,46 @@
 ## 纷享服务
 
 ### 通讯录
-
 <table>
-    <tr>
-        <td>接口名</td>
-        <td>接口描述</td>
-    </tr>
-    <tr>
-        <td>service.contact.select</td>
-        <td>选择员工和部门</td>
-    </tr>	
-    <tr>
-        <td>service.contact.selectDepartment</td>
-        <td>选择部门</td>
-    </tr>	
-    <tr>
-        <td>service.contact.selectUser</td>
-        <td>选择员工</td>
-    </tr>	
-    <tr>
-        <td>service.contact.getMembers</td>
-        <td>获取成员信息</td>
-    </tr>
-    <tr>
-        <td>service.contact.getUsersInfo</td>
-        <td>获取员工信息</td>
-    </tr>	
-    <tr>
-        <td>service.contact.setMark</td>
-        <td>关注员工或取消关注</td>
-    </tr>	
-    <tr>
-        <td>service.contact.getServiceChannelsInfo</td>
-        <td>获取服务号信息</td>
-    </tr>	  
+   <tr>
+      <td>接口名</td>
+      <td>接口描述</td>
+   </tr>
+	<tr>
+      <td>service.contact.select</td>
+      <td>选择员工和部门</td>
+   </tr>	
+	<tr>
+      <td>service.contact.selectDepartment</td>
+      <td>选择部门</td>
+   </tr>	
+	<tr>
+      <td>service.contact.selectUser</td>
+      <td>选择员工</td>
+   </tr>	
+	<tr>
+      <td>service.contact.getMembers</td>
+      <td>获取成员信息</td>
+   </tr>
+	<tr>
+      <td>service.contact.getUsersInfo</td>
+      <td>获取员工信息</td>
+   </tr>	
+	<tr>
+      <td>service.contact.setMark</td>
+      <td>关注员工或取消关注</td>
+   </tr>	
+	<tr>
+      <td>service.contact.getServiceChannelsInfo</td>
+      <td>获取服务号信息</td>
+   </tr>	  
 </table>
 
-> 使用`FSOpen.util.open`接口可跳转到“个人资料页”或“部门工作页”，参考[Util]()。  TODO：锚点
+> 使用`FSOpen.util.open`接口可跳转到“个人资料页”或“部门工作页”，参考[Util]()。    
 
-#### 关注员工或取消关注     
+TODO：锚点
+
+#### 关注员工或取消关注
 
 代码样例
 ```javascript
@@ -47,7 +48,7 @@ FSOpen.service.contact.setMark({
     userId: 'FSUID_5174F22D77B81347E278CBD353748547',
     value: true,
     onSuccess: function(resp) {
-        // do sth
+        alert(JSON.stringify(resp));
     },
     onFail: function(error) {
         alert('操作失败，错误码：' + error.errorCode);
@@ -56,10 +57,10 @@ FSOpen.service.contact.setMark({
 ``` 
 
 方法名：FSOpen.service.contact.setMark   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数       | 类型        | 必须 | 说明         |
 | -----------| ------------| -----| -------------|
@@ -86,17 +87,17 @@ FSOpen.service.contact.getMembers({
 ``` 
 
 方法名：FSOpen.service.contact.getMembers   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数         | 类型        | 必须 | 说明         |
 | -------------| ------------| -----| -------------|
 | departmentId | Number      | 是   | 如果查询对象是一个部门，则需传入部门ID。 |
 | sessionId    | String      | 是   | 如果查询对象是一个部门，则需传入群组（会话）ID。如果传入了一个有效的`departmentId`，接口后会忽略`sessionId`传参。 |
 
-成功回调返回参数
+成功回调返回参数：    
 
 | 参数    | 类型          | 说明         |
 | --------| --------------| -------------|
@@ -119,16 +120,16 @@ FSOpen.service.contact.getServiceChannelsInfo({
 ``` 
 
 方法名：FSOpen.service.contact.getServiceChannelsInfo   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数       | 类型        | 必须 | 说明         |
 | -----------| ------------| -----| -------------|
 | serviceChannelIds  | Array[String]      | 是   | 服务号ID列表 |
 
-成功回调返回参数  
+成功回调返回参数：      
 
 | 参数      | 类型          | 说明     |
 | ----------| --------------| ---------|
@@ -167,16 +168,16 @@ FSOpen.service.contact.getUsersInfo({
 ``` 
 
 方法名：FSOpen.service.contact.getUsersInfo   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数       | 类型          | 必须 | 说明         |
 | -----------| --------------| -----| -------------|
 | userIds    | Array[String] | 是   | 用户ID列表 |
 
-成功回调返回参数  
+成功回调返回参数：      
 
 | 参数      | 类型          | 说明     |
 | ----------| --------------| ---------|
@@ -240,13 +241,13 @@ FSOpen.service.contact.select({
         alert('获取失败，错误码：' + error.errorCode);
     }
 });
-``` 
+```
 
 方法名：FSOpen.service.contact.select   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数               | 类型          | 必须 | 说明         |
 | -------------------| --------------| -----| -------------|
@@ -319,10 +320,10 @@ FSOpen.service.contact.selectDepartment({
 ``` 
 
 方法名：FSOpen.service.contact.selectDepartment   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数               | 类型          | 必须 | 说明         |
 | -------------------| --------------| -----| -------------|
@@ -369,10 +370,10 @@ FSOpen.service.contact.selectUser({
 ``` 
 
 方法名：FSOpen.service.contact.selectUser   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数               | 类型          | 必须 | 说明         |
 | -------------------| --------------| -----| -------------|
@@ -405,8 +406,6 @@ JS版本：2.0.0
 
 
 ### 企信会话 
-
-
 <table>
    <tr>
       <td>接口名</td>
@@ -422,7 +421,7 @@ JS版本：2.0.0
    </tr>	
 </table>
 
->使用`FSOpen.util.open`接口可跳转到“企信会话窗口”，参考[Util]()。 TODO：锚点
+> 使用`FSOpen.util.open`接口可跳转到“企信会话窗口”，参考[Util]()。 TODO：锚点
 
 #### 发起1对1纷享电话
 
@@ -434,10 +433,10 @@ FSOpen.service.conversation.setupFSCall({
 ``` 
 
 方法名：FSOpen.service.conversation.setupFSCall   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型      | 必须 | 说明         |
 | ----------| ----------| -----| -------------|
@@ -453,10 +452,10 @@ FSOpen.service.conversation.setupFSConference({
 ``` 
 
 方法名：FSOpen.service.conversation.setupFSConference   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型         | 必须 | 说明         |
 | ----------| -------------| -----| -------------|
@@ -503,10 +502,10 @@ FSOpen.service.favorite.add({
 ``` 
 
 方法名：FSOpen.service.favorite.add   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型          | 必须 | 说明         |
 | ----------| --------------| -----| -------------|
@@ -540,11 +539,18 @@ JS版本：2.0.0
 
 代码样例
 ```javascript
-FSOpen.service.geo.getLocation();
+FSOpen.service.geo.getLocation({
+    onSuccess: function(resp) {
+        alert('位置信息：' + JSON.stringify(resp));
+    },
+    onFail: function(error) {
+        alert('操作失败：' + JSON.stringify(error));
+    }
+});
 ``` 
 
 方法名：FSOpen.service.geo.getLocation   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
 返回说明：  
@@ -567,16 +573,19 @@ FSOpen.service.geo.selectPOI({
     latitude: 39.903578,
     longitude: 116.473565,
     onSuccess: function(resp) {
-        console.log(resp);
+        alert('位置信息：' + JSON.stringify(resp));
+    },
+    onFail: function(error) {
+        alert('操作失败：' + JSON.stringify(error));
     }
 });
 ``` 
 
 方法名：FSOpen.service.geo.selectPOI   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明      
+调用参数说明：          
 
 | 参数      | 类型      | 必须 | 说明         |
 | ----------| ----------| -----| -------------|
@@ -636,10 +645,10 @@ FSOpen.service.mail.shareToConversation({
 ``` 
 
 方法名：FSOpen.service.mail.shareToConversation  
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数     | 类型   | 必须 | 说明         |
 | ---------| -------| -----| -------------|
@@ -668,10 +677,10 @@ FSOpen.service.mail.shareToFeed({
 ``` 
 
 方法名：FSOpen.service.mail.shareToFeed  
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数     | 类型   | 必须 | 说明         |
 | ---------| -------| -----| -------------|
@@ -710,7 +719,7 @@ FSOpen.service.pay.request({
     productId: 'xxx',
     productName: 'xxx',
     merchantId: 'xxx',
-    limitPayer: true,
+    limitPayer: 1,
     fromEa: 7,
     fromUid: 1099,
     expireTime: 1461564216568,
@@ -725,10 +734,10 @@ FSOpen.service.pay.request({
 ``` 
 
 方法名：FSOpen.service.pay.request  
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数       | 类型    | 必须 | 说明         |
 | -----------| --------| -----| -------------|
@@ -767,10 +776,10 @@ FSOpen.service.pay.requestForCorp({
 ``` 
 
 方法名：FSOpen.service.pay.requestForCorp  
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数         | 类型    | 必须 | 说明         |
 | -------------| --------| -----| -------------|
@@ -845,6 +854,7 @@ FSOpen.service.share.toConversation({
     imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
     onSuccess: function(resp) {
         // 可以在这里做些分享数据统计
+        alert('分享成功');
     },
     onFail: function(error) {
         if (error.errorCode == 40050) {
@@ -857,10 +867,10 @@ FSOpen.service.share.toConversation({
 ``` 
 
 方法名：FSOpen.service.share.toConversation   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -885,6 +895,7 @@ FSOpen.service.share.toFeed({
     imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
     onSuccess: function(resp) {
         // 可以在这里做些分享数据统计
+        alert('分享成功');
     },
     onFail: function(error) {
         if (error.errorCode == 40050) {
@@ -897,10 +908,10 @@ FSOpen.service.share.toFeed({
 ``` 
 
 方法名：FSOpen.service.share.toFeed   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -922,6 +933,7 @@ FSOpen.service.share.toCRMContact({
     link: location.href,
     onSuccess: function(resp) {
         // 可以在这里做些分享数据统计
+        alert('分享成功');
     },
     onFail: function(error) {
         if (error.errorCode == 40050) {
@@ -934,10 +946,10 @@ FSOpen.service.share.toCRMContact({
 ``` 
 
 方法名：FSOpen.service.share.toCRMContact   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -953,6 +965,7 @@ FSOpen.service.share.toWXFriend({
     imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
     onSuccess: function(resp) {
         // 可以在这里做些分享数据统计
+        alert('分享成功');
     },
     onFail: function(error) {
         if (error.errorCode == 40050) {
@@ -965,10 +978,10 @@ FSOpen.service.share.toWXFriend({
 ``` 
 
 方法名：FSOpen.service.share.toWXFriend   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -986,6 +999,7 @@ FSOpen.service.share.toWXMoments({
     imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
     onSuccess: function(resp) {
         // 可以在这里做些分享数据统计
+        alert('分享成功');
     },
     onFail: function(error) {
         if (error.errorCode == 40050) {
@@ -998,10 +1012,10 @@ FSOpen.service.share.toWXMoments({
 ``` 
 
 方法名：FSOpen.service.share.toWXMoments   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -1020,6 +1034,7 @@ FSOpen.service.share.toQQFriend({
     imgUrl: 'https://www.fxiaoke.com/static/img/index/logo.png?v=5.1.5',
     onSuccess: function(resp) {
         // 可以在这里做些分享数据统计
+        alert('分享成功');
     },
     onFail: function(error) {
         if (error.errorCode == 40050) {
@@ -1032,10 +1047,10 @@ FSOpen.service.share.toQQFriend({
 ``` 
 
 方法名：FSOpen.service.share.toQQFriend   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -1053,6 +1068,7 @@ FSOpen.service.share.viaSMS({
     content: '移动办公，自在纷享 {url}',
     onSuccess: function(resp) {
         // 可以在这里做些分享数据统计
+        alert('分享成功');
     },
     onFail: function(error) {
         if (error.errorCode == 40050) {
@@ -1065,10 +1081,10 @@ FSOpen.service.share.viaSMS({
 ``` 
 
 方法名：FSOpen.service.share.viaSMS   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -1085,6 +1101,7 @@ FSOpen.service.share.viaMail({
     content: '移动办公，自在纷享 {url}',
     onSuccess: function(resp) {
         // 可以在这里做些分享数据统计
+        alert('分享成功');
     },
     onFail: function(error) {
         if (error.errorCode == 40050) {
@@ -1097,10 +1114,10 @@ FSOpen.service.share.viaMail({
 ``` 
 
 方法名：FSOpen.service.share.viaMail   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -1139,10 +1156,10 @@ FSOpen.service.calendar.createEvent({
 ``` 
 
 方法名：FSOpen.service.calendar.createEvent   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型      | 必须 | 说明         |
 | ----------| ----------| -----| -------------|
@@ -1183,10 +1200,10 @@ FSOpen.service.feed.create({
 ``` 
 
 方法名：FSOpen.service.feed.create   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型      | 必须 | 说明         |
 | ----------| ----------| -----| -------------|
@@ -1224,13 +1241,13 @@ FSOpen.service.disk.addFile({
         alert('保存失败，错误码：' + error.errorCode);
     }
 });
-``` 
+```
 
 方法名：FSOpen.service.disk.addFile   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：      
 
 | 参数      | 类型      | 必须 | 说明         |
 | ----------| ----------| -----| -------------|
@@ -1243,7 +1260,7 @@ JS版本：2.0.0
 ```javascript
 FSOpen.service.disk.selectFile({
     onSuccess: function(resp) {
-        console.assert(resp.file !== undefined);
+        alert('文件信息：' + JSON.stringify(resp));
     },
     onFail: function(error) {
         alert('操作失败，错误码：' + error.errorCode);
@@ -1252,10 +1269,10 @@ FSOpen.service.disk.selectFile({
 ``` 
 
 方法名：FSOpen.service.disk.selectFile   
-JS版本：2.0.0        
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上     
 
-成功回调返回参数  
+成功回调返回参数：      
 
 | 参数      | 类型      | 说明     |
 | ----------| ----------| ---------|

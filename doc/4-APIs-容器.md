@@ -29,11 +29,10 @@
 ```javascript
 FSOpen.runtime.getVersion({
     onSuccess: function(resp){
-        console.assert(resp.ver !== undefined);
-        console.assert(parseFloat(resp.ver) > 5.2.0);
+        alert('当前终端版本号是：' + resp.ver);
     },
     onFail: function(error){
-        alert('您的应用不支持JSAPI，请升级到最新版本。');
+        alert('接口调用失败，错误码：' + error.errorCode);
     }
 });
 ```
@@ -42,7 +41,7 @@ FSOpen.runtime.getVersion({
 JS版本：2.0.0  
 客户端支持版本：5.4.0及以上  
 
-成功回调返回参数  
+成功回调返回参数：    
 
 | 参数      | 类型        | 说明                |
 | ----------| ------------| --------------------|
@@ -54,25 +53,25 @@ JS版本：2.0.0
 ```javascript
 FSOpen.runtime.getCurrentUser({
     onSuccess: function(resp){
-        console.assert(resp.user !== undefined);
+        alert('当前用户信息：' + JSON.stringify(resp));
     },
     onFail: function(error){
-        alert('您的应用不支持JSAPI，请升级');
+        alert('接口调用失败，错误码：' + error.errorCode);
     }
 });
 ```
 
-方法名：FSOpen.runtime.getCurrentUser  
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
+方法名：FSOpen.runtime.getCurrentUser    
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-成功回调返回参数  
+成功回调返回参数：    
 
 | 参数      | 类型        | 说明                |
 | ----------| ------------| --------------------|
 | user      | Object      | 返回当前用户的具体信息，详细字段如下表所示。 |
 
-`user`对象参数说明
+`user`对象参数说明：  
 
 | 参数      | 类型          | 说明         |
 | ----------| --------------| -------------|
@@ -89,21 +88,19 @@ JS版本：2.0.0
 ```javascript
 FSOpen.runtime.requestAuthCode({
     onSuccess: function(resp) {
-        console.assert(resp.code !== undefined);
-        console.assert(resp.userId !== undefined);
+        alert('免登授权码信息：' + JSON.stringify(resp));
     },
     onFail: function(error) {
-        error = error || {};
-        alert('操作失败，错误码：' + error.errorCode);
+        alert('接口调用失败，错误码：' + error.errorCode);
     }
 });
 ```  
 
-方法名：FSOpen.runtime.requestAuthCode  
+方法名：FSOpen.runtime.requestAuthCode   
 JS版本：2.0.0  
 客户端支持版本：5.4.0及以上  
 
-成功回调返回参数  
+成功回调返回参数：     
 
 | 参数       | 类型        | 说明                |
 | -----------| ------------| --------------------|
@@ -111,7 +108,6 @@ JS版本：2.0.0
 
 客户端同时提供一个更为便捷的JS API，可直接获取到当前用户信息，请参考[FSOpen.runtime.getCurrentUser](#getCurrentUser) 。
 TODO: 锚点。
-
 
 #### 终端升级提示    
 弹出升级提示，在Android上用户点击确定后可跳转到应用市场直接升级。  
@@ -123,11 +119,11 @@ FSOpen.runtime.showUpdate({
 });
 ``` 
 
-方法名：FSOpen.runtime.showUpdate    
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上    
+方法名：FSOpen.runtime.showUpdate  
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-参数说明  
+调用参数说明：    
 
 | 参数      | 类型        | 必须 | 说明                |
 | ----------| ------------| -----| --------------------|

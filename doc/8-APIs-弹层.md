@@ -74,10 +74,10 @@ FSOpen.widget.showActionSheet({
 ``` 
 
 方法名：FSOpen.widget.showActionSheet   
-JS版本：2.0.0     
-客户端支持版本：5.4.0及以上        
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：     
 
 | 参数            | 类型          | 必须 | 说明         |
 | ----------------| --------------| -----| -------------|
@@ -85,7 +85,7 @@ JS版本：2.0.0
 | cancelBtnLabel  | String        | 否   | `取消`选项文本，默认为“取消”，点击后收起单选列表。 |
 | actionBtnLabels | Array[String] | 是   | 选项文本列表 |
 
-成功回调返回参数
+成功回调返回参数：
 
 | 参数        | 类型      | 说明     |
 | ------------| ----------| ---------|
@@ -110,10 +110,10 @@ FSOpen.widget.showAlert({
 ``` 
 
 方法名：FSOpen.widget.showAlert   
-JS版本：2.0.0     
-客户端支持版本：5.4.0及以上        
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：     
 
 | 参数     | 类型      | 必须 | 说明         |
 | ---------| ----------| -----| -------------|
@@ -144,10 +144,10 @@ FSOpen.widget.showConfirm({
 ``` 
 
 方法名：FSOpen.widget.showConfirm   
-JS版本：2.0.0     
-客户端支持版本：5.4.0及以上        
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型      | 必须 | 说明         |
 | ----------| ----------| -----| -------------|
@@ -155,7 +155,7 @@ JS版本：2.0.0
 | content   | String    | 否   | 弹窗消息内容 |
 | btnLabels | String    | 是   | 弹窗左右按钮的文本，最多两个。 |
 
-成功回调返回参数
+成功回调返回参数：    
 
 | 参数     | 类型     | 说明     |
 | ---------| ---------| ---------|
@@ -179,10 +179,10 @@ FSOpen.widget.showPreloader({
 ``` 
 
 方法名：FSOpen.widget.showPreloader   
-JS版本：2.0.0     
-客户端支持版本：5.4.0及以上        
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型      | 必须 | 说明         |
 | ----------| ----------| -----| -------------|
@@ -198,8 +198,8 @@ FSOpen.widget.hidePreloader();
 ``` 
 
 方法名：FSOpen.widget.hidePreloader   
-JS版本：2.0.0     
-客户端支持版本：5.4.0及以上        
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
 
 
 #### 显示模态框     
@@ -226,10 +226,10 @@ FSOpen.widget.showModal({
 ``` 
 
 方法名：FSOpen.widget.showModal   
-JS版本：2.0.0     
-客户端支持版本：5.4.0及以上        
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型      | 必须 | 说明         |
 | ----------| ----------| -----| -------------|
@@ -238,7 +238,7 @@ JS版本：2.0.0
 | content   | String    | 否   | 弹窗文本内容，默认为空 |
 | btnLabels | String    | 是   | 弹窗左右按钮的文本，最多两个。 |
 
-成功回调返回参数
+成功回调返回参数：   
 
 | 参数     | 类型     | 说明     |
 | ---------| ---------| ---------|
@@ -267,10 +267,10 @@ FSOpen.widget.showPrompt({
 ``` 
 
 方法名：FSOpen.widget.showPrompt   
-JS版本：2.0.0     
-客户端支持版本：5.4.0及以上        
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型      | 必须 | 说明         |
 | ----------| ----------| -----| -------------|
@@ -278,14 +278,12 @@ JS版本：2.0.0
 | content   | String    | 否   | 弹窗消息内容 |
 | btnLabels | String    | 是   | 弹窗左右按钮的文本，最多两个。 |
 
-成功回调返回参数
+成功回调返回参数：  
 
 | 参数     | 类型     | 说明     |
 | ---------| ---------| ---------|
 | btnIndex | Number   | 点击的按钮索引，从0开始，从左到右分别是0、1 |
 | value    | String   | 弹窗输入框的值 |
-
-
 
 #### 显示toast     
 TODO：语言太苍白，来图！
@@ -307,10 +305,10 @@ FSOpen.widget.showToast({
 ``` 
 
 方法名：FSOpen.widget.showToast   
-JS版本：2.0.0     
-客户端支持版本：5.4.0及以上        
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型      | 必须 | 说明         |
 | ----------| ----------| -----| -------------|
@@ -318,6 +316,7 @@ JS版本：2.0.0
 | icon      | String    | 否   | 要显示的图标样式，有`success`和`error`。默认为`success` |
 | duration  | Number    | 否   | 显示持续时间，单位毫秒，默认按系统规范 |
 | delay     | Number    | 否   | 延迟显示时间，单位毫秒，默认0 |
+
 
 #### 显示时间选择器     
 TODO：语言太苍白，来图！
@@ -327,19 +326,19 @@ FSOpen.widget.showDateTimePicker({
     dateType: 'month',
     defaultValue: '2015-03-24',
     onSuccess: function(resp) {
-        console.assert(resp.value == '2015-03-24');
+        alert('选择的时间值：' + resp.value);
     },
     onFail: function(error) {
         alert('获取失败，错误码：' + error.errorCode);
     }
 });
-``` 
+```
 
 方法名：FSOpen.widget.showDateTimePicker   
-JS版本：2.0.0     
-客户端支持版本：5.4.0及以上        
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：     
 
 | 参数         | 类型      | 必须 | 说明         |
 | -------------| ----------| -----| -------------|
@@ -356,7 +355,7 @@ JS版本：2.0.0
 | week     | yyyy-MM-dd~yyyy-MM-dd | 周 |
 | day&#124;time | yyyy-MM-dd HH:mm | 年月日 时分 |
 
-成功回调返回参数
+成功回调返回参数：  
 
 | 参数       | 类型      | 说明     |
 | -----------| ----------| ---------|
@@ -379,12 +378,10 @@ FSOpen.widget.showEditor({
     },
     backFillData: {
         content: '我是输入',
-        images: [''],
-        tempFilePaths: []
     },
-    components: ['emoji', 'image', 'at'],
+    components: ['emoji', 'at'],
     onSuccess: function(resp) {
-        console.log(resp.content);
+        alert('你的输入是：' + resp.content);
     },
     onFail: function(error) {
         alert('操作失败，错误码：' + error.errorCode);
@@ -393,10 +390,10 @@ FSOpen.widget.showEditor({
 ``` 
 
 方法名：FSOpen.widget.showEditor   
-JS版本：2.0.0     
-客户端支持版本：5.4.0及以上        
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
 
-参数说明  
+调用参数说明：     
 
 | 参数         | 类型          | 必须 | 说明         |
 | -------------| --------------| -----| -------------|
@@ -404,8 +401,8 @@ JS版本：2.0.0
 | max          | Number        | 否   | 最大输入字符限制，不区分中英文。系统最多支持3000字。|
 | placeholder  | String        | 否   | 占位符。默认为空 |
 | navbar       | Object        | 否   | 输入框标题栏控制，具体说明见下面。|
-| backFillData | Object        | 否   | 回填数据内容，支持文本和图片的数据回填，具体说明见下面。默认为空 |
-| components   | Array[String] | 否   | 快捷输入组件。目前支持：`emoji`-表情，`image`-图片，`at`-@功能 |
+| backFillData | Object        | 否   | 回填数据内容，仅支持文本数据回填，具体说明见下面。默认为空 |
+| components   | Array[String] | 否   | 快捷输入组件。目前支持：`emoji`-表情，`at`-@功能 |
 
 `navbar`参数字段说明：
 
@@ -421,14 +418,10 @@ JS版本：2.0.0
 | 参数          | 类型          | 说明     |
 | --------------| --------------| ---------|
 | content       | String        | 需要回填的文本内容 |
-| images        | Array[String] | 需要回填的图片本地路径 |
-| tempFilePaths | Array[String] | 图片在服务器上的存储地址，可选。如果有，将不会重复上传该图片，提高性能。|
 
-成功回调返回参数
+成功回调返回参数：  
 
 | 参数          | 类型          | 说明     |
 | --------------| --------------| ---------|
 | content       | String        | 输入纯文本内容，如“批准[微笑]，@北京研发中心”。Emoji表情由H5端自行解析 |
-| thumbs        | Array[String] | 用户选择的图片提交后的缩略图地址，可用来在页面做图片展示 |
-| images        | Array[String] | 用户选择的图片的本地路径，不需要做上传，在编辑的时候回显使用 |
-| tempFilePaths | Array[String] | 用户选择的图片上传后的存储地址|
+

@@ -36,8 +36,8 @@ FSOpen.media.file.download({
 ``` 
 
 方法名：FSOpen.media.file.download   
-JS版本：2.0.0       
-客户端支持版本：5.4.0及以上     
+JS版本：2.0.0
+客户端支持版本：5.4.0及以上
 
 参数说明  
 
@@ -76,8 +76,8 @@ FSOpen.media.file.preview({
 ``` 
 
 方法名：FSOpen.media.file.preview   
-JS版本：2.0.0       
-客户端支持版本：5.4.0及以上     
+JS版本：2.0.0
+客户端支持版本：5.4.0及以上
 
 参数说明  
 
@@ -114,8 +114,8 @@ FSOpen.media.image.preview({
 ``` 
 
 方法名：FSOpen.media.image.preview   
-JS版本：2.0.0       
-客户端支持版本：5.4.0及以上     
+JS版本：2.0.0
+客户端支持版本：5.4.0及以上
 
 参数说明  
 

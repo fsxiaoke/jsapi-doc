@@ -1,9 +1,6 @@
 ## Webview  
 
-
-### URL传参控制 
-
-
+### URL传参控制  
 由于JS-API在页面加载后才会被执行，而对于Webview的一些设置需要在页面加载成功前执行，比如某些重要页面需要在用户看到之前验证其身份、或是在Webview加载网页之前即显示定制的导航栏背景色。
 纷享客户端支持通过在传入的URL后添加参数的方式控制Webview的某些行为或显示效果。
 
@@ -22,7 +19,6 @@ http://www.fxiaoke.com/fsask/index.html?fs_auth=true&fs_auth_appName=纷享问�
 | fs_nav_fsmenu   | Boolean | 控制是否显示纷享菜单，true为显示，false为不显示，默认显示。 |
 | fs_auth         | Boolean | 控制是否需对当前用户鉴权，如果为true则需要，否则不需要，默认false。 |
 | fs_auth_appname | String  | 对当前用户鉴权的应用名，只有在`fs_auth=true`时使用，非空值需要进行URL encode。 |
-
 
 
 ### Webview跳转 
@@ -66,9 +62,8 @@ FSOpen.webview.back({
 ``` 
 
 方法名：FSOpen.webview.back      
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
-
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
 
 #### 关闭当前页面
@@ -83,10 +78,10 @@ FSOpen.webview.close({
 ``` 
 
 方法名：FSOpen.webview.close      
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-参数说明  
+调用参数说明：    
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -106,18 +101,19 @@ FSOpen.webview.open({
 ``` 
 
 方法名：FSOpen.webview.open      
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-参数说明  
+调用参数说明：    
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
 | url       | String      | 是   | 需要打开的页面链接地址 |
 | onClose   | Function    | 是   | 打开的页面关闭后的回调。如果通过`webview.open`打开页面，可通过`webview.close`接口关闭页面并传递参数`extras`到`webview.open`的`onClose`回调。 |
 
+
 #### Android物理键回退回调
-仅Android适用。Android物理返回键返回上个页面时被调用。
+仅Android适用。Android物理返回键返回上个页面时被调用。  
 
 代码样例
 ```javascript
@@ -125,6 +121,9 @@ FSOpen.webview.onBackWebview({
     onBack: function() {
         alert('back to previous page！');
         FSOpen.webview.back();
+    },
+    onSuccess: function() {
+        alert('现在请点击物理返回键');
     }
 });
 ``` 
@@ -133,7 +132,7 @@ FSOpen.webview.onBackWebview({
 JS版本：2.0.0   
 客户端支持版本：5.4.0及以上   
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -146,18 +145,21 @@ Webview窗口被关闭时回调，包括顶部栏关闭按钮及物Android物理
 代码样例
 ```javascript
 FSOpen.webview.onCloseWebview({
-    onBack: function() {
+    onClose: function() {
         alert('我要关闭了！');
         FSOpen.webview.close();
+    },
+    onSuccess: function() {
+        alert('现在请点击回退按钮退出当前页面');
     }
 });
 ``` 
 
-方法名：FSOpen.webview.onCloseWebview         
+方法名：FSOpen.webview.onCloseWebview       
 JS版本：2.0.0   
 客户端支持版本：5.4.0及以上   
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -187,10 +189,10 @@ FSOpen.webview.setOrientation({
 ``` 
 
 方法名：FSOpen.webview.setOrientation      
-JS版本：2.0.0   
+JS版本：2.0.0  
 客户端支持版本：5.4.0及以上   
 
-参数说明  
+调用参数说明：     
 
 | 参数        | 类型        | 必须 | 说明         |
 | ------------| ------------| -----| -------------|
@@ -200,7 +202,6 @@ TODO：还未实现锁定和useSysConfig
 
 
 ### 导航栏 
-
 
 <table>
    <tr>
@@ -247,10 +248,10 @@ FSOpen.webview.navbar.setTitle({
 ``` 
 
 方法名：FSOpen.webview.navbar.setTitle        
-JS版本：2.0.0   
+JS版本：2.0.0  
 客户端支持版本：5.4.0及以上   
 
-参数说明
+调用参数说明：   
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -265,7 +266,9 @@ TODO：来个截图
 ```javascript
 FSOpen.webview.navbar.setMiddleBtn({
     onClick: function() {
-        FSOpen.webview.open('https://www.fxiaoke.com/aboutus/index.html');
+        FSOpen.webview.open({
+            url: 'https://www.fxiaoke.com/aboutus/index.html'
+        });
     }
 });
 ``` 
@@ -274,12 +277,11 @@ FSOpen.webview.navbar.setMiddleBtn({
 JS版本：2.0.0   
 客户端支持版本：5.4.0及以上   
 
-参数说明
+调用参数说明：   
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
 | onClick   | Function    | 否   | 定制按钮的点击回调 |
-
 
 #### 设置导航栏左侧按钮
 TODO：来个截图
@@ -298,7 +300,7 @@ FSOpen.webview.navbar.setLeftBtn({
 JS版本：2.0.0   
 客户端支持版本：5.4.0及以上   
 
-参数说明
+调用参数说明：   
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -306,29 +308,30 @@ JS版本：2.0.0
 | onClick   | Function    | 否   | 定制按钮的点击回调，如开发者声明了`onClick`，则需注意在最后根据需要调用`FSOpen.webview.close()`实现关闭当前页，否则Webview不会自动返回或关闭。如不声明`onClick`，Webview会自动关闭当前页。  |
 
 #### 设置导航栏右侧按钮
-可以在导航栏右侧显示1个或多个自定义按钮。超过两个按钮则会在更多菜单中显示这些按钮。
+可以在导航栏右侧显示1个或多个自定义按钮。超过两个按钮则会在更多菜单中显示这些按钮。  
 
 todo：来个图！
 
 代码样例
 ```javascript
+var btns = [
+    {btnId: '1', icon: 'fav', text: '收藏'},
+    {btnId: '2', icon: 'add', text: '添加'}
+];
 FSOpen.webview.navbar.setRightBtns({
-    items: [
-        {btnId: '1', icon: 'fav', text: '收藏'},
-        {btnId: '2', icon: 'add', text: '添加'}
-    ],
+    items: btns,
     onClick: function(resp) {
         // {btnId: '1'}
-        console.assert(resp.btnId !== undefined);
+        alert('点击了按钮：' + btns[resp.btnId - 1].text);
     }
 });
 ``` 
 
-方法名：FSOpen.webview.navbar.setRightBtns           
+方法名：FSOpen.webview.navbar.setRightBtns        
 JS版本：2.0.0   
 客户端支持版本：5.4.0及以上   
 
-参数说明
+调用参数说明：   
 
 | 参数      | 类型          | 必须 | 说明         |
 | ----------| --------------| -----| -------------|
@@ -369,7 +372,6 @@ todo：来个图！
  | ----------| --------------| ---------|
  | btnId     | String        | `item`的id |
 
-
 #### 清除导航栏右侧所有按钮
 注意此接口只会删除掉通过`FSOpen.webview.navbar.setRightBtns`设定的按钮，不会删除`FSOpen.webview.navbar.showMenu`设定的菜单。  
 
@@ -378,16 +380,15 @@ todo：来个图！
 FSOpen.webview.navbar.removeRightBtns();
 ``` 
 
-方法名：FSOpen.webview.navbar.removeRightBtns         
-JS版本：2.0.0      
-客户端支持版本：5.4.0及以上   
-
+方法名：FSOpen.webview.navbar.removeRightBtns      
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
 #### 显示"更多"菜单
-显示一个纷享提供的“更多”菜单，菜单中预置了一些常用的功能实现，比如收藏、转发到企信、转发到分享、转发到微信等。
+显示一个纷享提供的“更多”菜单，菜单中预置了一些常用的功能实现，比如收藏、转发到企信、转发到分享、转发到微信等。   
 TODO：来个图！
 
-通常开发者仅需自定义需要显示的菜单列表，无需再为每个功能提供实现，但如果有自己的特殊需求，也可以自定义实现各菜单的全局回调函数，详情可参考[Webview-“更多”菜单回调]()。
+通常开发者仅需自定义需要显示的菜单列表，无需再为每个功能提供实现，但如果有自己的特殊需求，也可以自定义实现各菜单的全局回调函数，详情可参考[Webview-“更多”菜单回调]()。   
 TODO：锚点。
 
 代码样例
@@ -414,10 +415,10 @@ FSOpen.webview.navbar.showMenu({
 ``` 
 
 方法名：FSOpen.webview.navbar.showMenu          
-JS版本：2.0.0   
+JS版本：2.0.0  
 客户端支持版本：5.4.0及以上   
 
-参数说明
+调用参数说明：   
 
 | 参数      | 类型          | 必须 | 说明         |
 | ----------| --------------| -----| -------------|
@@ -426,7 +427,7 @@ JS版本：2.0.0
 `menuItem`说明：
 
 | 参数                 | 说明             |
-| | -----------------|
+| ---------------------| -----------------|
 | service:favorite     | 收藏当前页面     |
 | share:toConversation | 转发到企信       |
 | share:toFeed         | 转发到工作流     |
@@ -450,17 +451,13 @@ JS版本：2.0.0
 FSOpen.webview.navbar.hideMenu();
 ``` 
 
-方法名：FSOpen.webview.navbar.hideMenu         
+方法名：FSOpen.webview.navbar.hideMenu      
 JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
-
-
-
+客户端支持版本：5.4.0及以上    
 
 
 ### “更多”菜单回调 
-
-通过`FSOpen.webview.navbar.showMenu`设置的“更多”菜单，在用户点击的时候会触发对应的全局回调处理。开发者可实现这些回调以自定义具体（转发）的内容信息。
+通过`FSOpen.webview.navbar.showMenu`设置的“更多”菜单，在用户点击的时候会触发对应的全局回调处理。开发者可实现这些回调以自定义具体（转发）的内容信息。   
 
 <table>
    <tr>
@@ -524,10 +521,10 @@ FSOpen.webview.menu.onShareToConversation({
 ``` 
 
 方法名：FSOpen.webview.menu.onShareToConversation   
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-参数说明  
+调用参数说明：    
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -559,10 +556,10 @@ FSOpen.webview.menu.onShareToFeed({
 ``` 
 
 方法名：FSOpen.webview.menu.onShareToFeed   
-JS版本：2.0.0   
+JS版本：2.0.0  
 客户端支持版本：5.4.0及以上   
 
-参数说明  
+调用参数说明：    
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -591,17 +588,14 @@ FSOpen.webview.menu.onShareToCRMContact({
 ``` 
 
 方法名：FSOpen.webview.menu.onShareToCRMContact   
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
 | link      | String      | 否   | 要转发的页面链接 |
-
-
-
 
 #### “更多”菜单回调：分享给微信好友     
 
@@ -625,10 +619,10 @@ FSOpen.webview.menu.onShareToWXFriend({
 ``` 
 
 方法名：FSOpen.webview.menu.onShareToWXFriend   
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -658,18 +652,16 @@ FSOpen.webview.menu.onShareToWXMoments({
 ``` 
 
 方法名：FSOpen.webview.menu.onShareToWXMoments   
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
-参数说明  
+调用参数说明：    
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
 | title     | String      | 否   | 分享标题，默认当前页面标题 |
 | link      | String      | 否   | 分享链接地址，默认当前页面链接 |
 | imgUrl    | String      | 否   | 分享缩略图地址，默认为纷享内置图标 |
-
-
 
 #### “更多”菜单回调：分享给QQ好友     
 
@@ -697,7 +689,7 @@ FSOpen.webview.menu.onShareToQQFriend({
 JS版本：2.0.0   
 客户端支持版本：5.4.0及以上   
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -705,7 +697,6 @@ JS版本：2.0.0
 | desc      | String      | 否   | 分享摘要描述，默认当前页面标题 |
 | link      | String      | 否   | 分享链接地址，默认当前页面链接 |
 | imgUrl    | String      | 否   | 分享缩略图地址，默认为纷享内置图标 |
-
 
 #### “更多”菜单回调：通过短信转发     
 
@@ -730,7 +721,7 @@ FSOpen.webview.menu.onShareViaSMS({
 JS版本：2.0.0   
 客户端支持版本：5.4.0及以上   
 
-参数说明  
+调用参数说明：     
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
@@ -760,15 +751,15 @@ FSOpen.webview.menu.onShareViaMail({
 JS版本：2.0.0   
 客户端支持版本：5.4.0及以上   
 
-参数说明  
+调用参数说明：    
 
 | 参数      | 类型        | 必须 | 说明         |
 | ----------| ------------| -----| -------------|
 | title     | String      | 否   | 转发邮件标题 |
 | content   | String      | 否   | 转发邮件内容，可使用`{url}`(5个字符)来表示当前页面的URL，后台会在最终内容中替换。 |
 
-### 页面 
 
+### 页面 
 
 <table>
    <tr>
@@ -802,9 +793,8 @@ FSOpen.webview.page.copyURL();
 ``` 
 
 方法名：FSOpen.webview.page.copyURL   
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
-
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
 #### 生成当前页面二维码     
 
@@ -814,9 +804,8 @@ FSOpen.webview.page.generateQR();
 ``` 
 
 方法名：FSOpen.webview.page.generateQR   
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
-
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
 #### 用浏览器打开当前页面     
 
@@ -826,9 +815,8 @@ FSOpen.webview.page.openWithBrowser();
 ``` 
 
 方法名：FSOpen.webview.page.openWithBrowser   
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
-
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
 #### 刷新页面     
 
@@ -837,16 +825,13 @@ JS版本：2.0.0
 FSOpen.webview.page.refresh();
 ``` 
 
-方法名：FSOpen.webview.page.refresh     
-JS版本：2.0.0   
+方法名：FSOpen.webview.page.refresh  
+JS版本：2.0.0  
 客户端支持版本：5.4.0及以上   
 
 
-
-
 ### Bounce 
-
-此类接口仅限于iOS系统。
+此类接口仅限于iOS系统。  
 
 <table>
    <tr>
@@ -870,10 +855,9 @@ JS版本：2.0.0
 FSOpen.webview.bounce.enable();
 ``` 
 
-方法名：FSOpen.webview.bounce.enable   
-JS版本：2.0.0   
+方法名：FSOpen.webview.bounce.enable    
+JS版本：2.0.0    
 客户端支持版本：5.4.0及以上   
-
 
 #### 禁用webview的bounce效果     
 
@@ -887,9 +871,7 @@ JS版本：2.0.0
 客户端支持版本：5.4.0及以上   
 
 
-
 ### 下拉刷新 
-
 
 <table>
    <tr>
@@ -917,25 +899,22 @@ JS版本：2.0.0
 ```javascript
 FSOpen.webview.pullRefresh.enable({
     onPullRefresh: function() {
-        $.ajax({
-            url: '/support/articles/',
-            type: "GET",
-            contentType: "application/json; charset=utf-8",
-            success: function() {
-                FSOpen.webview.pullRefresh.stop();
-            },
-            error: function() {
-            }
-        });
+        setTimeout(function() {
+            alert('数据加载成功');
+            FSOpen.webview.pullRefresh.stop();
+        }, 3000);
+    },
+    onSuccess: function() {
+        alert('现在下拉试试');
     }
 });
 ``` 
 
-方法名：FSOpen.webview.pullRefresh.enable      
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
+方法名：FSOpen.webview.pullRefresh.enable    
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上    
 
-参数说明
+调用参数说明：  
 
 | 参数          | 类型     | 必须 | 说明         |
 | --------------| ---------| -----| -------------|
@@ -948,10 +927,9 @@ JS版本：2.0.0
 FSOpen.webview.pullRefresh.disable();
 ``` 
 
-方法名：FSOpen.webview.pullRefresh.disable      
-JS版本：2.0.0   
-客户端支持版本：5.4.0及以上   
-
+方法名：FSOpen.webview.pullRefresh.disable   
+JS版本：2.0.0  
+客户端支持版本：5.4.0及以上  
 
 #### 收起下拉刷新     
 
@@ -960,7 +938,7 @@ JS版本：2.0.0
 FSOpen.webview.pullRefresh.stop();
 ``` 
 
-方法名：FSOpen.webview.pullRefresh.stop      
+方法名：FSOpen.webview.pullRefresh.stop    
 JS版本：2.0.0   
 客户端支持版本：5.4.0及以上   
 

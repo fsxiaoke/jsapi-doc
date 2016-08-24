@@ -27,8 +27,8 @@ FSOpen.util.traceEvent({
 ``` 
 
 方法名：FSOpen.util.traceEvent
-JS版本：2.0.0       
-客户端支持版本：5.4.0及以上     
+JS版本：2.0.0
+客户端支持版本：5.4.0及以上
 
 参数说明  
 
@@ -51,8 +51,8 @@ FSOpen.util.open({
 ``` 
 
 方法名：FSOpen.util.open
-JS版本：2.0.0       
-客户端支持版本：5.4.0及以上     
+JS版本：2.0.0
+客户端支持版本：5.4.0及以上
 
 参数说明  
 
