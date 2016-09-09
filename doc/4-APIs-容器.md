@@ -1,26 +1,30 @@
 ## 容器
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>runtime.getVersion</td>
-      <td>获取容器版本号</td>
-   </tr>
-   <tr>
-      <td>runtime.requestAuthCode</td>
-      <td>获取临时授权码用于免登业务</td>
-   </tr>
-   <tr>
-      <td>runtime.getCurrentUser</td>
-      <td>获取当前用户信息</td>
-	</tr>
-   <tr>
-      <td>runtime.showUpdate</td>
-      <td>提示版本升级</td>
-	</tr>
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>runtime.getVersion</td>
+            <td>获取容器版本号</td>
+        </tr>
+        <tr>
+            <td>runtime.requestAuthCode</td>
+            <td>获取临时授权码用于免登业务</td>
+        </tr>
+        <tr>
+            <td>runtime.getCurrentUser</td>
+            <td>获取当前用户信息</td>
+        </tr>
+        <tr>
+            <td>runtime.showUpdate</td>
+            <td>提示版本升级</td>
+        </tr>
+    </tbody>
 </table>
 
 #### 获取终端版本号   

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <div>hhehehehe</div>
+    <button id="" style="with:50px;height:50px" onclick="tt();">Click me</button>
+    <script type="text/javascript">
+    //alert(window._WebViewJavascriptBridge);
+    //alert(window.WebViewJavascriptBridge);
+    function connectWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) {
+            callback(WebViewJavascriptBridge);
+        } else {
+            document.addEventListener('WebViewJavascriptBridgeReady', function() {
+                alert('支持JS API，可以在这里显示相关按钮。');
+                callback(window.WebViewJavascriptBridge)
+            }, false);
+        }
+    }
+
+    function tt() {
+
+        var bridge = window.WebViewJavascriptBridge;
+        
+        bridge.send({action:'config', appId: 'FSAID_5f5e28a'}, function(r) {
+            console.log(r);
+            bridge.send({
+                action: 'media.image.upload',
+                "source":["album","camera"]
+            }, function(r) {
+                console.log(r)
+            })
+        })
+
+    }
+    
+    connectWebViewJavascriptBridge(function(bridge) {
+        alert('初始化成功');
+
+        bridge.registerHandler('fsMenuClickHandler', function(data) {
+            alert('纷享菜单按钮点击回调\n' + JSON.stringify(data));
+        });
+
+        bridge.registerHandler('audioRecordHandler', function(data) {
+            alert('纷享菜单按钮点击回调\n' + JSON.stringify(data));
+        });
+
+        bridge.registerHandler('uploadFileHandler', function(data) {
+            alert('纷享菜单按钮点击回调\n' + JSON.stringify(data));
+        });
+
+        // bridge.send({action:'config',
+        //         url: 'http://120.24.248.108:8080/demo/user/callback', // 实际可不用配置，由JSAPI取当前页面信息
+        //         // appId: 'FSAID_1313de7',
+        //         appId: 'FSAID_5f5e112',
+        //         timestamp: 1463650528707,
+        //         nonceStr: 'HUsfdsOIIejfoweu2u283',
+        //         signature: '377CB610A5C30247EF81C2E9C3ED33BB57448B0F',
+        //         jsApiList: [
+        //             'contact.choose',
+        //             'contact.chooseUser',
+        //             'contact.chooseDepartment'
+        //         ]
+        //     }, function(){
+        //     alert('授权成功');
+        //     bridge.send(
+        //         {
+        //             action: "notification.confirm", 
+        //             message: '消息内容',
+        //             title: '弹窗标题',
+        //             buttonLabels: ['按钮名称1', '按钮名称2'],
+        //         }, 
+        //         function(responseData) {
+        //             alert(JSON.stringify(responseData));
+        //         }
+        //     );
+        // });
+    });
+
+    </script>
+</body>
+</html>

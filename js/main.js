@@ -38,7 +38,7 @@
                 var node = $(html);
                 return node.length > 0 && node.get(0).tagName.toLowerCase() == 'for_fs_internal_only' ? '' : html;
             };
-
+            // 设置markdown解析规则
             marked.setOptions({
                 renderer: renderer,
                 gfm: true,
@@ -50,8 +50,8 @@
                 smartypants: false
             });
 
-            this.nav = $('#g-nav');
-            this.doc = $('#g-doc');
+            this.$nav = $('#g-nav');
+            this.$doc = $('#g-doc');
 
             this._initNav();
             this._initDoc();
@@ -64,7 +64,7 @@
             if (this.article) {
                 this.loadArticle(this.article);
             } else {
-                var $nodes = this.nav.find('.js-art');
+                var $nodes = this.$nav.find('.js-art');
                 if ($nodes.length)
                     location.hash = $nodes.first().attr('href');
             }
@@ -74,7 +74,7 @@
             // $.get(self.navFile, function(data) {
             //     self.nav.html(marked(data));
             // });
-            this.nav.on('click', function(e) {
+            this.$nav.on('click', function(e) {
 				var $node = $(e.target);
 				if ($node.hasClass('js-cate')) {
 					var $i = $node.find('i');
@@ -84,6 +84,8 @@
 					$ul.animate({height: 'toggle', opacity: 'toggle'});
 				}
 			});
+            console.log(this.$nav.children())
+            this.sb = this.$nav.children().addClass('scrollbar-macosx').scrollbar();
         },
         _initDoc: function() {
             // var self = this;
@@ -98,7 +100,7 @@
             //         }
             //     }
             // });
-            this.doc.on('click', function(e) {
+            this.$doc.on('click', function(e) {
                 var $node = $(e.target);
                 switch ($node.data('action')) {
                     case 'edit':
@@ -131,21 +133,22 @@
         loadArticle: function(url) {
             var self = this;
             self.setHighLight(url);
+			$('html,body').animate({scrollTop:0}, 200);
             $.ajax({
                 url: './doc/' + url + '.md',
                 type: 'GET',
                 success: function(data) {
                     var s = marked(data);
-                    self.doc.html(s);
+                    self.$doc.html(s);
                     self.makeCodeRun();
                 },
                 error: function(error) {
-                    self.doc.html('404 Not found');
+                    self.$doc.html('404 Not found');
                 }
             });
         },
         setHighLight: function(url) {
-            var $articles = this.nav.find('.js-art');
+            var $articles = this.$nav.find('.js-art');
 			$articles.each(function(index, article) {
 				if ($(article).attr('href') == '#' + url) {
 					$(article).closest('ul').show();
@@ -159,7 +162,7 @@
          * 使有效的代码段可直接执行
          */
         makeCodeRun: function() {
-            var $codes = this.doc.find('.lang-javascript');
+            var $codes = this.$doc.find('.lang-javascript');
             $codes.each(function(index, code) {
                 var $div = $('<div class="code">'),
                     $code = $(code).parent(),

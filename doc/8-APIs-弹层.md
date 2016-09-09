@@ -1,55 +1,57 @@
-## 弹层 
+## 弹层
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>widget.showActionSheet</td>
-      <td>弹出菜单</td>
-   </tr>	
-	<tr>
-      <td>widget.showAlert</td>
-      <td>弹出警告窗口</td>
-   </tr>	
-	<tr>
-      <td>widget.showConfirm</td>
-      <td>弹出确认窗口</td>
-   </tr>
-   	<tr>
-      <td>widget.showPreloader</td>
-      <td>弹出加载提示</td>
-   </tr>
-   	<tr>
-      <td>widget.hidePreloader</td>
-      <td>隐藏加载提示</td>
-   </tr>
-   	<tr>
-      <td>widget.showModal</td>
-      <td>弹出模态窗口</td>
-   </tr>
-   	<tr>
-      <td>widget.showPrompt</td>
-      <td>弹出提示窗口</td>
-   </tr>
-   	<tr>
-      <td>widget.showToast</td>
-      <td>弹出Toast</td>
-   </tr>
-   	<tr>
-      <td>widget.showDateTimePicker</td>
-      <td>弹出日期选择控件</td>
-   </tr>
-   	<tr>
-      <td>widget.showEditor</td>
-      <td>弹出文本框</td>
-   </tr>
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>widget.showActionSheet</td>
+            <td>弹出菜单</td>
+        </tr>
+        <tr>
+            <td>widget.showAlert</td>
+            <td>弹出警告窗口</td>
+        </tr>
+        <tr>
+            <td>widget.showConfirm</td>
+            <td>弹出确认窗口</td>
+        </tr>
+        <tr>
+            <td>widget.showPreloader</td>
+            <td>弹出加载提示</td>
+        </tr>
+        <tr>
+            <td>widget.hidePreloader</td>
+            <td>隐藏加载提示</td>
+        </tr>
+        <tr>
+            <td>widget.showModal</td>
+            <td>弹出模态窗口</td>
+        </tr>
+        <tr>
+            <td>widget.showPrompt</td>
+            <td>弹出提示窗口</td>
+        </tr>
+        <tr>
+            <td>widget.showToast</td>
+            <td>弹出Toast</td>
+        </tr>
+        <tr>
+            <td>widget.showDateTimePicker</td>
+            <td>弹出日期选择控件</td>
+        </tr>
+        <tr>
+            <td>widget.showEditor</td>
+            <td>弹出文本框</td>
+        </tr>
+    </tbody>
 </table>
 
-
-#### 显示单选列表(actionSheet)     
-
+#### 显示单选列表(actionSheet)
 TODO：语言太苍白，来图！
 
 代码样例

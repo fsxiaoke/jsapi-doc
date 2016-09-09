@@ -1,15 +1,18 @@
 ## Util
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>util.open</td>
-      <td>打开纷享内部页面</td>
-   </tr>	
-   </tr>	   
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>util.open</td>
+            <td>打开纷享内部页面</td>
+        </tr>
+    </tbody>
 </table>
 
 <FOR_FS_INTERNAL_ONLY>

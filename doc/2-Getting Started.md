@@ -1,4 +1,5 @@
 ## Getting Started
+
 ### 引入JS文件和CSS文件
 可以选择直接在Web页面在线引用纷享JS文件和CSS文件：
 ```html
@@ -53,7 +54,8 @@
     errorMessage: '请求参数错误'  // 错误描述
 }
 ``` 
-错误码可参考[错误码汇总表]()。
+
+错误码可参考[错误码汇总表][nav.appendix.error]。
 
 *TODO：锚点。*
 
@@ -96,7 +98,7 @@ JS版本：2.0.0
 
 > **signature签名算法**  
 > ##### jsapi_ticket  
-> jsapi_ticket是纷享应用调用纷享JS API的临时票据，在签名计算中使用。正常情况下，jsapi_ticket的有效期为7200秒，通过corpAccessToken来获取。详情参考[获取jsapi_ticket]()。  
+> jsapi_ticket是纷享应用调用纷享JS API的临时票据，在签名计算中使用。正常情况下，jsapi_ticket的有效期为7200秒，通过corpAccessToken来获取。详情参考[获取jsapi_ticket][nav.open.ticket]。  
 > *为提高性能，且避免频繁刷新jsapi_ticket导致api调用受限，影响自身业务，开发者必须在自己的服务全局缓存jsapi_ticket 。*    
 
 > ##### 签名算法  
@@ -166,7 +168,7 @@ FSOpen.init({
 | 40000     | 接口调用参数错误        |
 | 40001     | 初始化签名校验失败。检查signature签名生成算法是否正确，或是js ticket已过期，可尝试更新js ticket。 |
 
-*注：后文中接口调用失败如无特殊情况，将省略失败返回说明，开发者可自行查阅[错误码汇总表]()。*      
+*注：后文中接口调用失败如无特殊情况，将省略失败返回说明，开发者可自行查阅[错误码汇总表][nav.appendix.error]。*      
 *TODO：错误码锚点*
 
 ### 样例
@@ -227,3 +229,5 @@ FSOpen.init({
 ```
 TODO：林惠 最终融合下cosmo的东西。
 
+[nav.appendix.error]:  #{nav.appendix.error}   (错误码汇总表)
+[nav.open.ticket]:     #{nav.open.ticket}      (获取jsapi_ticket)

@@ -23,31 +23,35 @@ http://www.fxiaoke.com/fsask/index.html?fs_auth=true&fs_auth_appName=纷享问�
 
 ### Webview跳转 
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>webview.back</td>
-      <td>回退页面</td>
-   </tr>
-   <tr>
-      <td>webview.close</td>
-      <td>关闭当前页面</td>
-   </tr>
-   <tr>
-      <td>webview.open</td>
-      <td>打开页面</td>
-	</tr>
-   <tr>
-      <td>webview.onBackWebview</td>
-      <td>Android物理键回退回调</td>
-	</tr>
-   <tr>
-      <td>webview.onCloseWebview</td>
-      <td>页面关闭回调</td>
-	</tr>
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>webview.back</td>
+            <td>回退页面</td>
+        </tr>
+        <tr>
+            <td>webview.close</td>
+            <td>关闭当前页面</td>
+        </tr>
+        <tr>
+            <td>webview.open</td>
+            <td>打开页面</td>
+            </tr>
+        <tr>
+            <td>webview.onBackWebview</td>
+            <td>Android物理键回退回调</td>
+            </tr>
+        <tr>
+            <td>webview.onCloseWebview</td>
+            <td>页面关闭回调</td>
+        </tr>
+    </tbody>
 </table>
 
 
@@ -168,15 +172,19 @@ JS版本：2.0.0
 
 ### 屏幕控制 
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>webview.setOrientation</td>
-      <td>屏幕翻转</td>
-   </tr>
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>webview.setOrientation</td>
+            <td>屏幕翻转</td>
+        </tr>
+    </tbody>
 </table>
 
 #### 屏幕翻转
@@ -203,39 +211,43 @@ TODO：还未实现锁定和useSysConfig
 
 ### 导航栏 
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>webview.navbar.setTitle</td>
-      <td>设置导航栏标题</td>
-   </tr>
-	<tr>
-      <td>webview.navbar.setMiddleBtn</td>
-      <td>设置导航栏问号链接</td>
-   </tr>
-	<tr>
-      <td>webview.navbar.setLeftBtn</td>
-      <td>设置导航栏左侧按钮</td>
-   </tr>
-	<tr>
-      <td>webview.navbar.setRightBtns</td>
-      <td>设置导航栏右侧按钮</td>
-   </tr>
-	<tr>
-      <td>webview.navbar.removeRightBtns</td>
-      <td>清除导航栏右侧所有按钮</td>
-   </tr>
-	<tr>
-      <td>webview.navbar.showMenu</td>
-      <td>显示导航栏右侧“更多”菜单</td>
-   </tr>
-	<tr>
-      <td>webview.navbar.hideMenu</td>
-      <td>隐藏导航栏右侧的“更多”菜单</td>
-   </tr>
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>webview.navbar.setTitle</td>
+            <td>设置导航栏标题</td>
+        </tr>
+        <tr>
+            <td>webview.navbar.setMiddleBtn</td>
+            <td>设置导航栏问号链接</td>
+        </tr>
+            <tr>
+            <td>webview.navbar.setLeftBtn</td>
+            <td>设置导航栏左侧按钮</td>
+        </tr>
+            <tr>
+            <td>webview.navbar.setRightBtns</td>
+            <td>设置导航栏右侧按钮</td>
+        </tr>
+            <tr>
+            <td>webview.navbar.removeRightBtns</td>
+            <td>清除导航栏右侧所有按钮</td>
+        </tr>
+            <tr>
+            <td>webview.navbar.showMenu</td>
+            <td>显示导航栏右侧“更多”菜单</td>
+        </tr>
+            <tr>
+            <td>webview.navbar.hideMenu</td>
+            <td>隐藏导航栏右侧的“更多”菜单</td>
+        </tr>
+    </tbody>
 </table>
 
 #### 设置导航栏标题
@@ -459,43 +471,47 @@ JS版本：2.0.0
 ### “更多”菜单回调 
 通过`FSOpen.webview.navbar.showMenu`设置的“更多”菜单，在用户点击的时候会触发对应的全局回调处理。开发者可实现这些回调以自定义具体（转发）的内容信息。   
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>webview.menu.onShareToConversation</td>
-      <td>“更多”菜单回调：转发到企信</td>
-   </tr>
-	<tr>
-      <td>webview.menu.onShareToFeed</td>
-      <td>“更多”菜单回调：转发到“工作”</td>
-   </tr>
-	<tr>
-      <td>webview.menu.onShareToCRMContact</td>
-      <td>“更多”菜单回调：转发到CRM联系人</td>
-   </tr>
-	<tr>
-      <td>webview.menu.onShareToWXFriend</td>
-      <td>“更多”菜单回调：转发给微信好友</td>
-   </tr>
-	<tr>
-      <td>webview.menu.onShareToWXMoments</td>
-      <td>“更多”菜单回调：转发到微信朋友圈</td>
-   </tr>
-	<tr>
-      <td>webview.menu.onShareToQQFriend</td>
-      <td>“更多”菜单回调：转发给QQ好友</td>
-   </tr>
-	<tr>
-      <td>webview.menu.onShareViaSMS</td>
-      <td>“更多”菜单回调：通过短信转发</td>
-   </tr>
-	<tr>
-      <td>webview.menu.onShareViaMail</td>
-      <td>“更多”菜单回调：通过邮件转发</td>
-   </tr>
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>webview.menu.onShareToConversation</td>
+            <td>“更多”菜单回调：转发到企信</td>
+        </tr>
+            <tr>
+            <td>webview.menu.onShareToFeed</td>
+            <td>“更多”菜单回调：转发到“工作”</td>
+        </tr>
+            <tr>
+            <td>webview.menu.onShareToCRMContact</td>
+            <td>“更多”菜单回调：转发到CRM联系人</td>
+        </tr>
+            <tr>
+            <td>webview.menu.onShareToWXFriend</td>
+            <td>“更多”菜单回调：转发给微信好友</td>
+        </tr>
+            <tr>
+            <td>webview.menu.onShareToWXMoments</td>
+            <td>“更多”菜单回调：转发到微信朋友圈</td>
+        </tr>
+            <tr>
+            <td>webview.menu.onShareToQQFriend</td>
+            <td>“更多”菜单回调：转发给QQ好友</td>
+        </tr>
+            <tr>
+            <td>webview.menu.onShareViaSMS</td>
+            <td>“更多”菜单回调：通过短信转发</td>
+        </tr>
+            <tr>
+            <td>webview.menu.onShareViaMail</td>
+            <td>“更多”菜单回调：通过邮件转发</td>
+        </tr>
+    </tbody>
 </table>
 
 #### “更多”菜单回调：转发到企信     
@@ -761,28 +777,31 @@ JS版本：2.0.0
 
 ### 页面 
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>webview.page.copyURL</td>
-      <td>复制当前页面链接</td>
-   </tr>
-	<tr>
-      <td>webview.page.generateQR</td>
-      <td>生成当前页面二维码</td>
-   </tr>
-	<tr>
-      <td>webview.page.openWithBrowser</td>
-      <td>用浏览器打开当前页面</td>
-   </tr>
-	<tr>
-      <td>webview.page.refresh</td>
-      <td>刷新页面</td>
-
-   </tr>
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>webview.page.copyURL</td>
+            <td>复制当前页面链接</td>
+        </tr>
+            <tr>
+            <td>webview.page.generateQR</td>
+            <td>生成当前页面二维码</td>
+        </tr>
+            <tr>
+            <td>webview.page.openWithBrowser</td>
+            <td>用浏览器打开当前页面</td>
+        </tr>
+            <tr>
+            <td>webview.page.refresh</td>
+            <td>刷新页面</td>
+        </tr>
+    </tbody>
 </table>
 
 #### 复制当前页面链接     
@@ -833,19 +852,23 @@ JS版本：2.0.0
 ### Bounce 
 此类接口仅限于iOS系统。  
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>webview.bounce.enable</td>
-      <td>启用Bounce</td>
-   </tr>	
-	<tr>
-      <td>webview.bounce.disable</td>
-      <td>禁用Bounce</td>
-   </tr>
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>webview.bounce.enable</td>
+            <td>启用Bounce</td>
+        </tr>	
+            <tr>
+            <td>webview.bounce.disable</td>
+            <td>禁用Bounce</td>
+        </tr>
+    </tbody>
 </table>
 
 #### 启用webview的bounce效果     
@@ -873,23 +896,27 @@ JS版本：2.0.0
 
 ### 下拉刷新 
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>webview.pullRefresh.enable</td>
-      <td>启用下拉刷新</td>
-   </tr>	
-	<tr>
-      <td>webview.pullRefresh.disable</td>
-      <td>禁用下拉刷新</td>
-   </tr>	
-	<tr>
-      <td>webview.pullRefresh.stop</td>
-      <td>停止刷新</td>
-   </tr>
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>webview.pullRefresh.enable</td>
+            <td>启用下拉刷新</td>
+        </tr>	
+            <tr>
+            <td>webview.pullRefresh.disable</td>
+            <td>禁用下拉刷新</td>
+        </tr>	
+            <tr>
+            <td>webview.pullRefresh.stop</td>
+            <td>停止刷新</td>
+        </tr>
+    </tbody>
 </table>
 
 #### 启用下拉刷新     

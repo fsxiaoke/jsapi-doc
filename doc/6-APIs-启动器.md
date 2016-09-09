@@ -1,18 +1,22 @@
-## 启动器  
+## 启动器
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>launcher.checkAppInstalled</td>
-      <td>检测应用是否安装</td>
-   </tr>
-   <tr>
-      <td>launcher.launchApp</td>
-      <td>启动第三方应用</td>
-   </tr>
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>launcher.checkAppInstalled</td>
+            <td>检测应用是否安装</td>
+        </tr>
+        <tr>
+            <td>launcher.launchApp</td>
+            <td>启动第三方应用</td>
+        </tr>
+    </tbody>
 </table>
 
 #### 检测应用是否安装

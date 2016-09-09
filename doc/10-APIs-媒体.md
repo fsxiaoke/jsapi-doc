@@ -1,19 +1,24 @@
 ## 媒体
+
 ### 文件 
 
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>media.file.download</td>
-      <td>下载文件</td>
-   </tr>
-	<tr>
-      <td>media.file.preview</td>
-      <td>预览文件</td>
-   </tr>	   
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>media.file.download</td>
+            <td>下载文件</td>
+        </tr>
+        <tr>
+            <td>media.file.preview</td>
+            <td>预览文件</td>
+        </tr>
+    </tbody>
 </table>
 
 #### 文件下载
@@ -88,16 +93,19 @@ JS版本：2.0.0
 
 ### 图片 
 
-
-<table>
-   <tr>
-      <td>接口名</td>
-      <td>接口描述</td>
-   </tr>
-	<tr>
-      <td>media.image.preview</td>
-      <td>预览图片</td>
-   </tr>	   
+<table class="api-list">
+    <thead>
+        <tr>
+            <td>接口名</td>
+            <td>接口描述</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>media.image.preview</td>
+            <td>预览图片</td>
+        </tr>
+    </tbody>
 </table>
 
 #### 图片预览

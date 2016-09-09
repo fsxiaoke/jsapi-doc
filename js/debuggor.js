@@ -331,7 +331,7 @@
 
 
 	// module
-	exports.push([module.id, ".PDhaldmWxePpU24w-BSKm .m-mask{display:block;z-index:998;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;opacity:.55}.PDhaldmWxePpU24w-BSKm .m-code{display:block;z-index:999;position:fixed;top:50%;left:50%;border-radius:2px;background-color:#fff;width:500px;margin-top:-190px;margin-left:-250px;font-family:Microsoft Yahei}.PDhaldmWxePpU24w-BSKm .m-code .hd{height:46px;line-height:46px;padding:0 20px;border-radius:2px 2px 0 0;background-color:#f4f7fd;color:#6c7a95;font-size:16px}.PDhaldmWxePpU24w-BSKm .m-code .hd .close{position:absolute;top:13px;right:10px;width:20px;height:20px;line-height:20px;cursor:pointer;text-align:center}.PDhaldmWxePpU24w-BSKm .m-code .bd .qr{width:200px;height:200px;margin:20px auto}.PDhaldmWxePpU24w-BSKm .m-code .qr img{display:block;width:100%;height:100%}.PDhaldmWxePpU24w-BSKm .m-code .bd .tip{margin-bottom:30px;text-align:center}", ""]);
+	exports.push([module.id, ".PDhaldmWxePpU24w-BSKm .m-mask{display:block;z-index:998;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;opacity:.55}.PDhaldmWxePpU24w-BSKm .m-code{display:block;z-index:999;position:fixed;top:50%;left:50%;border-radius:2px;background-color:#fff;width:500px;margin-top:-190px;margin-left:-250px;font-family:Microsoft Yahei}.PDhaldmWxePpU24w-BSKm .m-code .hd{height:46px;line-height:46px;padding:0 20px;border-radius:2px 2px 0 0;background-color:#f4f7fd;color:#6c7a95;font-size:16px}.PDhaldmWxePpU24w-BSKm .m-code .hd .close{position:absolute;top:13px;right:10px;width:20px;height:20px;line-height:20px;cursor:pointer;text-align:center}.PDhaldmWxePpU24w-BSKm .m-code .bd .qr{width:200px;height:200px;margin:20px auto}.PDhaldmWxePpU24w-BSKm .m-code .qr img{display:block;width:100%;height:100%}.PDhaldmWxePpU24w-BSKm .m-code .bd .tip{margin-bottom:30px;text-align:center}.PDhaldmWxePpU24w-BSKm .m-code .tip .s{font-size:12px;color:#999}", ""]);
 
 	// exports
 	exports.locals = {
@@ -650,7 +650,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"m-mask\">&nbsp;</div>\r\n<div class=\"m-code\">\r\n    <div class=\"hd\">\r\n        <span class=\"title\">扫描二维码</span>\r\n        <span class=\"close\" data-action=\"close\">×</span>\r\n    </div>\r\n    <div class=\"bd\">\r\n        <div class=\"qr\"><!--<img src=\"https://www.fxiaoke.com/static/img/index/wx-code.png?v=5.1.5\"/>--></div>\r\n        <div class=\"tip\">请用纷享客户端扫描二维码</div>\r\n    </div>\r\n</div>";
+	module.exports = "<div class=\"m-mask\">&nbsp;</div>\r\n<div class=\"m-code\">\r\n    <div class=\"hd\">\r\n        <span class=\"title\">扫描二维码</span>\r\n        <span class=\"close\" data-action=\"close\">×</span>\r\n    </div>\r\n    <div class=\"bd\">\r\n        <div class=\"qr\"><!--<img src=\"https://www.fxiaoke.com/static/img/index/wx-code.png?v=5.1.5\"/>--></div>\r\n        <div class=\"tip\">请用纷享客户端扫描二维码<br><span class=\"s\">手机连接成功后请关闭本窗口重新点击“运行”按钮</span></div>\r\n    </div>\r\n</div>";
 
 /***/ },
 /* 7 */
