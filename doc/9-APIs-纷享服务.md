@@ -24,7 +24,7 @@
         </tr>
         <tr>
             <td>service.contact.getMembers</td>
-            <td>获取成员信息</td>
+            <td>获取成员列表</td>
         </tr>
         <tr>
             <td>service.contact.getUsersInfo</td>
@@ -41,163 +41,7 @@
     </tbody>
 </table>
 
-> 使用`FSOpen.util.open`接口可跳转到“个人资料页”或“部门工作页”，参考[Util]()。    
-
-TODO：锚点
-
-#### 关注员工或取消关注
-
-代码样例
-```javascript
-FSOpen.service.contact.setMark({
-    userId: 'FSUID_5174F22D77B81347E278CBD353748547',
-    value: true,
-    onSuccess: function(resp) {
-        alert(JSON.stringify(resp));
-    },
-    onFail: function(error) {
-        alert('操作失败，错误码：' + error.errorCode);
-    }
-});
-``` 
-
-方法名：FSOpen.service.contact.setMark   
-JS版本：2.0.0    
-客户端支持版本：5.4.0及以上     
-
-调用参数说明：      
-
-| 参数       | 类型        | 必须 | 说明         |
-| -----------| ------------| -----| -------------|
-| userId     | String      | 是   | 纷享用户的ID |
-| value      | Boolean     | 是   | 是否关注 |
-
-#### 获取某群组或部门的用户ID列表     
-
-代码样例
-```javascript
-FSOpen.service.contact.getMembers({
-    departmentId: 1000,
-    sessionId: 'f6b22ba707bd4447855567291c27476f',
-    onSuccess: function(resp) {
-        console.assert(resp.userIds.length != undefined);
-        FSOpen.service.contact.getUsersInfo({
-            userIds: resp.userIds
-        });
-    },
-    onFail: function(error) {
-        alert('操作失败，错误码：' + error.errorCode);
-    }
-});
-``` 
-
-方法名：FSOpen.service.contact.getMembers   
-JS版本：2.0.0    
-客户端支持版本：5.4.0及以上     
-
-调用参数说明：      
-
-| 参数         | 类型        | 必须 | 说明         |
-| -------------| ------------| -----| -------------|
-| departmentId | Number      | 是   | 如果查询对象是一个部门，则需传入部门ID。 |
-| sessionId    | String      | 是   | 如果查询对象是一个部门，则需传入群组（会话）ID。如果传入了一个有效的`departmentId`，接口后会忽略`sessionId`传参。 |
-
-成功回调返回参数：    
-
-| 参数    | 类型          | 说明         |
-| --------| --------------| -------------|
-| userIds | Array[String] | 用户ID列表 |
-
-
-#### 获取服务号信息     
-
-代码样例
-```javascript
-FSOpen.service.contact.getServiceChannelsInfo({
-    serviceChannelIds: ['FSAID_1313eef'],
-    onSuccess: function(resp) {
-        // do sth
-    },
-    onFail: function(error) {
-        alert('获取失败，错误码：' + error.errorCode);
-    }
-});
-``` 
-
-方法名：FSOpen.service.contact.getServiceChannelsInfo   
-JS版本：2.0.0    
-客户端支持版本：5.4.0及以上     
-
-调用参数说明：      
-
-| 参数       | 类型        | 必须 | 说明         |
-| -----------| ------------| -----| -------------|
-| serviceChannelIds  | Array[String]      | 是   | 服务号ID列表 |
-
-成功回调返回参数：      
-
-| 参数      | 类型          | 说明     |
-| ----------| --------------| ---------|
-| serviceChannels     | Object        | 用户`serviceChannel`关联数组，比如：{'FSAID_13135e9': {serviceChannelId:'',name:'',imgUrl:''}}，如果用户没找到，对应的值为空 |
-
-`serviceChannel`字段说明：
-
-| 参数      | 类型          | 说明         |
-| ----------| --------------| -------------|
-| serviceChannelId  | String| 服务号ID  |
-| name      | String        | 服务号名称     |
-| imgUrl    | String        | 服务号Logo地址 |
-
-#### 获取用户信息     
-
-代码样例
-```javascript
-FSOpen.service.contact.getUsersInfo({
-    userIds: [
-        'FSUID_571AA7C41A11BE3D9BA25BDD397AC86E',
-        'FSUID_643539016707F16000E85ADCC967D12C'
-    ],
-    onSuccess: function(resp) {
-        console.assert(resp.users != null);
-        var users = resp.users, key;
-        // 遍历搜索到的用户
-        for (key in users) {
-            // {userId:'',nickname:'',email:'',avatarUrl:'',position:'',marked:true}
-            console.log(users[key]);
-        }
-    },
-    onFail: function(error) {
-        alert('获取失败，错误码：' + error.errorCode);
-    }
-});
-``` 
-
-方法名：FSOpen.service.contact.getUsersInfo   
-JS版本：2.0.0    
-客户端支持版本：5.4.0及以上     
-
-调用参数说明：      
-
-| 参数       | 类型          | 必须 | 说明         |
-| -----------| --------------| -----| -------------|
-| userIds    | Array[String] | 是   | 用户ID列表 |
-
-成功回调返回参数：      
-
-| 参数      | 类型          | 说明     |
-| ----------| --------------| ---------|
-| users     | Object        | 用户`user`关联数组，比如：{'FSUID_XXX': {userId:'',nickname:'',email:'',avatarUrl:'',position:'',marked:true}}，如果用户没找到，对应的值为空 |
-
-`user`字段说明：
-
-| 参数      | 类型          | 说明         |
-| ----------| --------------| -------------|
-| userId    | String        | 用户ID  |
-| nickname  | String        | 用户昵称     |
-| email     | String        | 用户电子邮箱 |
-| avatarUrl | String        | 用户头像     |
-| position  | String        | 用户职位信息 |
-| marked    | Boolean       | 是否关注了此用户 |
+> 使用`FSOpen.util.open`接口可跳转到“个人资料页”或“部门工作页”，参考[通用][util.open]。    
 
 #### 从通讯录选择人员，部门和群组     
 
@@ -408,6 +252,167 @@ JS版本：2.0.0
 | avatarUrl | String        | 用户头像     |
 | position  | String        | 用户职位信息 |
 
+#### 获取成员列表    
+
+代码样例
+
+请注意样例中的参数'departmentId'需要替换成一个有效值，该Id可能来自于另外一个接口`selectDepartment`的返回。
+
+```javascript
+FSOpen.service.contact.getMembers({
+    departmentId: 1000,
+    sessionId: 'f6b22ba707bd4447855567291c27476f',
+    onSuccess: function(resp) {
+        console.assert(resp.userIds.length != undefined);
+        FSOpen.service.contact.getUsersInfo({
+            userIds: resp.userIds
+        });
+    },
+    onFail: function(error) {
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+方法名：FSOpen.service.contact.getMembers   
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
+
+调用参数说明：      
+
+| 参数         | 类型        | 必须 | 说明         |
+| -------------| ------------| -----| -------------|
+| departmentId | Number      | 是   | 如果查询对象是一个部门，则需传入部门ID。 |
+| sessionId    | String      | 是   | 如果查询对象是一个部门，则需传入群组（会话）ID。如果传入了一个有效的`departmentId`，接口后会忽略`sessionId`传参。 |
+
+成功回调返回参数：    
+
+| 参数    | 类型          | 说明         |
+| --------| --------------| -------------|
+| userIds | Array[String] | 用户ID列表 |
+
+
+#### 获取用户信息     
+
+代码样例
+```javascript
+FSOpen.service.contact.getUsersInfo({
+    userIds: [
+        'FSUID_571AA7C41A11BE3D9BA25BDD397AC86E',
+        'FSUID_643539016707F16000E85ADCC967D12C'
+    ],
+    onSuccess: function(resp) {
+        console.assert(resp.users != null);
+        var users = resp.users, key;
+        // 遍历搜索到的用户
+        for (key in users) {
+            // {userId:'',nickname:'',email:'',avatarUrl:'',position:'',marked:true}
+            console.log(users[key]);
+        }
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+方法名：FSOpen.service.contact.getUsersInfo   
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
+
+调用参数说明：      
+
+| 参数       | 类型          | 必须 | 说明         |
+| -----------| --------------| -----| -------------|
+| userIds    | Array[String] | 是   | 用户ID列表 |
+
+成功回调返回参数：      
+
+| 参数      | 类型          | 说明     |
+| ----------| --------------| ---------|
+| users     | Object        | 用户`user`关联数组，比如：{'FSUID_XXX': {userId:'',nickname:'',email:'',avatarUrl:'',position:'',marked:true}}，如果用户没找到，对应的值为空 |
+
+`user`字段说明：
+
+| 参数      | 类型          | 说明         |
+| ----------| --------------| -------------|
+| userId    | String        | 用户ID  |
+| nickname  | String        | 用户昵称     |
+| email     | String        | 用户电子邮箱 |
+| avatarUrl | String        | 用户头像     |
+| position  | String        | 用户职位信息 |
+| marked    | Boolean       | 是否关注了此用户 |
+
+
+
+#### 关注员工或取消关注
+
+代码样例
+```javascript
+FSOpen.service.contact.setMark({
+    userId: 'FSUID_5174F22D77B81347E278CBD353748547',
+    value: true,
+    onSuccess: function(resp) {
+        alert(JSON.stringify(resp));
+    },
+    onFail: function(error) {
+        alert('操作失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+方法名：FSOpen.service.contact.setMark   
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
+
+调用参数说明：      
+
+| 参数       | 类型        | 必须 | 说明         |
+| -----------| ------------| -----| -------------|
+| userId     | String      | 是   | 纷享用户的ID |
+| value      | Boolean     | 是   | 是否关注 |
+
+
+
+#### 获取服务号信息     
+
+代码样例
+```javascript
+FSOpen.service.contact.getServiceChannelsInfo({
+    serviceChannelIds: ['FSAID_1313eef'],
+    onSuccess: function(resp) {
+        // do sth
+    },
+    onFail: function(error) {
+        alert('获取失败，错误码：' + error.errorCode);
+    }
+});
+``` 
+
+方法名：FSOpen.service.contact.getServiceChannelsInfo   
+JS版本：2.0.0    
+客户端支持版本：5.4.0及以上     
+
+调用参数说明：      
+
+| 参数       | 类型        | 必须 | 说明         |
+| -----------| ------------| -----| -------------|
+| serviceChannelIds  | Array[String]      | 是   | 服务号ID列表 |
+
+成功回调返回参数：      
+
+| 参数      | 类型          | 说明     |
+| ----------| --------------| ---------|
+| serviceChannels     | Object        | 用户`serviceChannel`关联数组，比如：{'FSAID_13135e9': {serviceChannelId:'',name:'',imgUrl:''}}，如果用户没找到，对应的值为空 |
+
+`serviceChannel`字段说明：
+
+| 参数      | 类型          | 说明         |
+| ----------| --------------| -------------|
+| serviceChannelId  | String| 服务号ID  |
+| name      | String        | 服务号名称     |
+| imgUrl    | String        | 服务号Logo地址 |
+
 
 
 ### 企信会话 
@@ -431,7 +436,7 @@ JS版本：2.0.0
     </tbody>
 </table>
 
-> 使用`FSOpen.util.open`接口可跳转到“企信会话窗口”，参考[Util]()。 TODO：锚点
+> 使用`FSOpen.util.open`接口可跳转到“企信会话窗口”，参考[Util][util.open]。 
 
 #### 发起1对1纷享电话
 
@@ -490,7 +495,7 @@ JS版本：2.0.0
     </tbody>
 </table>
 
-> 使用`FSOpen.util.open`接口可跳转到“我的收藏”，参考[Util]()。 TODO：锚点
+> 使用`FSOpen.util.open`接口可跳转到“我的收藏”，参考[Util][util.open]。 
 
 #### 添加收藏
 
@@ -712,7 +717,7 @@ JS版本：2.0.0
 | url      | String | 否   | 邮件查看地址 |
 | sender   | String | 否   | 发件人名称 |
 
-</FOR_FS_INTERNAL_ONLY>
+
 
 ### 支付 
 
@@ -820,7 +825,7 @@ JS版本：2.0.0
 | toEAWalletId | String  | 否   | 收款企业账号ID，为空默认为纷享 |
 | signature    | String  | 是   | 最终的参数签名值 |
 
-
+</FOR_FS_INTERNAL_ONLY>
 
 ### 分享 
 
@@ -947,7 +952,7 @@ JS版本：2.0.0
 | link      | String      | 否   | 资源类型为`link`时使用，表示分享链接地址，默认当前页面链接 |
 | imgUrl    | String      | 否   | 资源类型为`link`时使用，表示分享缩略图地址，默认为纷享预置图标 |
 | name      | String      | 否   | 资源类型为`image`或`file`时使用，表示资源名 |
-| size      | String      | 否   | 资源类型为`image`或`file`时使用，表示资源大小 ，单位为kb。 TODO： 林惠 kb？|
+| size      | String      | 否   | 资源类型为`image`或`file`时使用，表示资源大小 ，单位为kb。|
 | npath     | String      | 否   | 资源类型为`image`或`file`时使用，表示资源存储地址。资源需是存储在纷享平台上，采用N-Path地址引用，如`N_201512_08_101239c8308f4ea7325f69df4fba386f1.pptx`。 |
 | content   | String      | 否   | 资源类型为`text`时使用，表示文件内容 |
 
@@ -1167,7 +1172,7 @@ JS版本：2.0.0
     </tbody>
 </table>
 
-> 使用`FSOpen.util.open`接口可跳转到“日历”，参考[Util]()。 TODO：锚点
+> 使用`FSOpen.util.open`接口可跳转到“日历”，参考[Util][util.open]。 
 
 #### 创建日程提醒     
 
@@ -1213,7 +1218,7 @@ JS版本：2.0.0
     </tbody>
 </table>
 
-> 使用`FSOpen.util.open`接口可跳转到“工作详情”，参考[Util]()。 TODO：锚点
+> 使用`FSOpen.util.open`接口可跳转到“工作详情”，参考[Util][util.open]。 
 
 #### 创建一条工作    
 
@@ -1323,3 +1328,6 @@ JS版本：2.0.0
 | fileNPath | String    | 文件地址。资源需是存储在纷享平台上，采用N-Path地址引用，如`N_201512_08_101239c8308f4ea7325f69df4fba386f1.pptx`。 |
 | size      | Number    | 文件大小，以字节为单位 |
 | url       | String    | 可通过HTTP连接访问的文件地址 |
+
+
+[util.open]: http://open.fxiaoke.com/wiki.html#artiId=105

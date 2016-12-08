@@ -10,7 +10,7 @@
     <tbody>
         <tr>
             <td>device.authenticateUser</td>
-            <td>鉴权，支持指纹和纷享密码两种方式</td>
+            <td>对当前用户鉴权，支持指纹和纷享密码两种方式</td>
         </tr>
         <tr>
             <td>device.getAP</td>
@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <td>device.scan</td>
-            <td>扫一扫</td>
+            <td>调用扫码</td>
         </tr>
         <tr>
             <td>device.vibrate</td>
@@ -66,7 +66,7 @@ JS版本：2.0.0
 | appName   | String      | 是   | 当前应用名字 |
 
 
-#### 获取热点信息    
+#### 获取接入点标识    
 
 代码样例
 ```javascript
@@ -114,7 +114,7 @@ JS版本：2.0.0
 | network   | String      | 网络类型，取值可能为：`2g``3g``4g``wifi``unknown``none`，`none`表示离线。|
 
 
-#### 获取通用唯一识别码     
+#### 获取设备唯一编码     
 
 代码样例
 ```javascript
@@ -160,7 +160,7 @@ JS版本：2.0.0
 | text        | String      | 扫码内容            |
 
 
-#### 设备震动     
+#### 手机震动     
 
 代码样例
 ```javascript

@@ -206,8 +206,6 @@ JS版本：2.0.0
 | ------------| ------------| -----| -------------|
 | orientation | String      | 否   | `portrait`代表锁定屏幕为竖屏，`landscape`代表锁定屏幕为横屏，`useSysConfig`代表跟随系统设定。默认为portrait。 |
 
-TODO：还未实现锁定和useSysConfig
-
 
 ### 导航栏 
 
@@ -272,7 +270,7 @@ JS版本：2.0.0
 #### 设置导航栏问号链接
 可在导航栏标题文本后显示一个问号图标，并定义其点击后的跳转链接。
 
-TODO：来个截图
+![image1][image-navbar]
 
 代码样例
 ```javascript
@@ -296,7 +294,8 @@ JS版本：2.0.0
 | onClick   | Function    | 否   | 定制按钮的点击回调 |
 
 #### 设置导航栏左侧按钮
-TODO：来个截图
+
+图示见[设置导航栏问号链接][navbar.setMiddleBtn]
 
 代码样例
 ```javascript
@@ -322,7 +321,7 @@ JS版本：2.0.0
 #### 设置导航栏右侧按钮
 可以在导航栏右侧显示1个或多个自定义按钮。超过两个按钮则会在更多菜单中显示这些按钮。  
 
-todo：来个图！
+图示见[设置导航栏问号链接][navbar.setMiddleBtn]  
 
 代码样例
 ```javascript
@@ -375,8 +374,9 @@ JS版本：2.0.0
  | more       | 更多    |
  | setting    | 设置    |
  | chat       | 聊天    |
+ | save       | 保存    |
 
-todo：来个图！
+![image3][image-icons]
 
  `onClick`点击回调参数属性说明：
 
@@ -398,10 +398,9 @@ JS版本：2.0.0
 
 #### 显示"更多"菜单
 显示一个纷享提供的“更多”菜单，菜单中预置了一些常用的功能实现，比如收藏、转发到企信、转发到分享、转发到微信等。   
-TODO：来个图！
+![image2][image-fsmenu]
 
-通常开发者仅需自定义需要显示的菜单列表，无需再为每个功能提供实现，但如果有自己的特殊需求，也可以自定义实现各菜单的全局回调函数，详情可参考[Webview-“更多”菜单回调]()。   
-TODO：锚点。
+通常开发者仅需自定义需要显示的菜单列表，无需再为每个功能提供实现，但如果有自己的特殊需求，也可以自定义实现各菜单的全局回调函数，详情可参考本文**Webview-“更多”菜单回调**章节。   
 
 代码样例
 ```javascript
@@ -969,3 +968,9 @@ FSOpen.webview.pullRefresh.stop();
 JS版本：2.0.0   
 客户端支持版本：5.4.0及以上   
 
+
+[webview.callback]: #{webvew.callback}
+[navbar.setMiddleBtn]: #{navbar.setMiddleBtn}
+[image-navbar]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/02/08/rBEiBlfZFEqAE_YFAADPpSDiJqY481.png
+[image-fsmenu]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/02/09/rBEiBlfZGq6AZDdcAARZHjjCoBw598.png
+[image-icons]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/01/50/rBEiBFfZFKSANSqSAAEPr-YTH1A189.png

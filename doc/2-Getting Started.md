@@ -1,7 +1,7 @@
 ## Getting Started
 
-### 引入JS文件和CSS文件
-可以选择直接在Web页面在线引用纷享JS文件和CSS文件：
+### 引入JS文件和CSS文件  
+1， 如果仅应用纷享**JS API**，可以选择直接在Web页面在线引用对应JS文件和CSS文件：
 ```html
 <!-- 纷享JS API核心JavaScript文件 -->
 <script src="http://www.fxiaoke.com/open/jsapi/2.0.0/fsapi.min.js"></script>
@@ -16,11 +16,16 @@
 
 <!-- 纷享JS UI组件库CSS文件 -->
 <link rel="stylesheet" href="/assets/css/fsui.css"/>
+
 ```
+ 
+成功加载JS文件后，可直接使用全局变量`FSOpen`调用API，如`FSOpen.runtime.getVersion`。   
 
-成功加载JS文件后，可直接使用全局变量`FSOpen`调用API，如`FSOpen.runtime.getVersion`。
 
-*TODO：css还未发布。内部使用1.0.0 js有另外一个地址 *
+2， 如需应用纷享**UI组件库**，还需另下载对应的JS文件和CSS文件，放在站点的本地目录中引用。下载下来的压缩包需先解压，其中`uikit.js`和`uikit.css`包含所有的组件定义。如仅应用了部分组件，也可以仅引用`components`文件夹中对应的分类js文件和css文件，以加快页面加载速度。  
+
+[**UI组件库下载地址**][uikitdownload]
+
 
 ### JS API使用约定
 **所有接口均接受一个JSON object参数，基本格式如下：**
@@ -57,7 +62,6 @@
 
 错误码可参考[错误码汇总表][nav.appendix.error]。
 
-*TODO：锚点。*
 
 ### 初始化API运行环境
 在使用JS API之前，必须使用`FSOpen.init`方法对运行环境进行预配置，否则接口调用会出错。
@@ -169,7 +173,6 @@ FSOpen.init({
 | 40001     | 初始化签名校验失败。检查signature签名生成算法是否正确，或是js ticket已过期，可尝试更新js ticket。 |
 
 *注：后文中接口调用失败如无特殊情况，将省略失败返回说明，开发者可自行查阅[错误码汇总表][nav.appendix.error]。*      
-*TODO：错误码锚点*
 
 ### 样例
 
@@ -181,8 +184,10 @@ FSOpen.init({
     <title>纷享问问</title>
     <meta name="description" content="纷享问答社区，鼓励原创与分享" />
     <!-- FS UI Kit -->
-    <link rel="stylesheet" href="assets/css/fsui.css" />
-    <!-- FS core JavaScript. Better to include it at the end so the pages load faster -->
+    <link rel="stylesheet" href="assets/css/uikit.css" />
+    <script src="assets/js/uikit.js"></script>
+
+    <!-- FS core JavaScript. Better to include it at the end so the pages loaded faster -->
     <script src="http://www.fxiaoke.com/open/jsapi/2.0.0/fsapi.min.js"></script>
 </head>
 
@@ -197,10 +202,7 @@ FSOpen.init({
     <div class="searchbar">
         <input type="text" class="form-control" placeholder="请输入问题关键字" />
     </div>
-    <!-- 300 lines of code is omitted ^o^ -->
-    <div class="contentcard">
-        <!-- wo bian bu xia qu le ╮(╯﹏╰)╭-->
-    </div>
+    <!-- 300 lines of code is omitted  -->
     
     <script>
 	  FSOpen.init({
@@ -227,7 +229,7 @@ FSOpen.init({
 </html>
 
 ```
-TODO：林惠 最终融合下cosmo的东西。
 
-[nav.appendix.error]:  #{nav.appendix.error}   (错误码汇总表)
-[nav.open.ticket]:     #{nav.open.ticket}      (获取jsapi_ticket)
+[nav.appendix.error]:  http://open.fxiaoke.com/wiki.html#artiId=117
+[nav.open.ticket]:   http://open.fxiaoke.com/wiki.html#artiId=17
+[uikitdownload]: http://open.fxiaoke.com/open/uikit/uikit.zip

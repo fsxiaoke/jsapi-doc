@@ -10,19 +10,19 @@
     <tbody>
         <tr>
             <td>widget.showActionSheet</td>
-            <td>弹出菜单</td>
+            <td>显示弹出菜单</td>
         </tr>
         <tr>
             <td>widget.showAlert</td>
-            <td>弹出警告窗口</td>
+            <td>显示警告窗口</td>
         </tr>
         <tr>
             <td>widget.showConfirm</td>
-            <td>弹出确认窗口</td>
+            <td>显示确认窗口</td>
         </tr>
         <tr>
             <td>widget.showPreloader</td>
-            <td>弹出加载提示</td>
+            <td>显示加载提示</td>
         </tr>
         <tr>
             <td>widget.hidePreloader</td>
@@ -30,29 +30,29 @@
         </tr>
         <tr>
             <td>widget.showModal</td>
-            <td>弹出模态窗口</td>
+            <td>显示模态窗口</td>
         </tr>
         <tr>
             <td>widget.showPrompt</td>
-            <td>弹出提示窗口</td>
+            <td>显示带输入框的窗口</td>
         </tr>
         <tr>
             <td>widget.showToast</td>
-            <td>弹出Toast</td>
+            <td>显示Toast</td>
         </tr>
         <tr>
             <td>widget.showDateTimePicker</td>
-            <td>弹出日期选择控件</td>
+            <td>显示日期选择控件</td>
         </tr>
         <tr>
             <td>widget.showEditor</td>
-            <td>弹出文本框</td>
+            <td>显示文本编辑器</td>
         </tr>
     </tbody>
 </table>
 
-#### 显示单选列表(actionSheet)
-TODO：语言太苍白，来图！
+#### 显示单选菜单
+![image10][image-actioinsheet]
 
 代码样例
 ```javascript
@@ -93,8 +93,8 @@ JS版本：2.0.0
 | ------------| ----------| ---------|
 | actionIndex | Number    | 选择的索引号，从0开始，从上到下依次递增+1。 |
 
-#### 显示Alert     
-TODO：语言太苍白，来图！
+#### 显示警告窗口     
+![image11][image-alert]
 
 代码样例
 ```javascript
@@ -123,8 +123,8 @@ JS版本：2.0.0
 | content  | String    | 否   | 弹窗消息内容 |
 | btnLabel | String    | 否   | 弹窗按钮文本，默认“OK”。 |
 
-#### 显示Confirm     
-TODO：语言太苍白，来图！
+#### 显示确认窗口     
+![image12][image-confirm]
 
 代码样例
 ```javascript
@@ -163,8 +163,8 @@ JS版本：2.0.0
 | ---------| ---------| ---------|
 | btnIndex | Number   | 点击的按钮索引，从0开始，从左到右分别为0、1 |
 
-#### 显示预加载提示框     
-TODO：语言太苍白，来图！
+#### 显示加载提示     
+![image13][image-preloader]
 
 代码样例
 ```javascript
@@ -191,8 +191,8 @@ JS版本：2.0.0
 | text      | String    | 否   | loading显示的文本，空表示不显示文字 |
 | icon      | Boolean   | 否   | 是否显示图标，默认为true；若text为空，则强制为true。 |
 
-#### 隐藏预加载提示框     
-TODO：语言太苍白，来图！
+#### 隐藏加载提示     
+
 
 代码样例
 ```javascript
@@ -204,16 +204,16 @@ JS版本：2.0.0
 客户端支持版本：5.4.0及以上     
 
 
-#### 显示模态框     
-TODO：语言太苍白，来图！
+#### 显示模态提示     
+![image14][image-modal]
 
 代码样例
 ```javascript
 FSOpen.widget.showModal({
-    title: '标题',
-    imgUrl: '',
-    content: '我是一个模态窗口内容',
-    btnLabels: ['取消','确定'],
+    title: '升级提示',
+    imgUrl: 'https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/02/04/rBEiBVfZFl6AOJ6eAABPHGYzNOo452.png',
+    content: '有很多新功能哦~',
+    btnLabels: ['我知道了','升级'],
     onSuccess: function(resp) {
         if (resp.btnIndex == 0) {
             alert('取消');
@@ -246,8 +246,8 @@ JS版本：2.0.0
 | ---------| ---------| ---------|
 | btnIndex | Number   | 点击的按钮索引，从0开始，从左到右分别是0、1 |
 
-#### 显示Prompt     
-TODO：语言太苍白，来图！
+#### 显示带输入框的窗口     
+![image15][image-prompt]
 
 代码样例
 ```javascript
@@ -287,8 +287,7 @@ JS版本：2.0.0
 | btnIndex | Number   | 点击的按钮索引，从0开始，从左到右分别是0、1 |
 | value    | String   | 弹窗输入框的值 |
 
-#### 显示toast     
-TODO：语言太苍白，来图！
+#### 显示Toast     
 
 代码样例
 ```javascript
@@ -320,8 +319,8 @@ JS版本：2.0.0
 | delay     | Number    | 否   | 延迟显示时间，单位毫秒，默认0 |
 
 
-#### 显示时间选择器     
-TODO：语言太苍白，来图！
+#### 显示日期选择控件     
+![image17][image-picker]
 
 ```javascript
 FSOpen.widget.showDateTimePicker({
@@ -363,8 +362,8 @@ JS版本：2.0.0
 | -----------| ----------| ---------|
 | value      | String    | 选择的时间字符串，与`dateType`对应。如果有时分秒，则为24小时制。 |
 
-#### 显示文本输入框     
-TODO：语言太苍白，来图！
+#### 显示文本编辑器     
+![image18][image-editor]
 
 代码样例
 ```javascript
@@ -427,3 +426,11 @@ JS版本：2.0.0
 | --------------| --------------| ---------|
 | content       | String        | 输入纯文本内容，如“批准[微笑]，@北京研发中心”。Emoji表情由H5端自行解析 |
 
+[image-actioinsheet]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/02/04/rBEiBVfZFMuACJRaAAKkouRyTpE291.png
+[image-alert]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/02/08/rBEiBlfZFRqAf9baAAMtSsaZwiY740.png
+[image-confirm]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/02/0D/rBEiBVfePH-AM7ULAAG3fca1nvA945.png
+[image-preloader]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/01/50/rBEiBFfZFy2AOjjvAAQQ1QPdiYU545.png
+[image-modal]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/02/04/rBEiBVfZF0mAa8DaAAPD-mQkvF0449.png
+[image-prompt]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/02/09/rBEiBlfZGMGAHTbSAAM7wVYwZwk729.png
+[image-picker]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/01/50/rBEiBFfZGNKAQFaoAAN4ohNc4Hs196.png
+[image-editor]: https://open.fxiaoke.com/fscdn/img?imgId=group1/M00/02/04/rBEiBVfZGOmAQfy-AAG40v_WcD4630.png

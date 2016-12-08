@@ -124,7 +124,7 @@
 	                    var data = event.detail || {};
 	                    me.log('客户端：' + data.clientId + '加入了房间：' + data.roomId + '，总连接数：' + data.clientCount);
 	                    // 生成二维码链接
-	                    me.qrcodeUrl = [me.debugUrl, '?fs_rid=' + data.roomId, '&fs_aid=' + (me.appId || '')].join('');
+	                    me.qrcodeUrl = [me.debugUrl, '?fs_nav_fsmenu=true&fs_rid=' + data.roomId, '&fs_aid=' + (me.appId || '')].join('');
 	                    // 如果当前有大于两个的客户端，说明二维码已经被扫描过，不用再出现了
 	                    me.needQRCode = data.clientCount <= 1;
 	                    break;

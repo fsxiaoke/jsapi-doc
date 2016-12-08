@@ -10,15 +10,15 @@
     <tbody>
         <tr>
             <td>runtime.getVersion</td>
-            <td>获取容器版本号</td>
-        </tr>
-        <tr>
-            <td>runtime.requestAuthCode</td>
-            <td>获取临时授权码用于免登业务</td>
+            <td>获取终端版本号</td>
         </tr>
         <tr>
             <td>runtime.getCurrentUser</td>
             <td>获取当前用户信息</td>
+        </tr>
+        <tr>
+            <td>runtime.requestAuthCode</td>
+            <td>获取临时授权码用于免登业务</td>
         </tr>
         <tr>
             <td>runtime.showUpdate</td>
@@ -110,10 +110,9 @@ JS版本：2.0.0
 | -----------| ------------| --------------------|
 | code       | String      | 免登授权码，主要用于通过服务器接口换取用户身份。 |
 
-客户端同时提供一个更为便捷的JS API，可直接获取到当前用户信息，请参考[FSOpen.runtime.getCurrentUser](#getCurrentUser) 。
-TODO: 锚点。
+客户端同时提供一个更为便捷的JS API，可直接获取到当前用户信息，请参考接口**获取当前用户信息** `FSOpen.runtime.getCurrentUser  `。
 
-#### 终端升级提示    
+#### 提示版本升级    
 弹出升级提示，在Android上用户点击确定后可跳转到应用市场直接升级。  
 
 代码样例
@@ -132,4 +131,3 @@ JS版本：2.0.0
 | 参数      | 类型        | 必须 | 说明                |
 | ----------| ------------| -----| --------------------|
 | message   | String      | 是   | 升级提示文本 |
-
